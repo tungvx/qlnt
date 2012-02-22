@@ -1,0 +1,21 @@
+﻿{% block content %}
+{#<table border = 0 align = "center" width = "100%">#}
+{#</table>#}
+{#<br>#}
+<form action="{{ url }}" method="post" class="onPage">{% csrf_token %}
+    {{ form.non_field_errors }}
+    <table class="dataform">
+	    {{ form.as_table }}
+   {% if message != None %}
+	{{message}} <br>
+	{% endif %}
+	<tr>
+	<th></th>
+	<td>
+		<input type ="submit" class="g-button red" value="Lưu"/>
+	    <a href="/school/kiluat/{{p.id}}" class="g-button onPage">Quay lại</a>
+	</td>
+	</tr> 	
+	 </table>
+</form>
+{% endblock %}

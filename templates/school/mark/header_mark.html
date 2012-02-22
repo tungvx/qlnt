@@ -1,0 +1,149 @@
+﻿{% load upload_tags %}
+{#    <script>#}
+{#        // Implement checkbox-like buttons#}
+{#        $(".toggle-buttons > .g-button").click(function() {#}
+{#            $(this).siblings(".g-button").removeClass("checked");#}
+{#            $(this).addClass("checked");#}
+{#            console.log($(this));#}
+{#        });#}
+{#    </script>#}
+
+	<div class="notify-widget-paneB" >
+		<button  style="display:none" id="buttonSave" onclick="update()"  > <div id="messageChanging" class="notify"  >  </div>  </button>
+	</div>
+
+{#<div id="mark-mode" class="g-button-group toggle-buttons">#}
+{#    <a class="g-button checked">Nhập điểm</a>#}
+{#    <a class="g-button">Nhắn tin</a>#}
+{#</div>#}
+
+	<table width="100%" border=0 >
+	<tr>
+		<td>
+			Chế độ:
+			<span onclick="showMessageTable(0);" style="cursor: pointer;" >
+				<input type="radio" name="ModeTypeMark" value="1" checked id="radioMessageTable1"	>Nhập điểm &nbsp&nbsp
+			</span>
+
+			<span onclick="showMessageTable(1);" style="cursor: pointer;">
+				<input type="radio" name="ModeTypeMark" value="2"  id="radioMessageTable2">Nhắn tin
+			</span>
+		</td>
+
+		<td>
+			{% if enableChangeMark %}
+			<div style="text-align:right">
+				Dịch chuyển:
+				<input type="radio" name="nextcell" id="move-right" value="move-right" style=""
+					   title="Chuyển sang cột tiếp theo bằng ENTER,TAB  hoặc phím mũi tên">
+				Ngang
+
+				<input type="radio" name="nextcell" id="move-down" value="move-down" checked
+					   title="Chuyển xuống hàng tiếp theo bằng ENTER, TAB hoặc phím mũi tên">
+				Dọc
+			</div>
+			{% endif %}
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="g-button-container" id="messageTable" style="display:none;	position:absolute; ">
+                <div class="g-button-group">
+                    <button onclick="selectNoSent()" class="g-button blue">Chọn điểm chưa nhắn</button>
+                    <button onclick="selectAllToSend()" class="g-button">Chọn tất</button>
+                    <button onclick="cancelAll()"        class="g-button ">Bỏ chọn tất</button>
+                </div>
+                <button onclick="sendSMS()"  class="g-button red">Gửi</button>
+			</div>
+		</td>
+
+        <td align="right">
+            <div class="g-button-container">
+            <div class="g-button-group">
+                    {% if enableChangeMark %}
+                        <a class="g-button" href="#popupDiv" id="import">Nhập từ Excel </a>
+                    {% endif %}
+                    <a class="g-button" href="/school/markExcel/{{termChoice}}/{{subjectChoice}}"> Xuất ra Excel </a>
+            </div>
+            <a class="g-button green"
+                    {% if  not selectedSubject.nx %}
+               title="Bạn không cần gõ dấu phảy. Ví dụ nhập 7.5 thì chỉ cần gõ 75"
+                    {% else %}
+               title="Bạn chỉ cần gõ tắt: D -> Đ (Đạt), C -> CĐ (Chưa đạt)"
+                    {% endif %}>
+                Gõ tắt
+            </a>
+            </div>
+        </td>
+	</tr>
+	</table>
+
+	</form>	
+	<script>	
+		m = document.getElementById("{{nextcell}}")
+		if (m) m.checked = true;
+	</script>
+	
+	<div id="editWindow" class="popup-windows" style=" display:none; z-index: 2000;">
+		<section style="width: 350px; padding: 3px; float: right; background-color: #f5f5f5; margin-top: 0;">
+			<div class="mainSMS">
+                <table class="dataform">
+                    <tr>
+                        <td>Ghi chú cho điểm học sinh</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <textarea class="smsContext popupTextarea"
+                              id="editContent"
+                              rows="3"
+                              style="width: 300px; max-width: 300px;">
+                            </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button id="saveNote" class="g-button red">
+                                Lưu
+                            </button>
+                            <button id="editClose" class="g-button ">
+                                Thôi
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+			</div>
+		</section>
+	</div>
+	
+    <div style="display:none"  >
+        <div id="fileupload">
+            <form method="post" action="" enctype="multipart/form-data">
+                <div class="fileupload-buttonbar">
+                    {% csrf_token %}
+                    <label class="fileinput-button">
+                        <span>Chọn file...</span>
+                        <input type="file" name="file" multiple>
+                    </label>
+                    <button type="submit" id="startUpload" class="start">Tải file lên</button>
+                </div>
+            </form>
+			
+            <div class="fileupload-content">
+                <table class="files"></table>
+                <div class="fileupload-progressbar"></div>
+            </div>
+			
+            <div id="errorDetail" style="display: none;font: 14px/18px Arial;color:red">
+            </div>
+            <p class="hint">
+                Chú ý: Phải dùng file Excel theo
+                <a class="g-button blue" href="/school/markExcel/{{termChoice}}/{{subjectChoice}}">mẫu này</a>.
+            </p>
+        </div>
+    </div>
+    {% upload_js %}
+	<script>
+		{% include "school/mark/qlnt_upload_for_student.js" %}
+	</script>	
+	
+{#	<br>#}

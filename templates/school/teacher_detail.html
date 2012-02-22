@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% if pos > 1 %}
+        {% add_crumb 'Giáo viên' 'school.views.teachers' %}
+        {% add_crumb teacher %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if message != None %}
+	{{message}} <br>
+{% endif %}
+
+<script>
+    $(document).ready(function() {
+        {% if pos > 3 %}
+            $("input").attr("disabled",false);
+            $("select").attr("disabled",false);
+        {% endif %}
+        {% if pos == 3 %}
+            $("input","#tabs2").attr("disabled",false);
+            $("select","#tabs2").attr("disabled",false);
+        {% endif %}
+        $( "#tabs" ).tabs({
+            ajaxOptions: {
+                error: function( xhr, status, index, anchor ) {
+                    $( anchor.hash ).html(
+                        "Có lỗi khi lấy dữ liệu từ máy chủ. Xin hãy thử lại" );
+                },
+                global: false
+            }
+        });
+        var update_teacher_detail = function(json) {
+            $("#notify").showNotification(json.message);
+            if (json.response_type == 'ttcn') {
+                $("#id_first_name").parents("td").append(json.first_name);
+                $("#id_last_name").parents("td").append(json.last_name);
+                $("#id_birthday").parents("td").append(json.birthday);
+            }
+            else if (json.response_type == 'ttll') {
+                $("#id_phone").parents("td").append(json.phone);
+                $("#id_email").parents("td").append(json.email);
+                $("#id_sms_phone").parents("td").append(json.sms_phone);
+            }
+            else if (json.response_type == 'ttcb'){
+                $("#id_cmt").parents("td").append(json.cmt);
+                $("#id_ngay_vao_doan").parents("td").append(json.ngay_vao_doan);
+                $("#id_ngay_vao_dang").parents("td").append(json.ngay_vao_dang);
+                $("#id_hs_luong").parents("td").append(json.hs_luong);
+                $("#id_bac_luong").parents("td").append(json.bac_luong);
+                $("#id_bhxh").parents("td").append(json.bhxh);
+            }
+        };
+        $("form").submit(function(){
+            $(".errorlist", this).empty();
+            data = $(this).serialize();
+            var arg = {
+                data : data,
+                type: $(this).attr("method"),
+                url: $(this).attr("action"),
+                success: update_teacher_detail,
+                global: false
+            };
+            $.ajax(arg);
+            return false;
+        });
+        $("form.onPage").live("submit", function() {
+            var data = $(this).serialize();
+            var arg = {
+                data:data,
+                type: $(this).attr("method"),
+                url: $(this).attr("action"),
+                global: false,
+                success: function(response){
+                    $('.ui-tabs-panel:visible').html(response);
+                    applyListener();
+                }
+            };
+            $.ajax(arg);
+            return false;
+        });
+    });
+</script>
+<div id="tabs">
+    <ul>
+        <li><a href="#tabs1"> Thông tin cá nhân </a></li>
+        <li><a href="#tabs2"> Liên lạc </a> </li>
+        {% if pos >= 3%}
+        <li><a href="#tabs3"> Công tác </a></li>
+        {% endif %}
+        {% if pos > 3 %}
+        <li><a href="/school/teacher/account/{{ id }}">Tài khoản</a></li>
+        {% endif %}
+    </ul>
+    <div id="tabs1">
+        <form action="/school/viewTeacherDetail/{{id}}" method="post">{% csrf_token %}
+            {{ ttcnform.non_field_errors }}
+            <table class="dataform">
+                {{ ttcnform.as_table }}
+			<tr>
+				<th></th>
+				<td>
+            <input type="hidden" value="ttcn" name="request_type">
+            {%if pos > 3%}
+                <input type ="submit" class="g-button blue"  value="Lưu"/>
+            {% endif %}
+				</td>
+				</tr>
+
+            </table>
+        </form>
+    </div>
+    <div id="tabs2">
+        <form action="/school/viewTeacherDetail/{{id}}" method="post">{% csrf_token %}
+            {{ ttllform.non_field_errors }}
+            <table class="dataform">
+                {{ ttllform.as_table }}
+			<tr>
+				<th></th>
+				<td>
+            <input type="hidden" value="ttll" name="request_type">
+            {%if pos > 2%}
+                <input type ="submit" class="g-button blue"  value="Lưu"/>
+            {% endif %}
+				</td>
+				</tr>
+
+				</table>
+        </form>
+    </div>
+    {% if pos >= 3 %}
+    <div id="tabs3">
+        <form action="/school/viewTeacherDetail/{{ id }}" method="post">{% csrf_token %}
+            {{ ttcbform.non_field_errors }}
+            <table class="dataform">
+                {{ ttcbform.as_table }}
+				<tr>
+				<th></th>
+				<td>
+		            <input type="hidden" value="ttcb" name="request_type">
+		            {%if pos > 3%}
+		                <input type ="submit" class="g-button blue"  value="Lưu"/>
+		            {% endif %}
+				</td>
+				</tr> 	
+            </table>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

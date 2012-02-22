@@ -1,0 +1,502 @@
+/* CSS Document */
+
+#popupDiv {
+    margin: 20px;
+}
+
+div.tr{
+    padding-top: 10px;
+}
+
+div.notify-widget-pane {
+    text-align: center;
+    position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+div.notify {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    padding: 2px 10px;
+    background: #FFF1A8;
+    border-color: #fff1bb;
+    color: black;
+    width: auto;
+    display: inline-block;
+    border: 3px solid transparent;
+    border-radius: 3px;
+    visibility: visible;
+    -moz-border-radius: 3px; /*firefox*/
+    -webkit-border-radius: 3px; /*chrome*/
+}
+
+div.notify-widget-paneB {
+    text-align: center;
+    position: fixed;
+    display: block;
+    top: 20px;
+    left: 0;
+    width: 100%;
+}
+
+.no-padding{
+    padding: 0;
+}
+
+li.tab-label span{
+    display: None;
+}
+
+li.ui-tabs-selected span{
+    display: block;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.messageTable {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #333333;
+    background:#FFFFFF;
+    border: 1px solid #999999;
+    border-collapse: collapse;
+    position:absolute;
+    margin-top: 0px;
+    cursor: pointer;
+    z-index:200;
+}
+
+.messageTable li:hover {
+    background-color:  #BFFFFF;
+    cursor: pointer;
+}
+
+
+/*--- main-table ----------------*/
+table {
+    max-width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.main-table {
+	margin-left: auto;
+	margin-right: auto;
+    margin-bottom: 18px;
+    font-size: 13px;
+    color: #333333;
+    border-collapse: collapse;
+    /*border-radius: 5px;*/
+    /*border-spacing: 0px;*/
+	width:100%;
+}
+.main-table thead:first-child tr th, .main-table thead:first-child tr td {
+    border-top: 0;
+}
+.main-table tbody + tbody {
+    border-top: 2px solid #ddd;
+}
+/* header */
+.main-table th, .main-table td {
+    padding: 6px 6px;
+    line-height: 18px;
+    border-bottom: #dddddd thin solid;
+}
+.main-table th {
+    font-weight: bold;
+    /*vertical-align: bottom;*/
+	background-color: #eeeeee;
+}
+.main-table tr.selected, 
+.main-table tr.high-light {
+    background-color: #f3f48d;
+}
+
+.main-table tr.lastblock {
+    background-color: #FFFFFF;
+}
+.main-table tr.total-row {
+    font-weight: bold;
+}
+/* cells */
+.main-table td.lastname {
+    width: 120px;
+    border-right: 0;
+}
+.main-table td.firstname {
+    width: 50px;
+    border-left: 0;
+}
+.main-table td.normal {
+    padding: 0px;
+}
+.main-table td.noedit {
+    padding: 0px;
+    color: #999999;
+	background-color: #F4F4F4;
+}
+.main-table td.sent {
+    padding: 0px;
+    background-color: #B2FFDB;
+}
+.main-table td.selected {
+    /*padding: 0px;*/
+    background-color: #f3f48d;
+}
+.main-table td.mark-even {
+    /*padding: 0px;*/
+    /*background-color: #eeeeee;*/
+}
+.main-table td.mark-odd {
+    /*padding: 0px;*/
+    /*background-color: #ffffff;*/
+}
+
+/* controls */
+.main-table input[type=text], .main-table input[type=checkbox], .main-table select{
+    padding:2px;
+}
+.main-table input[type=checkbox]{
+    text-align: center;
+}
+
+.table-condensed th, .table-condensed td {
+    padding: 4px 5px;
+}
+.table-bordered, .table-bordered th, .table-bordered td {
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+}
+
+.table-striped tbody tr:nth-child(odd)
+{
+    background-color: #f9f9f9;
+}
+
+.table-striped tbody  tr.selected, .table-striped tbody  td.selected , .table-striped tbody th.selected{
+    background-color: #f3f48d;
+}
+
+
+table .span1 {
+    float: none;
+    width: 44px;
+    margin-left: 0;
+}
+table .span2 {
+    float: none;
+    width: 124px;
+    margin-left: 0;
+}
+table .span3 {
+    float: none;
+    width: 204px;
+    margin-left: 0;
+}
+table .span4 {
+    float: none;
+    width: 284px;
+    margin-left: 0;
+}
+table .span5 {
+    float: none;
+    width: 364px;
+    margin-left: 0;
+}
+table .span6 {
+    float: none;
+    width: 444px;
+    margin-left: 0;
+}
+table .span7 {
+    float: none;
+    width: 524px;
+    margin-left: 0;
+}
+table .span8 {
+    float: none;
+    width: 604px;
+    margin-left: 0;
+}
+table .span9 {
+    float: none;
+    width: 684px;
+    margin-left: 0;
+}
+table .span10 {
+    float: none;
+    width: 764px;
+    margin-left: 0;
+}
+table .span11 {
+    float: none;
+    width: 844px;
+    margin-left: 0;
+}
+table .span12 {
+    float: none;
+    width: 924px;
+    margin-left: 0;
+}
+
+
+
+/*input.ui-autocomplete-input{*/
+    /*float: left;*/
+    /*border: none;*/
+    /*height: 16px;*/
+    /*padding: 0px;*/
+/*}*/
+
+div.autocomplete button{
+    float: left;
+    height: 24px;
+    border-left: none;
+    background: transparent;
+    /*width: 21px;*/
+}
+
+
+#markTable input{
+    margin:-3px -3px ;
+    border: 0px;
+}
+
+.main-table#school-timetable td p {
+    padding: 0px;
+    font-size: 13px;
+}
+
+/* ------------- end main-table -----------------*/
+
+#sortable tr {
+    min-height: 1.5em;
+}
+
+input.mark {
+    cursor: pointer;
+    border: 0px;
+    width: 100%;
+    background-color:  transparent;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: -3px;
+}
+
+div#submenu {
+    position: relative;
+    text-align: left;
+    padding: 10px 0px 10px 0px;
+    margin-bottom: 3px;
+    border-bottom: 1px solid #eeeeee;
+    display: block;
+}
+
+div#tableFunction {
+    position: relative;
+    text-align: right;
+    margin-bottom: 3px;
+}
+
+.errorlist {
+    color: #CD0A0A;
+}
+
+.errorlist ul {
+    width: auto;
+}
+
+.hint {
+    font-size: 12px;
+    color: #5d5858;
+    position: relative;
+    margin: 10px 0px 0px 0px;
+    bottom: 3px;
+}
+
+div.errorDiv{
+    margin: 10px 2px;
+    border: 1px solid #CD0A0A;
+    padding: 4px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+div.leftInfoDiv, div.rightInfoDiv, div.confirmation, div.startYear, div.info-box {
+    margin-right: 20px;
+    position: relative;
+    width: auto;
+    padding: 5px;
+    float: left;
+}
+
+div.info-box {
+
+}
+
+div#divList {
+    -webkit-column-count: 4;
+    -webkit-column-rule: 1px solid #bbb;
+    -webkit-column-gap: 4em;
+
+    -moz-column-count: 4;
+    -moz-column-rule: 1px solid #bbb;
+    -moz-column-gap: 4em;
+
+    column-count: 4;
+    column-rule: 1px solid #bbb;
+    column-gap: 4em;
+
+    padding: 10px;
+
+    display: block;
+}
+
+#divList li {
+    margin: 5px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+
+div#tabs ul li{
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+
+/* HELP page */
+.help-page {
+    width: 270px;
+    /*height:400px;*/
+    float: left;
+    overflow: hidden;
+    clear: none;
+    color: #333333;
+    border: 1px #cccccc solid;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    text-align: justify;
+    /*-moz-box-shadow: 1px 1px 5px #888888;*/
+    /*-webkit-box-shadow: 1px 1px 5px #888888;*/
+    /*box-shadow: 1px 1px 5px #888888;*/
+}
+
+#content .help-page h2 {
+    padding: 10px 0px 10px;
+}
+
+#content .help-page p {
+    padding: 10px 0px 0px;
+    line-height: 1.2em;
+}
+
+.leftAlign{
+    text-align: left;
+}
+.rightAlign{
+    text-align: right;
+}
+.centerAlign{
+    text-align: center;
+}
+.center-div{
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table.dataform {
+    margin: 3px auto 3px auto;
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    padding: 10px;
+    border: #dddddd thin solid;
+    background-color:  #eeeeee;
+}
+
+table.dataform th {
+    padding: 5px;
+    text-align: right;
+    color: #666666;
+}
+
+table.dataform td {
+    /*background-color:  #ffffff;*/
+    padding: 5px;
+    text-align: left;
+}
+
+table.dataform input, table.dataform select, table.dataform textarea {
+    padding: 5px;
+    font-size: 14px;
+    border: 1px solid #bbbbbb;
+    text-align: left;
+    background-color:  #ffffff;
+}
+
+li.selected{
+    background-color: #fbfbb6;
+}
+
+/* report list */
+#report-list .category{
+	padding: 0 0 .5% 0;
+}
+#report-list .list {
+    clear:both;
+}
+#report-list .list li {
+    margin-left:20px;
+	padding: 0px 0 .5% 0;
+}
+/*#report-list li:nth-child(2n+1) {*/
+    /*background-color:rgba(0,0,0,.1);*/
+    /*background-color:rgba(0,0,0,.05);*/
+    /*border:solid 1px rgba(255,255,255,.1);*/
+    /*border-radius:5px;*/
+/*}*/
+#report-list h4 {
+    /*color:#fafafa;*/
+    font-weight:normal;
+    /*margin-bottom:2px;*/
+}
+#report-list p {
+    /*font:normal 14px/1.3 'helvetica neue', helvetica, arial;*/
+    color:#aaa;
+    text-align: left;
+}
+
+.popup-windows {
+    background-color: #fff;
+    border: 1px solid gray;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    padding: 20px;
+    opacity: 0.9;
+
+    -moz-box-shadow: 0 0 5px 5px #888;
+    -webkit-box-shadow: 0 0 5px 5px#888;
+    box-shadow: 0 0 5px 5px #888;
+}
+
+.popup-windows .dataform {
+    background-color: transparent;
+    border: none;
+    margin: 0;
+
+}
+
+.ui-icon { padding: 0;float:left;cursor: pointer}

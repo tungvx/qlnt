@@ -1,0 +1,100 @@
+{% extends "base_help.html" %}
+
+{% block explain %}
+<br><br><br><br><br>
+{% endblock %}
+
+{% block help %}
+    {% if user.userprofile.position == 'HIEU_TRUONG' or user.userprofile.position == 'HIEU_PHO' or  user.userprofile.position == 'GIAO_VU' %}
+        <div style="background:transparent url('/static/images/helpImage/QLNT_QL_Lophoc.jpg') no-repeat; height:700px; width:100%;">
+        <div  id="icon2" style="margin: 115px 0 0 500px">
+            <a class="a" href="QLNT_QL_Nhantin" >
+            <label><span style="width: 250px">Nhắn tin kết quả học tập cho học sinh hoặc nhắn tin đến những học sinh chọn từ danh sách với nội dung tùy chọn(nhắc nhở, thông báo...) <u> Tìm hiểu thêm...</u></span>
+            </label></a>
+        </div>
+        <div  id="icon1" style="margin: 115px 0 0 580px">
+            <a class="a" href="QLNT_QL_Sapxep" >
+            <label><span style="width: 230px">Sắp xếp lại thứ tự các học sinh trong danh sách lớp bằng thao tác kéo thả<u><br>Tìm hiểu thêm...</u></span>
+            </label></a>
+        </div>
+        <div  id="icon3" style="margin: 115px 0 0 650px">
+                <label><span style="width: 200px">Nhập danh sách học sinh từ<br><a href="/static/template_files/student_template.xls"><u>file Excel theo mẫu này</u></a> <img src='/static/images/helpImage/QLNT_QL_Nhapexcel.jpg' style="opacity: 0.9"></span>
+                </label>
+        </div>
+        <div  id="icon2" style="margin: 115px 0 0 715px">
+                <label><span style="width: 170px">Xuất danh sách học sinh của lớp ra file excel</span>
+                </label>
+        </div>
+        <div  id="icon3" style="margin: 115px 0 0 770px">
+                <label><span >Thêm học sinh vào lớp: Click 'Thêm', sau đó điền đầu đủ thông tin học sinh, rồi click 'Thêm'</span>
+                </label>
+        </div>
+        <div  id="icon3" style="margin: 115px 0 0 815px">
+                <label><span >Xóa học sinh: Chọn học sinh cần xóa từ danh sách lớp, rồi click'Xóa' để xóa học sinh đã chọn</span>
+                </label>
+        </div>
+    {% else %}
+        {% if user.userprofile.position == 'GIAO_VIEN' %}
+            <div style="background:transparent url('/static/images/helpImage/QLNT_GV_Lopchunhiem.jpg') no-repeat; height:700px; width:100%;">
+            <div  id="icon2" style="margin: 105px 0 0 395px">
+                <a class="a" href="QLNT_QL_Nhantin" >
+                <label><span style="width: 250px">Nhắn tin kết quả học tập cho học sinh hoặc nhắn tin đến những học sinh chọn từ danh sách với nội dung tùy chọn(nhắc nhở, thông báo...) <u> Tìm hiểu thêm...</u></span>
+                </label></a>
+            </div>
+            <div  id="icon2" style="margin: 105px 0 0 460px">
+                <a class="a" href="QLNT_QL_Sapxep" >
+                <label><span style="width: 230px">Sắp xếp lại thứ tự các học sinh trong danh sách lớp bằng thao tác kéo thả<u><br>Tìm hiểu thêm...</u></span>
+                </label></a>
+            </div>
+            <div  id="icon2" style="margin: 105px 0 0 525px">
+                    <label><span style="width: 170px">Xuất danh sách học sinh của lớp ra file excel</span>
+                    </label>
+            </div>
+            <div  id="icon2" style="margin: 105px 0 0 700px">
+                    <label><span>Click để download Phiếu báo điểm kỳ I, II hoặc Sổ ghi điểm gọi tên dưới dạng file excel</span>
+                    </label>
+            </div>
+        {% endif %}
+    {% endif %}
+    <div  id="icon1" style="margin: 80px 0 0 30px">
+        <a class="a" href="QLNT_QL_Diemdanh" >
+        <label><span style="width: 230px">Điểm danh: Cập nhật tình trạng đi học, nghỉ học có phép, k phép của học sinh trong lớp<u><br>Tìm hiểu thêm...</u></span>
+        </label></a>
+    </div>
+    <div  id="icon1" style="margin: 80px 0 0 85px">
+        <a class="a" href="QLNT_QL_Diem" >
+        <label><span style="width: 230px">Điểm: Nhập, chỉnh sửa điểm các môn học của lớp<u><br>Tìm hiểu thêm...</u></span>
+        </label></a>
+    </div>
+    <div  id="icon1" style="margin: 80px 0 0 140px">
+        <a class="a" href="QLNT_QL_Hanhkiem" >
+        <label><span style="width: 230px">Hạnh kiểm: Đánh giá hạnh kiểm học sinh trong lớp<u><br>Tìm hiểu thêm...</u></span>
+        </label></a>
+    </div>
+    <div  id="icon1" style="margin: 80px 0 0 200px">
+        <a class="a" href="QLNT_QL_Tongket" >
+        <label><span style="width: 230px">Tổng kết: Tính điểm trung bình cho cả lớp cả lớp<u><br>Tìm hiểu thêm...</u></span>
+        </label></a>
+    </div>
+    <div  id="icon1" style="margin: 80px 0 0 240px">
+        <a class="a" href="QLNT_QL_Xeploai" >
+        <label><span style="width: 230px">Xếp loại, xét lên lớp, ở lại lớp, kiểm tra lại và rèn luyện thêm trong hè<u><br>Tìm hiểu thêm...</u></span>
+        </label></a>
+    </div>
+    <div  id="icon1" style="margin: 80px 0 0 300px">
+        <a class="a" href="QLNT_QL_Monhoc" >
+        <label><span style="width: 230px">Môn học: Xem tất cả thông tin của tất cả môn học của lớp<u><br>Tìm hiểu thêm...</u></span>
+        </label></a>
+    </div>
+    <div  id="icon1" style="margin: 80px 0 0 340px">
+        <a class="a" href="QLNT_QL_Lichhoc" >
+        <label><span style="width: 230px">Lịch học: Xem thời khóa biểu của lớp<u><br>Tìm hiểu thêm...</u></span>
+        </label></a>
+    </div>
+    <div  id="icon2" style="margin: 250px 0 0 315px">
+            <label><span >Danh sách các học sinh trong lớp sẽ được hiển thị ở đây, có thể click vào tên học sinh để chỉnh sửa các thông tin về học sinh đó</span>
+            </label>
+    </div>
+
+
+{% endblock %}

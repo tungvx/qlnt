@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Trợ giúp' %}
+{% endblock %}
+
+{% block content %}
+  <div class="help-page">
+    <h2>Giới thiệu</h2>
+
+    <p>TrườngNhà không chỉ là hệ thống thông tin cho các trường học phổ thông mà còn là cầu nối giữa nhà trường và gia đình.
+    Nhà trường sẽ quản lý được các thông tin về học tập của học sinh như
+      hồ sơ học sinh, giáo viên, điểm, hạnh kiểm, điểm danh.
+      Các thông tin này sẽ được cung cấp cho học sinh, phụ huynh, giáo viên và qua tin nhắn điện thoại (SMS).
+      Các Sở Giáo dục và Đào tạo luôn nắm được tình hình của các trường cũng như các thông tin thống kê, báo cáo tổng hợp.</p>
+
+    <p>Phần mềm do <a href="http://www.viettel.com.vn">Tập đoàn viễn thông Viettel</a> và
+      <a href="http://www.vnu.edu.vn">Đại học Quốc gia Hà Nội</a> hợp tác phát triển và cung cấp dưới dạng dịch vụ.
+      Dự án hình thành từ các đề tài nghiên cứu phát triển của <a href="http://www.dost.hanoi.gov.vn/">Sở Khoa học và
+        Công nghệ Hà Nội</a>.
+    </p>
+  </div>
+
+  <div class="help-page">
+    <h2>Đối tượng phục vụ</h2>
+
+    <p>Phần mềm phục vụ các đối tượng chính là: Hiệu trưởng, Hiệu phó, Giáo viên, Học sinh, Phụ huynh
+      và Cán bộ cấp Sở, Phòng Giáo dục.</p>
+    <ul>
+      <li> - Nhà trường có thể quản lý các thông tin về tình hình học tập của học sinh toàn trường và hồ sơ giáo
+        viên.
+      </li>
+      <li> - Giáo viên có thể nhập các kết quả học tập, rèn luyện của học sinh cho các lớp mình giảng dạy.</li>
+      <li> - Phụ huynh có thể xem các thông tin về tình hình học tập của con em mình.</li>
+      <li> - Học sinh có thể xem các thông tin về tình hình học tập của mình.</li>
+    </ul>
+  </div>
+
+  <div class="help-page">
+    <h2>Hướng dẫn sử dụng</h2>
+
+    <p>Phần mềm có giao diện tự nhiên để người sử dụng hiểu nghiệp vụ có thể sử dụng được ngay.
+    </p>
+
+    <p>Khi người quản trị cấp trường thêm giáo viên hoặc học sinh, các tài khoản của giáo viên và học sinh được
+      tự động tạo ra để giáo viên và học sinh cũng có thể đăng nhập và sử dụng hệ thống. Giáo viên sẽ nhập được các
+      thông tin
+      về điểm của lớp mình dạy. Học sinh có thể xem thông tin về điểm của mình.
+    </p>
+    </p>
+    Hướng dẫn ngắn gọn về phần mềm có thể xem
+    <a target="_blank" href="https://docs.google.com/open?id=0B-w5Nu1TpdFRYzc4NmMyZWQtMTc0My00ZDQwLWJlM2YtNDg5MWU5NDIwMzQz">
+      tại đây</a>.
+    </p>
+  </div>
+
+{% endblock %}
+

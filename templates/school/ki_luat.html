@@ -1,0 +1,55 @@
+﻿{% block content %}
+
+<script>
+{% if pos > 3 %}
+    function confirmDelete()
+    {
+        return confirm("Bạn có muốn xóa kỉ luật này không?");
+    }
+{% endif %}
+</script>
+
+{% if count > 0 %}
+<table class="main-table" >
+    <thead>
+    <tr>
+		<th > STT </th>
+        <th > Thời gian</th>
+        <th > Hình thức</th>
+        <th > Địa điểm </th>
+        <th > Nội dung </th>
+        {%if pos > 1%}
+        <th></th>
+        {%endif%}
+    </tr>
+    </thead>
+    {% if message != None %}
+    {{message}}
+    {% endif %}
+
+    {% for kt in ktl %}
+    <tr>
+        <td> {{forloop.counter}} </td>
+        <td> {{kt.time|date:"SHORT_DATE_FORMAT"}}</td>
+        <td> {{kt.hinh_thuc}}</td>
+        <td> {{kt.dia_diem}} </td>
+        <td> {{kt.noi_dung}} </td>
+        {%if pos > 3%}
+        <td>
+            <a href = "/school/kiluat/{{kt.id}}/delete" class="g-button onPage" onclick="return confirmDelete();">
+                Xóa</a>
+            <a href = "/school/kiluat/{{kt.id}}/edit" class="g-button onPage">
+                Sửa</a>
+        </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+    <p>Học sinh hiện chưa có kỉ luật nào</p>
+    <br>
+{% endif %}
+{% if pos > 3 %}
+    <a title="Thêm kỉ luật cho học sinh" class = "g-button blue onPage" href="/school/kiluat/{{student_id}}/add"> Thêm </a>
+{% endif %}
+{% endblock %}

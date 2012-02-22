@@ -1,0 +1,41 @@
+﻿{% block content %}
+
+    {% if count > 0 %}
+    <table class="main-table" style="width:auto;">
+        <thead>
+        <tr>
+            <th class="leftAlign"> STT </th>
+            <th class="leftAlign"> Ngày</th>
+            <th class="leftAlign"> Loại </th>
+        </tr>
+        </thead>
+        </tbody>
+        {% for f in form %}
+            <tr>
+                <td>
+                    <p>{{forloop.counter}}</p>
+                </td>
+                <td>
+                    <p>{{ f.time|date:"SHORT_DATE_FORMAT" }}</p>
+                </td>
+
+                <td>
+                    <p>{{ f.loai }}</p>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+        {% if pos > 2 %}
+            <tfoot>
+            <td>
+                <a href="/school/diemdanhhs/{{ student_id }}/1" class="g-button blue onPage">Thêm</a>
+            </td>
+            </tfoot>
+        {% endif %}
+    </table>
+    {% else %}
+        <p>Học sinh hiện chưa nghỉ buổi nào</p>
+    {% endif %}
+    <br>
+{% endblock %}

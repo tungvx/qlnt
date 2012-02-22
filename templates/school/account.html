@@ -1,0 +1,28 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("button").click(function(){
+            var i = confirm('Mật khẩu sẽ được tạo lại giống tên tài khoản.\nBạn có muốn thay đổi không?');
+            return i;
+        });
+    });
+</script>
+
+
+{% block content %}
+    {{ message }}
+    <form action="{{ url }}" method="post" class="onPage">
+        {% csrf_token %}
+    <table class="dataform">
+        <tr>
+            <th>Tài khoản:</th>
+            <td>{{ account }}</td>
+        </tr>
+        <tr>
+            <th></th>
+            <td>
+			    <button class="g-button blue"> Tạo lại mật khẩu </button>
+			</td>
+        </tr>
+    </table>
+    </form>
+{% endblock %}

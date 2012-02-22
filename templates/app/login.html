@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Đăng nhập' %}
+{% endblock %}
+
+{% block content %}
+{#    <h2>Đăng nhập</h2>#}
+    <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+        <table class="dataform">
+            <tr>
+                <th>Tên đăng nhập</th>
+                <td>
+                    {{ form.username }}
+                </td>
+                <td>
+                    {{ form.username.errors }}
+                </td>
+            </tr>
+            <tr>
+                <th>Mật khẩu</th>
+                <td>
+                    {{ form.password }}
+                </td>
+                <td>
+                    {{ form.password.errors }}
+                </td>
+            </tr>
+            {% if form.errors %}
+                <tr>
+                    <th colspan="2">
+                        <div class="errorlist">
+                            Tên tài khoản hoặc mật khẩu không đúng.
+                        </div>
+                    </th>
+                </tr>
+            {% endif %}
+            <tr>
+                <th></th>
+                <td>
+                    <input class="g-button blue" type="submit" value="Đăng nhập"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <script type="text/javascript">
+        document.getElementById('id_username').focus()
+    </script>
+{% endblock %}

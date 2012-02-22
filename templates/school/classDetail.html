@@ -1,0 +1,514 @@
+{% extends "base.html" %}
+{% load upload_tags %}
+{% block css %}
+    <style type="text/css">
+        input[type="text"] {
+            width: 90%;
+        }
+    </style>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="/static/js/template_js/class_detail.js?0.7"></script>
+{% endblock %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb class 'school.views.viewClassDetail' class.id %}
+{% endblock %}
+
+{% block content %}
+    {#    <h2>Lớp {{ class }} </h2>#}
+
+    <script>
+        function submitClass() {
+            if (document.info.class.value !={{class.id}})
+                if (document.info.class.value != -1) {
+                    window.location = "{%url school.views.school_index  %}viewClassDetail/" + document.info.class.value;
+                }
+        }
+
+        function confirmDelete() {
+            return confirm("Bạn có chắc chắn xóa toàn bộ thông tin của học sinh không?");
+        }
+    </script>
+
+    {% if message != None %}
+        <a>{{ message }}</a>
+    {% endif %}
+
+    <div id="submenu">
+        <div class="g-button-group">
+            {% if pos > 1 %}
+                <a title="Nhập thông tin học sinh nghỉ học có phép, không phép" class="g-button blue"
+                   href="{%url school.views.school_index  %}diemdanh/{{class.id}}">
+                    Điểm danh</a>
+            {% endif %}
+
+            {% if pos > 3 %}
+                <a title="Nhập hoặc chỉnh sửa điểm các môn học" class="g-button blue"
+                   href="{%url school.views.school_index  %}markTable/{{currentTerm.id}}/{{class.id}}">Điểm</a>
+            {% else %}
+                {% if gvcn %}
+                    <a title="Xem điểm các môn do người dùng chủ nhiệm" class="g-button blue"
+                       href="/school/markForTeacher/2/{{currentTerm.id}}">
+                        Điểm</a>
+                {% endif %}
+            {% endif %}
+
+            {% if pos > 2 %}
+                <a title="Đánh giá hạnh kiểm học sinh trong lớp" class="g-button blue"
+                   href="{%url school.views.school_index  %}hanhkiem/{{class.id}}">
+                    Hạnh kiểm</a>
+            {% endif %}
+        </div>
+
+        <div class="g-button-group">
+            {% if pos > 1 or inClass == 1 %}
+                <a title="Xem tất cả thông tin của của môn học trong lớp" class="g-button green"
+                   href="{%url school.views.school_index  %}subjectPerClass/{{class.id}}">
+                    Môn học</a>
+            {% endif %}
+
+            <a title="Xem thời khóa biểu lớp" class="g-button green"
+               href="/school/timeTable/{{class.id}}">
+                Lịch học</a>
+        </div>
+
+        {% if pos > 3 or gvcn == 1 %}
+            <div class="g-button-group">
+                {% ifequal class.year_id.school_id.status 1 %}
+                    <a title="Tính trung bình học lực của cả lớp" class="g-button "
+                       href="{%url school.views.school_index  %}xepLoaiHlTheoLop/{{class.id}}/1">
+                        Tổng kết </a>
+                {% else %}
+                    <a title="Tính trung bình học lực của cả lớp" class="g-button"
+                       href="{%url school.views.school_index  %}xepLoaiHlTheoLop/{{class.id}}/2">
+                        Tổng kết </a>
+                {% endifequal %}
+
+                {% ifnotequal class.year_id.school_id.status 1 %}
+                    <a title="Xếp loại, xét lên lớp, ở lại lớp, kiểm tra lại, rèn luyện thêm trong hè"
+                       class="g-button"
+                       href="{%url school.views.school_index  %}xlCaNamTheoLop/{{class.id}}/1">
+                        Xếp loại</a>
+                {% else %}
+                    <a title="Chức năng này đã bị vô hiệu hóa vì đang trong học kỳ I" class="g-button disabled2">
+                        Xếp loại</a>
+                {% endifnotequal %}
+            </div>
+        {% endif %}
+
+
+
+        {% if pos == 3 and gvcn == 1 %}
+        {#                    <a class="g-button blue" title="In phiếu báo điểm kỳ I"#}
+        {#                       href="/school/printMarkForClass/1">#}
+        {#                        Phiếu báo điểm kì I </a>#}
+        {##}
+        {#                    <a class="g-button blue" title="In phiếu báo điểm kỳ II"#}
+        {#                       href="/school/printMarkForClass/2">#}
+        {#                        Phiếu báo điểm kì II </a>#}
+        {##}
+        {#                    <a class="g-button blue" title="In phiếu báo điểm kỳ II"#}
+        {#                       href="/school/printMarkBook/{{class.id}}">#}
+        {#                        Sổ ghi điểm và gọi tên </a>#}
+        <div class="g-button-group">
+            <a class="g-button dropdown-toggle" data-toggle="dropdown" href="#">
+                Phiếu/Sổ điểm
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a title="In phiếu báo điểm kỳ I"
+                       href="/school/printMarkForClass/1">
+                        Phiếu báo điểm kì I </a></li>
+                <li>
+                    <a title="In phiếu báo điểm kỳ II"
+                       href="/school/printMarkForClass/2">
+                        Phiếu báo điểm kì II </a></li>
+                <li>
+                    <a title="In phiếu báo điểm kỳ II"
+                       href="/school/printMarkBook/{{class.id}}">
+                        Sổ ghi điểm và gọi tên </a></li>
+            </ul>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    {% if pos > 3 or gvcn == 1 %}
+        <div id="tableFunction">
+            <div class="g-button-group">
+                <a class="g-button red"
+                   title="Nhắn tin kết quả học tập"
+                   href="/school/sendSMSResult/{{class.id}}">
+{#                    <i class="icon-envelop icon-white"></i>#}
+                    Nhắn tin học tập
+                </a>
+                {% if pos == 3 and gvcn == 1 or pos > 3 %}
+                    <button id="textSms" class="g-button red"
+                            title="Nhắn tin đến những học sinh đã chọn">
+{#                        <i class="icon-envelop"></i>#}
+                        Nhắn tin
+                    </button>
+                {% endif %}
+            </div>
+
+            <div class="g-button-group">
+                <a class="g-button "
+                   href="{% url school.views.organize_students class.id "0" %}"
+                   title="Sắp xếp thứ tự học sinh trong lớp">
+                    Sắp xếp</a>
+            </div>
+            <div class="g-button-group">
+                {% if pos > 3 %}
+                    <a class="g-button "
+                       title="Nhập danh sách học sinh từ file Excel"
+                       href="#popupDiv"
+                       id="import">
+                        Nhập từ Excel </a>
+                {% endif %}
+
+                {% if pos > 3 or gvcn == 1 %}
+                    <a class="g-button"
+                       title="Xuất danh sách học sinh ra file Excel."
+                       href="{% url school.views.class_generate class.id 'student_list' %}"
+                       id="export">
+                        Xuất ra Excel </a>
+                {% endif %}
+            </div>
+
+                {% if pos != 3 %}
+                    <div class="g-button-group">
+                        <a class="g-button manualAddStudent"
+                           title="Thêm học sinh mới"
+                           >
+                            Thêm
+                        </a>
+                        <button id="delSelected" class="g-button"
+                                title="Xóa những học sinh đang được chọn">
+                            Xóa
+                        </button>
+                    </div>
+                {% endif %}
+        </div>
+    {% endif %}
+
+    <table class="main-table table-striped" style="table-layout: fixed;">
+
+        <colgroup>
+            <col style="width: 4%;"/>
+            <col style="width: 4%;"/>
+            <col style="width: 12%;"/>
+            <col style="width: 6%"/>
+            <col style="width: 8%"/>
+            <col/>
+            <col/>
+            <col style="width: 5%"/>
+            <col style="width: 8%; min-width: 97px;"/>
+            <col/>
+            <col/>
+            <col/>
+        </colgroup>
+        <thead>
+        <tr class="thread">
+            {% if pos > 3 or gvcn == 1 %}
+                <th title="Chọn cả lớp" style="text-align: center;">
+                    <input type="checkbox" id="checkbox_all" class="studentCheckbox"/>
+                </th>
+            {% endif %}
+            <th class="leftAlign"><a
+                    href="{%url school.views.school_index  %}viewClassDetail/{{class.id}}/0/{{next_status}}"
+                    class="" title="Hiển thị theo thứ tự sắp xếp">STT</a></th>
+            <th class="leftAlign" id="thLastName">Họ</th>
+            <th class="leftAlign" id="thFirstName"><a
+                    href="{%url school.views.school_index  %}viewClassDetail/{{class.id}}/1/{{next_status}} "
+                    class="" title="Sắp xếp theo tên">Tên</a></th>
+            <th class="leftAlign" id="thBirthday"><a
+                    href="{%url school.views.school_index  %}viewClassDetail/{{class.id}}/2/{{next_status}}"
+                    class="" title="Sắp xếp ngày sinh">Ngày sinh</a>
+            </th>
+            <th class="leftAlign" id=""> Nơi sinh</th>
+            <th class="leftAlign"><a
+                    href="{%url school.views.school_index  %}viewClassDetail/{{class.id}}/3/{{next_status}}"
+                    class="" title="Sắp xếp giới tính">Giới tính</a>
+            </th>
+            <th class="leftAlign">Dân tộc</th>
+            <th class="leftAlign">Nơi ở</th>
+            <th class="leftAlign">Họ tên bố</th>
+            <th class="leftAlign">Họ tên mẹ</th>
+            <th class="leftAlign" title="Điện thoại nhắn tin">Điện thoại</th>
+        </tr>
+        </thead>
+
+        </tbody>
+        {% for ss in studentList %}
+            <tr class="{{ss.id}} student">
+                {% if pos > 3 or gvcn == 1 %}
+                    <td style="text-align: center;">
+                        <input type="checkbox" id="checkbox_{{ss.id}}" class="studentCheckbox"/>
+                    </td>
+                {% endif %}
+                <td> {{ forloop.counter }} </td>
+                {% if pos > 1 or student_id == ss.id %}
+                    <td><a title="Xem toàn bộ thông tin chi tiết"
+                           href="{%url school.views.school_index  %}viewStudentDetail/{{ss.id}}">{{ ss.last_name }}</a>
+                    </td>
+                    <td><a title="Xem toàn bộ thông tin chi tiết"
+                           href="{%url school.views.school_index  %}viewStudentDetail/{{ss.id}}">{{ ss.first_name }}</a>
+                    </td>
+                {% else %}
+                    <td> {{ ss.last_name }} </td>
+                    <td> {{ ss.first_name }} </td>
+                {% endif %}
+                <td> {{ ss.birthday|date:"SHORT_DATE_FORMAT" }} </td>
+                <td> {{ ss.birth_place }} </td>
+                <td> {{ ss.sex }} </td>
+                <td> {{ ss.dan_toc }} </td>
+
+                <td> {{ ss.current_address }} </td>
+                <td> {{ ss.father_name }} </td>
+                <td> {{ ss.mother_name }} </td>
+                <td class="smsPhone"> {{ ss.sms_phone }}</td>
+            </tr>
+        {% endfor %}
+
+        {% if pos > 3 %}
+            <form action="/school/viewClassDetail/{{class.id}}/{{sort_type}}/{{sort_status}}"
+                  id="submitform"
+                  method="post">{% csrf_token %}
+                <tr class="form" id="addStudentForm">
+                    {{ form.non_field_errors }}
+                    <td colspan="2">
+                        <input class="g-button red no-text" type="submit" value="Lưu"/>
+                    </td>
+                    <td>
+                        {{ form.last_name.errors }}
+                        {{ form.last_name }}
+                    </td>
+                    <td>
+                        {{ form.first_name.errors }}
+                        {{ form.first_name }}
+                    </td>
+                    <td>
+                        {{ form.birthday.errors }}
+                        {{ form.birthday }}
+                    </td>
+                    <td>
+                        {{ form.birth_place.errors }}
+                        {{ form.birth_place }}
+                    </td>
+                    <td>
+                        {{ form.sex.errors }}
+                        {{ form.sex }}
+                    </td>
+                    <td>
+                        {{ form.dan_toc.errors }}
+                        {{ form.dan_toc }}
+                    </td>
+                    <td>
+                        {{ form.current_address.errors }}
+                        {{ form.current_address }}
+                    </td>
+                    <td>
+                        {{ form.father_name.errors }}
+                        {{ form.father_name }}
+                    </td>
+                    <td>
+                        {{ form.mother_name.errors }}
+                        {{ form.mother_name }}
+                    </td>
+                    <td>
+                        {{ form.sms_phone.errors }}
+                        {{ form.sms_phone }}
+                    </td>
+
+                </tr>
+            </form>
+        {% endif %}
+        </tbody>
+    </table>
+
+    <a class="g-button manualAddStudent"
+       title="Thêm học sinh mới">
+        Thêm
+    </a>
+
+    <div id="student_placeholder" style="display: none;">
+    </div>
+    <div style="display: none;">
+        <div id="fileupload">
+            <form method="post" action="" enctype="multipart/form-data">
+                <div class="fileupload-buttonbar">
+                    {% csrf_token %}
+                    <label class="fileinput-button">
+                        <span>Chọn file...</span>
+                        <input type="file" name="file" multiple>
+                    </label>
+                    <button type="submit" id="startUpload" class="start">Tải file lên</button>
+                </div>
+            </form>
+            <div class="fileupload-content">
+                <table class="files"></table>
+                <div class="fileupload-progressbar"></div>
+            </div>
+            <div id="errorDetail" class="errorlist errorDiv" style="display: none;">
+            </div>
+            <div class="hint">
+                <p>
+                    Chú ý: Phải dùng file Excel theo <a href="{{ MEDIA_URL }}template_files/student_template.xls">mẫu
+                    này</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="smsWindow" class="popup-windows" style="display: none; z-index: 2000;">
+        <section >
+            <table class="dataform">
+                <tr>
+                    <th class="from tr">Người gửi</th>
+                    <td>
+                        {{ user.last_name }} {{ user.first_name }} ({{ user }})
+                    </td>
+                </tr>
+                <tr>
+                    <th class="to tr">Người nhận</th>
+                    <td>
+                        <button id="showChosenStudent">Chưa chọn học sinh nào</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th >Kèm tên học sinh</th>
+                    <td>
+                        <input type="checkbox" id="includeStudentName" checked="checked">
+                    </td>
+                </tr>
+
+                <tr>
+                    <th >Nội dung</th>
+                    <td>
+                        <textarea class="smsContext item popupTextarea"
+                                  id="smsContent"
+                                  rows="4"
+                                  style="width: 250px; max-width: 250px; height: 100px;"></textarea>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th ></th>
+                    <td>
+                        <button id="send" class="g-button red" disabled="disabled">Gửi</button>
+                        <button id="smsClose" class="g-button" >Thôi</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th ></th>
+                    <td>
+                        <div class="progressbar ui-widget ui-widget-content ui-corner-all"
+                             id="smsProgressbar"
+                             style="display: none; height: 15px; margin-left: 10px; padding-left: 0;">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </div>
+
+
+{#    <div id="smsWindow" class="popup-windows" style="display: none; z-index: 2000;">#}
+{#        <section style="width: 350px; padding: 10px; float: right; background-color: #f5f5f5; margin-top: 0;">#}
+{#            <div id="smsClose" style="width: 100%;">#}
+{#                <span class="ui-icon ui-icon-circle-close" style="float: right; width: 17px; height: 20px;"></span>#}
+{#            </div>#}
+{#            <div class="placeholder" style="clear: both;"></div>#}
+{##}
+{#            <div class="mainSMS">#}
+{#                <div class="from tr">#}
+{#                    <div class="verticalLabel" style="width: 70px;">#}
+{#                        <b style="width: 70px;">Từ:</b>#}
+{#                    </div>#}
+{#                    <div class="verticalContent" style="padding-left: 10px; float: left;">#}
+{#                        <b>{{ user.last_name }} {{ user.first_name }} ({{ user }})</b>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="placeHolder" style="clear: both;"></div>#}
+{#                <div class="to tr">#}
+{#                    <div class="verticalLabel" style="width: 70px;">#}
+{#                        <label for="showChosenStudent" style="vertical-align: top;">#}
+{#                            <b style="vertical-align: top; width: 50px;">Tới:</b>#}
+{#                        </label>#}
+{#                    </div>#}
+{#                    <div class="verticalContent">#}
+{#                        <button id="showChosenStudent">Chưa chọn học sinh nào</button>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="placeHolder" style="clear: both;"></div>#}
+{#                <div class="sms tr">#}
+{#                    <div class="verticalLabel" style="width: 70px;">#}
+{#                        &nbsp;#}
+{#                    </div>#}
+{#                    <div class="verticalContent">#}
+{#                        <input type="checkbox" id="includeStudentName" checked="checked" style="float: left;">#}
+{#                        &nbsp;Gửi kèm theo tên học sinh#}
+{#                    </div>#}
+{#                    <div class="placeholder" style="clear: both;"></div>#}
+{#                    <div class="verticalLabel" style="width: 70px;">#}
+{#                        <label for="smsContent" style="vertical-align: top;">#}
+{#                            <b style="vertical-align: top; width: 50px;">Nội dung:</b>#}
+{#                        </label>#}
+{#                    </div>#}
+{#                    <div class="verticalContent">#}
+{#                        <textarea class="smsContext item popupTextarea"#}
+{#                                  id="smsContent"#}
+{#                                  rows="7"#}
+{#                                  style="width: 250px; max-width: 250px; height: 100px;"></textarea>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="placeHolder" style="clear: both;"></div>#}
+{#                <div class="buttons tr">#}
+{#                    <div class="verticalLabel" style="width: 70px;">#}
+{#                        <p>&nbsp;</p>#}
+{#                    </div>#}
+{#                    <div class="verticalContent">#}
+{#                        <button class="g-button blue" id="send" disabled="disabled">Gửi</button>#}
+{#                    </div>#}
+{##}
+{#                </div>#}
+{#                <div class="placeHolder" style="clear: both;"></div>#}
+{#                <div class="tr">#}
+{#                    <div class="verticalLabel" style="width: 70px;">#}
+{#                        <p>&nbsp</p>#}
+{#                    </div>#}
+{#                    <div id="smsErrorDetail" class="verticalContent errorlist errorDiv" style="display: none;">#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="placeHolder" style="clear: both;"></div>#}
+{#                <div class="tr">#}
+{#                    <div class="verticalLabel" style="width: 70px;">#}
+{#                        <p>&nbsp</p>#}
+{#                    </div>#}
+{#                    <div class="verticalContent progressbar ui-widget ui-widget-content ui-corner-all"#}
+{#                         id="smsProgressbar"#}
+{#                         style="display: none; height: 15px; margin-left: 10px; padding-left: 0;">#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#            </div>#}
+{#        </section>#}
+{#        <div class="placeholder" style="clear: both;"></div>#}
+{#    </div>#}
+
+    {% upload_js %}
+    <script type="text/javascript" src="/static/js/jquery_file_upload/qlnt_upload_for_student.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("input.datepicker").datepicker("option", "yearRange", '{{ year_range }}');
+            $("input.datepicker").datepicker("option", "defaultDate", '{{ default_date }}');
+        });
+
+    </script>
+{% endblock %}

@@ -1,0 +1,79 @@
+﻿{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Báo cáo, tổng kết' '/school/report' %}
+{% endblock %}
+
+{% block content %}
+
+    <div id="report-list">
+        <h3><span class="category">Tính tổng kết</span></h3>
+        <ul class="list">
+            <li>
+                <a href="{%url school.views.school_index  %}finishTerm/{{firstTerm.id}}">
+                    Tính tổng kết học kỳ I</a>
+            </li>
+
+            {% ifnotequal currentTerm.number 1 %}
+                <li>
+                    <a href="{%url school.views.school_index  %}finishTerm/{{secondTerm.id}}">Tính
+                        tổng kết học kỳ II </a>
+                </li>
+
+                <li>
+                    <a
+                            href="{%url school.views.school_index  %}finishYear/{{firstTerm.year_id.id}}">Tính tổng kết
+                        cả năm</a>
+
+                </li>
+            {% else %}
+                {#                    <a title="Đang trong học kỳ I nên link này đã bị vô hiệu hóa">Tính tổng kết học kỳ II</a>#}
+                {#                    <br>#}
+                {##}
+                {#                    <a title="Đang trong học kỳ I nên link này sẽ bị vô hiệu hóa">Tính tổng kết cả năm</a>#}
+            {% endifnotequal %}
+        </ul>
+
+        <h3><span class="category">Tải về file Excel</span></h3>
+        <ul class="list">
+            <li>
+                <a href="/school/printMarkBook"> Sổ gọi tên và ghi điểm </a>
+            </li>
+            <li>
+                <a href="/school/printMarkForClass"> Phiếu báo điểm</a>
+            </li>
+        </ul>
+
+        <h3><span class="category">Báo cáo học tập</span></h3>
+        <ul class="list">
+            <li>
+                <a href="/school/count1"> Học lực, hạnh kiểm, danh hiệu</a>
+
+            </li>
+            <li>
+                <a href="/school/count2/1/1"> Thống kê điểm trung bình</a>
+            </li>
+            <li>
+                <a href="/school/count2/2/1"> Thống kê điểm cuối kì</a>
+            </li>
+            <li>
+                <a href="/school/printDanhHieu"> Học sinh có danh hiệu </a>
+            </li>
+            <li>
+                <a href="/school/printNoPass"> Học sinh không lên lớp, thi lại, rèn luyện
+                    thêm </a>
+            </li>
+        </ul>
+
+        <h3><span class="category">Báo cáo hệ thống</span></h3>
+        <ul class="list">
+            <li>
+                <a href="/school/countSMS"> Thống kê tin nhắn</a>
+
+            </li>
+        </ul>
+    </div>
+
+{% endblock %}

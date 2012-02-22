@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Sửa hồ sơ người sử dụng' %}
+{% endblock %}
+
+{% block content %}
+  {% if user.is_authenticated and user.username == profile.user.username %}
+{#    <h2>Sửa thông tin tài khoản: {{ user }}</h2>#}
+
+    <form method="POST" action="" enctype="multipart/form-data"> {% csrf_token %}
+      <table class="dataform">
+        <tr>
+          <th><label for="id_phone">Điện thoại:</label></th>
+          <td><input id="id_phone" type="text" name="phone" maxlength="20" value="{{ profile.phone }}"/></td>
+        </tr>
+        <tr>
+          <th><label for="id_notes">Ghi chú:</label></th>
+          <td><input id="id_notes" type="text" name="notes" maxlength="255" value="{{ profile.notes}}"/></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>
+		      <input type="submit" class="g-button blue" name="submit" value="Lưu" id="submit">
+
+			</td>
+        </tr>		
+      </table>
+    </form>
+    </div>
+  {% endif %}
+{% endblock content %}

@@ -1,0 +1,63 @@
+td {
+    font-weight: bold;
+}
+
+td.toan {
+    background-color: #D82222;
+}
+
+td.li {
+    background-color: #23EE37;
+}
+
+td.hoa {
+    background-color: #22C3D8;
+}
+
+td.sinh {
+    background-color: #EE9223;
+}
+
+td.van {
+    background-color: #B55C2D;
+}
+
+td.su {
+    background-color: #235195;
+}
+
+td.dia {
+    background-color: #239586;
+}
+
+td.ngoaingu {
+    background-color: #DE4F54;
+}
+
+td.gdcd {
+    background-color: #A4CFF7;
+}
+
+td.congnghe {
+    background-color: #FEFA09;
+}
+
+td.theduc {
+    background-color: #866C86;
+}
+
+td.ngoaingu2 {
+    background-color: #6AF997;
+}
+
+td.tinhoc {
+    background-color: #CFF57F;
+}
+
+td.gdqp {
+    background-color: #B28DE1;
+}
+
+td.other {
+    background-color: #BDC9C4;
+}

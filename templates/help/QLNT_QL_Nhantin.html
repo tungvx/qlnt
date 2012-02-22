@@ -1,0 +1,27 @@
+{% extends "base_help.html" %}
+
+{% block explain %}
+    <li>Bước 1: Chọn lớp học cần nhắn tin kết quả học tập từ trang chủ, Click 'Nhắn tin học tập' để bắt đầu</li>
+    <li>Bước 2: Chọn học kỳ I, II hoặc cả năm để nhắn tin kết quả học tập của kỳ tương ứng cho học sinh</li>
+    <li>Bước 3: Chọn ra những học sinh cần nhắn tin học tập từ danh sách lớp</li>
+    <li>Bước 4: Có thể xem trước nội dung tin nhắn sẽ gửi, sau đó click'Gửi' để gửi tin nhắn kết quả học tập cho học sinh đã chọn </li>
+    <br>
+{% endblock %}
+
+{% block help %}
+    <div style="background:transparent url('/static/images/helpImage/QLNT_QL_Nhantin.jpg') no-repeat; height:700px; width:100%;">
+    <div  id="icon1" style="margin:80px 0 0 140px">
+        <label><span style="width: 230px">Chọn học kỳ I, II hoặc cả năm để nhắn tin thông báo kết quả học tập các kỳ tương ứng cho học sinh trong lớp</span>
+    </div>
+    <div  id="icon1" style="margin:180px 0 0 200px">
+        <label><span style="width: 230px">Chọn các học sinh từ danh sách lớp để gửi tin nhắn kết quả học tập</span>
+    </div>
+    <div id="icon2" style="margin: 180px 0 0 500px">
+        <label><span style="width: 200px">Đây là nội dung tin nhắn kết quả học tập sẽ được gửi cho học sinh</span>
+        </label>
+    </div>
+    <div  id="icon1" style="margin:100px 0 0 30px">
+        <label><span style="width: 200px">Chọn 'Gửi' để gửi tin nhắn kết quả học tập đến những học sinh đã được chọn ra từ danh sách lớp</span>
+    </div>
+
+{% endblock %}

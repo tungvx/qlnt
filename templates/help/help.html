@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Trợ giúp' %}
+{% endblock %}
+
+{% block content %}
+    <iframe scrolling="no" src="QLNT_Menu" width=200px height=550px frameborder="3px" name="iFrameBar" style="border:thick; border-color: #a9a9a9; overflow: hidden;">
+    </iframe>
+    {% if user.is_authenticated %}
+    {# Đã đăng nhập vào hệ thống #}
+        {% if user.userprofile.position == 'HOC_SINH' %}
+            <iframe scrolling="no"  src="QLNT_HS" width=78% height=550px  name="iFrame" style=" border:thick; border-color: #a9a9a9;"></iframe>
+        {% else %}
+            {% if user.userprofile.position == 'GIAO_VIEN' %}
+                <iframe scrolling="no"  src="QLNT_GV" width=78% height=550px  name="iFrame" style=" border:thick; border-color: #a9a9a9;"></iframe>
+            {% else %}
+                {% if user.userprofile.position == 'HIEU_TRUONG' or user.userprofile.position == 'HIEU_PHO' or  user.userprofile.position == 'GIAO_VU'%}
+                    <iframe scrolling="no"  src="QLNT_QL" width=78% height=550px  name="iFrame" style=" border:thick; border-color: #a9a9a9;"></iframe>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <iframe scrolling="no"  src="QLNT_Welcome" width=78% height=640px  name="iFrame" style=" border:thick; border-color: #a9a9a9;"></iframe>
+    {% endif %}
+{% endblock %}
+

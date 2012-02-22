@@ -1,0 +1,29 @@
+{% extends "base_help.html" %}
+
+{% block explain %}
+    <li>Bước 1:Từ trang chủ, chọn lớp-môn hoc từ danh sách các lớp bạn đang giảng dậy</li>
+    <li>Bước 2:Nhập điểm cho học sinh bằng cách click trực tiếp vào bảng điểm rồi nhập hoặc nhập từ file excel</li>
+    <li>Lưu ý: Điểm đã nhập chỉ có thể sửa trong thời gian chưa khóa sổ điểm</li>
+    <br><br>
+{% endblock %}
+
+{% block help %}
+    <div style="background:transparent url('/static/images/helpImage/QLNT_GV_Quanlicaclop.jpg') no-repeat; height:700px; width:100%;">
+    <div  id="icon2" style="margin: 90px 0 0 320px">
+        <label><span>Chọn nhanh sang môn-lớp học khác mà bạn đang giảng dậy</span>
+        </label>
+    </div>
+    <div  id="icon2" style="margin: 290px 0 0 400px">
+        <label><span>Nhập điểm trực tiếp: Click trực tiếp vào ô để nhập điểm cho học sinh. Lưu ý, điểm đã nhập chỉ sửa được trong thời gian sổ điểm chưa bị khóa</span>
+        </label>
+    </div>
+    <div  id="icon3" style="margin: 115px 0 0 720px">
+            <label><span style="width: 200px">Nhập điểm của học sinh từ<br><a href=""><u>file Excel theo mẫu này</u></a> <img src='/static/images/helpImage/QLNT_QL_Nhapexcel.jpg' style="opacity: 0.9"></span>
+            </label>
+    </div>
+    <div  id="icon3" style="margin: 115px 0 0 800px">
+            <label><span>Xuất bảng điểm của lớp ra file excel</span>
+            </label>
+    </div>
+
+{% endblock %}

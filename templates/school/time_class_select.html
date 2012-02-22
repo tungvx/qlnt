@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Điểm danh' %}
+{% endblock %}
+
+{% block content %}
+  <script>
+     $(document).ready(function(){
+        $("input.datepicker").datepicker();
+     });
+  </script>
+  <form action="" method="post">{% csrf_token %}
+    <h2>Điểm danh {{ form }}
+      <input type="submit" value="Chọn"/>
+    </h2>
+    {% if message != None %}
+      {{ message }}
+    {% endif %}
+  </form>
+{% endblock %}

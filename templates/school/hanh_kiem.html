@@ -1,0 +1,185 @@
+﻿{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb class 'school.views.viewClassDetail' class.id %}
+    {% add_crumb 'Hạnh kiểm' %}
+{% endblock %}
+
+{% block content %}
+    {% if pos > 2 %}
+        <script language="JavaScript" type="text/javascript">
+            function submitClass() {
+                if (document.info.class.value !={{class.id}})
+                    if (document.info.class.value != -1) {
+                        window.location = "{%url school.views.school_index  %}hanhkiem/" + document.info.class.value;
+                    }
+            }
+
+            $(document).ready(function() {
+                $(".submitbutton").attr("disabled", true);
+                $("select[name=term1]").each(function() {
+                    $(this).change(function() {
+                        var id = $(this).parents("tr").attr('class').split(' ')[0];
+                        var term1 = $(this).val();
+                        var data = { id: id, term1:term1, request_type:'term1'};
+                        var arg = { type:"POST",
+                            url:"",
+                            data: data,
+                            datatype:"json",
+                            error: function() {
+                                $(".submitbutton").attr("disabled", false);
+                            }
+                        };
+                        $.ajax(arg);
+                        return false;
+
+                    });
+                });
+
+                $("select[name=term2]").each(function() {
+                    $(this).change(function() {
+                        var id = $(this).parents("tr").attr('class').split(' ')[0];
+                        var term2 = $(this).val();
+                        var data = { id: id, term2:term2, request_type:'term2'};
+                        var arg = { type:"POST",
+                            url:"",
+                            data: data,
+                            datatype:"json",
+                            error: function() {
+                                $(".submitbutton").attr('disabled', false);
+                            }
+                        };
+                        $.ajax(arg);
+                        return false;
+
+                    });
+                });
+
+                $("select[name=year]").each(function() {
+                    $(this).change(function() {
+                        var id = $(this).parents("tr").attr('class').split(' ')[0];
+                        var y = $(this).val();
+                        var data = { id: id, year:y, request_type:'year'};
+                        var arg = { type:"POST",
+                            url:"",
+                            data: data,
+                            datatype:"json",
+                            error: function() {
+                                $(".submitbutton").attr('disabled', false);
+                            }
+                        };
+                        $.ajax(arg);
+                        return false;
+
+                    });
+                });
+            });
+        </script>
+    {% endif %}
+
+
+    <form action="" name="info" method="post">{% csrf_token %}
+        {% if pos > 1 %}
+            <p> Lớp
+                <select name="class" onchange="submitClass()">
+                    {% for cl in classList %}
+                        {% if cl.id != class.id %}
+                            <option value={{ cl.id }}> {{ cl }}</option>
+                        {% else %}
+                            <option selected="selected" value={{ cl.id }}> {{ cl }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </p>
+        {% else %}
+{#            <h2> Hạnh kiểm lớp {{ class }}</h2>#}
+        {% endif %}
+    </form>
+
+    <form action="/school/hanhkiem/{{class.id}}" method="post">{% csrf_token %}
+        <table class="main-table">
+            <tr>
+                <th class="leftAlign"> STT</th>
+                <th class="leftAlign"><a
+                        href="{%url school.views.school_index  %}hanhkiem/{{class.id}}/1/{{next_status}}">Họ tên </a>
+                </th>
+                <th class="leftAlign"><a
+                        href="{%url school.views.school_index  %}hanhkiem/{{class.id}}/2/{{next_status}}">Ngày sinh</a>
+                </th>
+                <th class="leftAlign"><a
+                        href="{%url school.views.school_index  %}hanhkiem/{{class.id}}/3/{{next_status}}">Giới tính </a>
+                </th>
+                <th class="leftAlign"> Kì I</th>
+                <th class="leftAlign"> Kì II</th>
+                <th class="leftAlign"> Cả năm</th>
+            </tr>
+            {% if message != None %}
+                <br>
+                {{ message }}
+            {% endif %}
+
+            {% for p,f, v in list %}
+                <tr class="{{p.id}}">
+                    <td>
+                        <p>{{ forloop.counter }}</p>
+                    </td>
+
+                    <td>
+                        <p>{{ p.last_name }} {{ p.first_name }}</p>
+                    </td>
+
+                    <td>
+                        <p>{{ p.birthday|date:"SHORT_DATE_FORMAT" }}</p>
+                    </td>
+
+                    <td>
+                        <p>{{ p.sex }}</p>
+                    </td>
+                    {% if pos > 3 %}
+                        {% if term.number == 1 %}
+                            <td>
+                                {{ f.term1.errors }}
+                                {{ f.term1 }}
+                            </td>
+                            <td></td>
+                            <td></td>
+                        {% else %}
+                            <td>
+                                {{ v.get_hk_term1 }}
+                            </td>
+
+                            <td>
+                                {{ f.term2.errors }}
+                                {{ f.term2 }}
+                            </td>
+                            <td>
+                                {{ f.year.errors }}
+                                {{ f.year }}
+                            </td>
+                        {% endif %}
+                    {% else %}
+                        <td>
+                            {{ v.get_hk_term1 }}
+                        </td>
+                        <td>
+                            {{ v.get_hk_term2 }}
+                        </td>
+                        <td>
+                            {{ v.get_hk_year }}
+
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+            <div class="g-button-group">
+                {% if pos > 3 %}
+                    <input class="g-button submitbutton" type="submit" value="Lưu"/>
+                {% endif %}
+                {#                <a href="{%url school.views.school_index  %}viewClassDetail/{{class.id}}" title="Quay về danh sách lớp"#}
+                {#                   class="g-button"> Quay lại </a>#}
+            </div>
+    </form>
+{% endblock %}

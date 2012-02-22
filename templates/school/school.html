@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Lớp học' %}
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="/static/js/template_js/school.js"></script>
+{% endblock %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <section id="classes">
+		<div class="centerAlign">
+        {% if user.userprofile.position == 'HIEU_TRUONG' or user.userprofile.position == 'HIEU_PHO' or user.userprofile.position == 'GIAO_VU' %}
+            <table class="main-table" >
+                <thead>
+                <tr >
+                    {% for grade in grades %}
+                    <th style="background-color:white;">Khối {{ grade.number }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                <tr >
+                {% for grade in grades %}
+                    <td style="text-align: center;vertical-align: top">
+                    {% for class in classes %}
+                        {% if class.block_id == grade %}
+                            <a class="g-button blue no-text classDiv" style="margin: 5px;"
+                               href="{% url school.views.viewClassDetail class.id %}">
+                                <div id="{{ class.id }}">
+                                    <span class="class-name"> {{ class.name }} </span>
+
+                                    <div class="class-pupils-total " title="Sĩ số">
+                                        {{ class.number_of_pupils }}</div>
+                                    {% if class.teacher %}
+                                        <div class="class-main-teacher " title="Giáo viên chủ nhiệm">
+                                            {{ class.teacher }}
+                                        </div>
+                                    {% else %}
+                                        <div class="class-main-teacher " title="Chưa gán giáo viên chủ nhiệm">
+                                            (...)
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+        {% else %}
+            {% if user.userprofile.position == 'GIAO_VIEN' %}
+                    {% if teaching_subjects %}
+                           <h3>Điểm các lớp bạn giảng dạy</h3>
+                        {% for subject in teaching_subjects %}
+                            <a class="g-button blue"
+                               href="school/markForTeacher/1/{{term.id}}/{{subject.id}}">
+                                 {{ subject.class_id }} 
+                                 - {{ subject.name }}
+                            </a>
+                        {% endfor %}
+						<br><br>
+                    {% endif %}
+
+                    {% if teaching_class %}
+                        <h3>Bạn là chủ nhiệm lớp {{teaching_class}}</h3>
+                        <a class="g-button blue" 
+							href="school/viewClassDetail/{{teaching_class.id}}">
+                            <i class="icon-list icon-white" ></i>
+							Danh sách lớp
+						</a>
+						
+	                    {% if head_subjects %}
+							<br><br>
+							<h4>Điểm các môn của lớp {{ teaching_class }}</h4>
+							<div >
+	                        {% for subject in head_subjects %}
+	                            <a class="g-button sm" style="margin-bottom: 10px;"
+	                               href="school/markForTeacher/2/{{term.id}}/{{subject.id}}">
+	                                {{ subject.name }}
+	                            </a>
+	                        {% endfor %}
+							</div>
+	                    {% endif %}
+                    {% endif %}
+	            {% else %}
+                {% if user.userprofile.position == 'HOC_SINH' %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+					</div>
+        </section>
+    {% endif %}
+{% endblock %}
+

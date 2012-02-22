@@ -1,0 +1,361 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    {% block title %}
+        <title>{{ user.userprofile.organization.name }}</title>
+    {% endblock %}
+
+    <link href="/static/css/smoothness/jquery-ui-1.8.17.custom.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="/static/css/todc-css3-google-buttons-06a89af/google-buttons.css?0.7" rel="stylesheet" type="text/css"/>
+
+    <link href="/static/css/tipTip.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="/static/css/jquery_file_upload/jquery.fileupload-ui.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link href="/static/css/layout.css?0.7" rel="stylesheet" type="text/css"/>
+    <link href="/static/css/style.css?0.7" rel="stylesheet" type="text/css"/>
+    <link href="/static/css/template_css/popup.css?0.7" rel="stylesheet" type="text/css"/>
+
+    {% block css %}
+        <!-- For extra css -->
+    {% endblock %}
+    <!--[if lt IE 9]>
+	  <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	  <![endif]-->
+
+
+
+    <script type="text/javascript" src="/static/js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui-1.8.17.custom.min.js"></script>
+
+    <script type="text/javascript" src="/static/js/jquery.tipTip.minified.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.ui.datepicker-vi.js"></script>
+    <script type="text/javascript" src="/static/js/jquery_file_upload/jquery.fileupload.js"></script>
+    <script type="text/javascript" src="/static/js/jquery_file_upload/jquery.fileupload-ui.js"></script>
+    <script type="text/javascript" src="/static/js/jquery_file_upload/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="/static/js/jquery_file_upload/jquery.tmpl.min.js"></script>
+    <script type="text/javascript" src="/static/js/Class.create.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-encoder-0.1.0.js"></script>
+    <script type="text/javascript" src="/static/js/template_js/base.js?0.7"></script>
+    <script type="text/javascript" src="/static/css/todc-css3-google-buttons-06a89af/js/bootstrap-dropdown.js?0.7"></script>
+
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-5180820-2']);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+
+    {% block js %}
+        <!-- For extra js -->
+    {% endblock %}
+</head>
+
+<body>
+
+<header>
+    <section id="hearder-bar">
+        <div id="school-info">
+            <ul>
+                {% if user.is_authenticated %}
+                    {% if user.is_superuser %}
+                        <p> Quản trị hệ thống</p>
+                    {% else %}
+                        <p id="school-name">
+                            {{ user.userprofile.organization.name }}
+                        </p>
+
+                        {% if user.userprofile.position == 'HIEU_TRUONG'  or user.userprofile.position == 'HIEU_PHO' or user.userprofile.position == 'GIAO_VU' %}
+{#                            <li><a#}
+{#                                   href="{% url school.views.info %}"#}
+{#                                   title="Các thông tin về trường học, giáo viên, lớp học, chuyển lớp">#}
+{#                                <p class="icon-cog"></p>#}
+{#                            </a></li>#}
+                        {% else %}
+                            <li><a
+                                   href="{% url school.views.info %}"
+                                   title="Các thông tin về trường học">
+                                xem
+                            </a></li>
+                        {% endif %}
+                        <li><p>
+                            {{ user.userprofile.organization.get_status }}</p></li>
+                        {#            <li><a title="Chuyển sang học kỳ khác">đổi</a></li>#}
+                    {% endif %}
+                {% else %}
+                    <p>Quản lý Nhà trường</p>
+                {% endif %}
+                <li> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+                <li><a href="{% url help.views.help %}" title="Xem hướng dẫn sử dụng">Trợ giúp</a></li>
+            </ul>
+        </div>
+
+        <a href="{%url school.views.school_index %}">
+            <img class="logo" src="/static/images/logo.png" alt="logo"
+                 title="{{ user.userprofile.organization.name }}"/>
+        </a>
+
+        <div id="user-info">
+            <ul>
+                {% if user.is_authenticated %}
+                    {% if not user.is_superuser %}
+                        <li><a href="/profiles/{{user.username}}"
+                               title="Sửa thông tin người sử dụng, đổi mật khẩu, đổi tên tài khoản.">
+                            {% if user.pupil %}
+                                {{ user.pupil.last_name }} {{ user.pupil.first_name }} ({{ user.username }})
+                            {% else %}
+                                {% if user.teacher %}
+                                    {{ user.teacher.last_name }} {{ user.teacher.first_name }} ({{ user.username }})
+								{% else %}
+                                    {{user.first_name}} ({{ user.username }})
+                                {% endif %}
+                            {% endif %}
+						</a></li>
+                    {% else %}
+                        <li><a href="">
+                            {{ user.last_name }} {{ user.first_name }}
+							({{ user.username }})
+						</a></li>
+                    {% endif %}
+                    <li><a href="{%url django.contrib.auth.views.logout %}" 
+						title="Thoát ra khỏi hệ thống">Đăng xuất
+					</a></li>
+                {% else %}
+                    <li><a id="login" href="{%url app.views.login %}"
+                           title="Nếu bạn đã có tài khoản thì chọn đăng nhập để sử dụng hệ thống">
+                        Đăng nhập</a></li>
+                    <li><a href="{%url app.views.register %}"
+                           title="Nếu bạn chưa có tài khoản và phụ trách tin học của trường thì đăng ký để sử dụng hệ thống">
+                        Đăng ký</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </section>
+
+    <nav id="nav">
+        <div class="actions g-button-container">
+            <div class="g-button-group">
+            {% if not user.is_authenticated %}
+                {# Chưa đăng nhập vào hệ thống #}
+                <a class="g-button"  href="/" title="Giới thiệu">
+                    <i class="icon-home"></i>
+                    Giới thiệu </a>
+
+                <a class="g-button"  href="/help" title="Xem hướng dẫn sử dụng">
+                    <i class="icon-question-sign"></i>
+                    Trợ giúp</a>
+            {% else %}
+                {% if user.is_superuser %}
+                    <a class="g-button"  href="{%url app.views.manage_register %}"
+                           title="Quản lý đăng ký người dùng">
+                        <i class="icon-check"></i>
+                        Quản lý đăng ký</a>
+
+                    <a class="g-button"  href="/admin" title="Mở trình quản trị sẵn có của hệ thống">
+                        <i class="icon-book"></i>
+                        Quản trị CSDL</a>
+                {% else %}
+                    {% if user.userprofile.position == 'GIAM_DOC_SO' or user.userprofile.position == 'TRUONG_PHONG' %}
+                        <a class="g-button"  title="Xem các đơn vị trực thuộc">
+                            <i class="icon-list-alt"></i>
+                            Đơn vị trực thuộc</a>
+                        <a class="g-button"  title="Các báo cáo thống kê, tổng kết">
+                            <i class="icon-signal"></i>
+                            Báo cáo</a>
+                    {% endif %}
+
+                    {# Người sử dụng cấp trường       #}
+                    {% if user.userprofile.position == 'HIEU_TRUONG' or user.userprofile.position == 'HIEU_PHO' or user.userprofile.position == 'GIAO_VIEN' or user.userprofile.position == 'GIAO_VU' or user.userprofile.position == 'HOC_SINH' %}
+                        {# Đang trong năm học #}
+                        {% if user.userprofile.organization.status != 0 %}
+                            {% if user.userprofile.position == 'HIEU_TRUONG'  or user.userprofile.position == 'HIEU_PHO' %}
+                                  <a class="g-button"  href="{%url school.views.school_index %}"
+                                       title="Về trang chủ">
+                                      <i class="icon-list"></i>
+                                    Lớp học
+                                </a>
+
+
+                                    <a class="g-button"  href="{%url school.views.timeTable_school %}"
+	                                   title="Thời khóa biểu toàn trường">
+                                        <i class="icon-calendar"></i>
+                                        Lịch học
+                                    </a>
+
+
+                                {# Khi chưa khởi  tạo năm học #}
+                                {% if user.userprofile.organization.status == 3 %}
+                                    <a class="g-button"  href="{%url school.views.setup %}"
+                                           title="Khai báo thông tin trường học và tạo nhanh các lớp học">
+                                        <i class="icon-calendar"></i>
+                                        Khởi tạo
+                                    </a>
+                                {% else %}
+                                    <a class="g-button"  href="{%url school.writeExcel.report %}"
+                                           title="Các báo cáo thống kê, tổng kết">
+                                        <i class="icon-signal"></i>
+                                        Báo cáo</a>
+
+                                    <div class="g-button-group">
+                                        <a class="g-button " href="{% url school.views.info %}"
+                                                title="Thiết lập thông tin nhà trường, quản lý danh sách giáo viên, lớp học, và chuyển lớp">
+                                            <i class="icon-cog"></i>
+                                            Thiết lập
+                                        </a>
+                                        <a class="g-button dropdown-toggle no-text" data-toggle="dropdown" href="#">
+                                            <span class="caret" ></span>
+{#                                            <i class="icon-cog"></i>#}
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="{% url school.views.teachers %}"
+                                                title="Quản lý danh sách giáo viên, cán bộ trong trường">
+                                                <i class="icon-user"></i>
+                                                Giáo viên</a></li>
+                                            <li><a href="{% url school.views.classes %}"
+                                                   title="Thêm/xoá lớp và gán giáo viên chủ nhiệm lớp">
+                                                <i class="icon-list-alt"></i>
+                                                Lớp học và Chủ nhiệm</a></li>
+                                            <li><a href="{% url school.views.move_students %}"
+                                                   title="Chuyển học sinh từ lớp này sang lớp khác">
+                                                <i class="icon-move"></i>
+                                                Chuyển lớp</a></li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                {% if user.userprofile.position == 'GIAO_VIEN' %}
+                                    <a class="g-button"  href="{%url school.views.school_index %}" title="Về trang chủ">
+                                        <i class="icon-home"></i>
+                                        Trang chủ
+                                    </a>
+
+                                    <a class="g-button"  href="{%url school.views.classes %}" title="Danh sách lớp học">
+                                        <i class="icon-list"></i>
+                                        Lớp học
+                                    </a>
+
+		                            <a class="g-button"  href="{%url school.views.timeTable_school %}"
+		                                   title="Thời khóa biểu toàn trường">
+                                        <i class="icon-calendar"></i>
+                                        Lịch học
+                                    </a>
+
+                                    <a class="g-button"  href="{% url school.views.teachers %}" title="Danh sách giáo viên">
+                                        <i class="icon-user"></i>
+                                        Giáo viên
+                                    </a>
+                                {% else %}
+                                    {% if user.userprofile.position == 'HOC_SINH' %}
+                                        <a
+                                                href="{% url school.views.viewStudentDetail user.pupil.id %}">
+                                            <i class="icon-home"></i>
+                                            Hồ sơ
+                                        </a>
+                                    {% endif %}
+                                    <a class="g-button"  href="{%url school.views.classes %}" title="Danh sách lớp học">
+                                        <i class="icon-list"></i>
+                                        Lớp học
+                                    </a>
+		                            <a class="g-button"  href="{%url school.views.timeTable_school %}"
+		                                   title="Thời khóa biểu toàn trường">
+                                        <i class="icon-calendar"></i>
+                                        Lịch học
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+
+                        {% else %}
+                            {# Khi chưa khởi  tạo năm học #}
+                            {% if user.userprofile.organization.status == 0 %}
+                                <a
+                                        href="{%url school.views.setup %}"
+                                        title="Khai báo thông tin trường học và tạo nhanh các lớp học">
+                                    <i class="icon-cog"></i>
+                                    Khởi tạo
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+            </div>
+            <a
+                    class="g-button"
+                    href="#feedbackDiv"
+                    id="feedback"
+                    title="Góp ý, thông báo lỗi">
+                <i class="icon-comment"></i>
+                Góp ý
+            </a>
+{#            </div>#}
+        </div>
+    </nav>
+</header>
+
+<section id="main">
+    <div id="breadcrumb">
+        {% block breadcrumb %}
+            {% load breadcrumb_tags %}
+            {% add_crumb 'Trang chủ' '/' %}
+        {% endblock %}
+        {% render_breadcrumbs %}
+    </div>
+
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <div class="placeholder" style="clear: both;"></div>
+</section>
+
+{#<div id="place_keeper" style="clear: both;"></div>#}
+
+<div id="feedbackWindow" class="popup-windows" style="display: none; z-index: 2000;">
+    <table class=dataform>
+        <tr>
+            <td>Nội dung góp ý:
+            <td>
+        </tr>
+        <tr>
+            <td>
+                <textarea class="feedbackContext popupTextarea"
+                  id="feedbackContent"
+                  rows="7"
+                  style="width: 300px; height: auto;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>
+        <button class="g-button red"  id="sendFeedback">Gửi</button>
+        <button class="g-button"  id="feedbackClose">Thôi</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="notify-widget-pane">
+    <div class="notify" id="notify" style="display: none;">
+        Đang gửi dữ liệu...
+    </div>
+</div>
+
+<footer>
+    <div id="menu"><a href="#">Về đầu trang</a></div>
+        <div id="sitemap"><a href="/help/sitemap">Sơ đồ</a></div>
+    <p class="copyright">©2011 by Viettel Telecom and Vietnam National University, Hanoi. <a href="/app/contact">Liên
+        hệ</a></p>
+</footer>
+
+</body>
+</html>
+

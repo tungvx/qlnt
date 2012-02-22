@@ -1,0 +1,27 @@
+{% extends "base_help.html" %}
+
+{% block explain %}
+    <li>Từ trang chủ chọn lớp cần đánh giá xếp loại, sau đó click 'Xếp loại' để bắt đầu </li>
+    <li>Click 'Đánh giá, xếp loại học sinh', hệ thống sẽ tự động thống kê và đánh giá học sinh</li>
+    <li>Chọn: Tất cả, Học sinh giỏi, Lên lớp, Thi lại, Tiên tiến... để lọc ra danh sách các loại học sinh tương ứng</li>
+    <li>'Nhập điểm thi lại', 'Nhập HK rèn luyện thêm' để cập nhật điểm thi lại hoặc HK rèn luyện thêm(nếu có) cho học sinh</li>
+    <br>
+{% endblock %}
+
+{% block help %}
+    <div style="background:transparent url('/static/images/helpImage/QLNT_QL_Xeploai.jpg') no-repeat; height:700px; width:100%;">
+        <div  id="icon2" style="margin:135px 0 0 300px">
+        <label><span style="width: 230px">Chọn: tất cả, giỏi, lên lớp, thi lại, tiên tiến... để lọc ra danh sách các học sinh được xếp loại tương ứng</span>
+    </div>
+    <div  id="icon1" style="margin:90px 0 0 100px">
+        <label><span style="width: 230px">Click 'Đánh giá, xếp loại học sinh', hệ thống sẽ tự động đánh giá xếp loại học sinh và hiển thị ở bảng bên dưới</span>
+    </div>
+    <div id="icon2" style="margin: 90px 0 0 620px">
+        <label><span style="width: 200px">Nhập điểm thi lại cho học sinh( nếu có)</span>
+        </label>
+    </div>
+    <div  id="icon3" style="margin:90px 0 0 760px">
+        <label><span style="width: 200px">Cập nhật rèn luyện thêm trong hè cho học sinh (nếu có)</span>
+    </div>
+
+{% endblock %}

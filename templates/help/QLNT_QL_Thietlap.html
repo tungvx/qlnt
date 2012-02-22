@@ -1,0 +1,36 @@
+{% extends "base_help.html" %}
+
+{% block explain %}
+    <li>Click vào 'Thiết lập' hoặc 'Sửa' ở góc trên bên trái để bắt đầu thiết lập các thông tin cho trường học</li>
+    <li>Thiết lập các thông tin cho trường học(Tên, địa chỉ, email...) ở đây, sau đó click 'Lưu' </li>
+    <li>Click 'Giáo viên' để thêm/sửa/xóa thông tin giáo viên </li>
+    <li>Click 'Lớp và chủ nhiệm' để thêm/xóa lớp học, gán giáo viên chủ nhiệm </li>
+    <li>Click 'Chuyển lớp' để thao tác chuyển lớp cho học sinh</li>
+{% endblock %}
+
+{% block help %}
+    <div style="background:transparent url('/static/images/helpImage/QLNT_QL_Thietlap.jpg') no-repeat; height:700px; width:100%;">
+        <div  id="icon1" style="margin: 65px 0 0 25px">
+            <a class="a" href="QLNT_QL_Giaovien" >
+            <label><span style="width: 200px">Thêm/Xóa thông tin giáo viên<u><br>Tìm hiểu thêm...</u></span>
+            </label></a>
+        </div>
+        <div  id="icon2" style="margin: 65px 0 0 100px">
+            <a class="a" href="QLNT_QL_Lopvachunhiem" >
+            <label><span style="width: 180px">Thêm/xóa lớp học; Gán GV chủ nhiệm<u><br>Tìm hiểu thêm...</u></span>
+            </label></a>
+        </div>
+        <div  id="icon2" style="margin: 65px 0 0 185px">
+            <a class="a" href="QLNT_QL_Chuyenlop" >
+            <label><span style="width: 200px">Chuyển lớp cho học sinh<u><br>Tìm hiểu thêm...</u></span>
+            </label></a>
+        </div>
+
+
+
+
+    <div  id="icon1" style="margin: 250px 0 0 190px">
+        <label><span style="width: 200px">Thiết lập các thông tin cho trường học(Tên, địa chỉ, email...) ở đây, sau đó click 'Lưu'</span>
+        </label>
+    </div>
+{% endblock %}

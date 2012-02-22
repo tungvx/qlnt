@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+
+    {% add_crumb 'Thông tin tài khoản người sử dụng' %}
+{% endblock %}
+
+{% block content %}
+  {% if user.username == profile.user.username %}
+{#    <h2>Thông tin tài khoản: {{ user.username }}</h2>#}
+    {% if profile %}
+      <div id="submenu">
+        <a href="{% url profiles_edit_profile %}" class="g-button blue">Chỉnh sửa</a>
+{#        <a href="{% url app.views.change_password %}" class="g-button blue">Đổi mật khẩu </a>#}
+        <a class="g-button blue" href="/school/password_change">Đổi mật khẩu</a>
+        {% if user.userprofile.username_change == 0 %}
+          <a class="g-button blue" href="/school/username_change">Đổi tên tài khoản</a>
+        {% endif %}
+      </div>
+      <table class="dataform">
+        <tr>
+          <th>Họ và tên:</th>
+          <td> {{ profile.user.first_name }} {{ profile.user.last_name }}</td>
+        </tr>
+        <tr>
+          <th>Tổ chức:</th>
+          <td> {{ profile.organization }}</td>
+        </tr>
+        <tr>
+          <th>Vị trí:</th>
+          <td> {{ profile.position }}</td>
+        </tr>
+        <tr>
+          <th>Điện thoại: </th>
+          <td> {{ profile.phone }}</td>
+        </tr>
+        <tr>
+          <th>Ghi chú:</th>
+          <td> {{ profile.notes }}</td>
+        </tr>
+      </table>
+    {% else %}
+    {% endif %}
+  {% endif %}
+{% endblock %}
+	

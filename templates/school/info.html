@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Thông tin nhà trường'  %}
+{% endblock %}
+
+{% block content %}
+{#    <h2>Thiết lập dữ liệu trường học</h2>#}
+    {% if user.userprofile.position == 'HIEU_TRUONG' or user.userprofile.position == 'HIEU_PHO' %}
+        <script type="text/javascript" src="/static/js/ggplus_popup.js?0.7"></script>
+        <link href="/static/css/googlePlusPopup.css?0.7" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" >
+            $(document).ready( function(){
+                $("#cancel").click(function(){
+                    window.location.href = "{%url school.views.school_index %}";
+                    return false;
+                });
+            });
+            $(document).ready(function(){
+                // setup layout
+                // end setting up layout
+                var updateSchoolDetailDone = function(json) {
+                    console.log(json.status);
+                    console.log(json.status.indexOf('error'));
+                    console.log(json);
+                    if (json.status.indexOf('error') == -1) {
+                        $("#notify").showNotification(json.message);
+                        $.ajaxSetup({
+                            global: false
+                        });
+                    {#                        $("#school-info").load('{% url school.views.school_index %} #school-name');#}
+                        $("#header-bar").load('{% url school.views.school_index %} #school-info');
+                        $.ajaxSetup({
+                            global: true
+                        });
+                    } else {
+                        $("#id_phone").parents("td").append(json.phone);
+                        $("#id_email").parents("td").append(json.email);
+                        $("#id_address").parents("td").append(json.address);
+                        $("#id_name").parents("td").append(json.name);
+                        $("#id_lock_time").parents("td").append(json.lock_time);
+                        $("#notify").showNotification(json.message);
+                        console.log(json.message);
+                    }
+
+                };
+
+                $("#submit").click(function() {
+                    $(".errorlist").empty();
+                    var schoolName = $("#id_name").val();
+                    var schoolLevel = $("#id_school_level").val();
+                    var schoolAddress = $("#id_address").val();
+                    var schoolPhone = $("#id_phone").val();
+                    var schoolEmail = $("#id_email").val();
+                    var schoolLockTime = $("#id_lock_time").val();
+                    var schoolClassLabels = $("#id_class_labels").val();
+                    var data = { name: schoolName, school_level: schoolLevel,
+                        address: schoolAddress, phone: schoolPhone, email: schoolEmail,
+                        update_school_detail: true,
+                        lock_time: schoolLockTime,
+                        class_labels: schoolClassLabels
+                    };
+                    var para = {
+                        type:"POST",
+                        url:"",
+                        global: false,
+                        data: data,
+                        datatype: "json",
+                        success: updateSchoolDetailDone
+                    };
+                    $.ajax(para);
+                    return false;
+                });
+                $("#popupLockTimeValue").val($("#id_lock_time").val());
+                $("#lockTimePopup").find('li.value').each(function(){
+                    $(this).bind('click', function(){
+                        $("#popupLockTimeValue").val($(this).attr('value'));
+                        $('li').each(function(){
+                            $(this).removeClass('selected');
+                        });
+                        $(this).addClass('selected');
+                        $("#customLockTime").show();
+                        $("#popupLockTimeValue").hide();
+                        return true;
+                    });
+                });
+                $("#customLockTime").bind('click',function(){
+                    $('li').each(function(){
+                        $(this).removeClass('selected');
+                    });
+                    $(this).hide();
+                    $("#popupLockTimeValue").val($("#id_lock_time").val());
+                    $("#popupLockTimeValue").show();
+                    return true;
+                });
+
+                $("#id_lock_time").googlePlusPopup({
+                    popupWindow: $("#lockTimePopup"),
+                    getValue: function(){
+                        var val = $("#id_lock_time").val();
+                        if (val == 1) return "Một giờ";
+                        else if (val == 24) return "Một ngày";
+                        else if (val == 168) return "Một tuần";
+                        else if (val == 10000) return "Cả học kì";
+                        else return val.toString() + " Giờ";
+                    },
+                    applyValue: function(popup, original){
+                        original.val(popup.find('input#popupLockTimeValue').val());
+                        return null;
+                    }
+                });
+            });
+        </script>
+        <div id="submenu">
+                <a class="g-button blue" href="{% url school.views.teachers %}" title="Thêm/xoá/sửa thông tin giáo viên">
+                    Giáo viên
+                </a>
+                <a class="g-button blue" href="{%url school.views.classes %}" title="Thêm/xoá lớp học và gán giáo viên chủ nhiệm">
+                    Lớp và chủ nhiệm
+                </a>
+                <a class="g-button blue" href="{% url school.views.move_students %}" title="Chuyển lớp cho học sinh">
+                     Chuyển lớp
+                </a>
+        </div>
+        {#        <h2>Thông tin trường học</h2>#}
+        <form action="{%url school.views.info %}" method="post">{% csrf_token %}
+            {% if message != None %}
+                {{message}}
+                <br/>
+            {% endif %}
+            <div class="info-box">
+                <h3>Thông tin cơ bản</h3>
+                <table class="dataform">
+                    {{ form.as_table }}
+                </table>
+            </div>
+            <div class="info-box">
+                <h3>Thiết lập thông số</h3>
+                <table class="dataform">
+                    {{ setting_form.as_table }}
+                </table>
+            </div>
+
+            <div class="googlePlusPopupDiv" id="lockTimePopup" style="display: none; padding-left: 20px;">
+                <ul>
+                    <li class="value" value="1" style="padding-left: 10px; cursor: pointer;">Một giờ</li>
+                    <li class="value" value="24" style="padding-left: 10px;cursor: pointer;">Một ngày</li>
+                    <li class="value" value="168" style="padding-left: 10px;cursor: pointer;">Một tuần</li>
+                    <li class="value" value="10000" style="padding-left: 10px;cursor: pointer;">Cả học kì</li>
+                    <li value="" id="customLockTime" style="padding-left: 10px;cursor: pointer;">Giá trị khác</li>
+                    <li value="" style="padding-left: 10px;cursor: pointer;">
+                        <label>
+                            <input type="text" id="popupLockTimeValue"
+                                   style="display: none;padding: 5px;
+                                          font-size: 14px;
+                                          border: 1px solid #bbbbbb;
+                                          text-align: left;
+                                          background-color: #ffffff;"
+                                   value=""/>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+            <div style="padding: 10px;clear: both;">
+                <input type="submit" id="submit" class="g-button red" name="submit" value="Lưu" />
+                <input type="reset"  id="cancel" class="g-button" name="cancel" value="Hủy" />
+            </div>
+        </form>
+
+    {% else %}
+        <div>
+            {% if message != None %}
+                {{message}}
+                <br/>
+            {% endif %}
+
+            <table class="dataform">
+                <tr>
+                    <th> Tên trường: </th>
+                    <td> {{ school.name }}</td>
+                </tr>
+                <tr>
+                    <th> Cấp: </th>
+                    <td>{{ school.school_level }}</td>
+                </tr>
+                <tr>
+                    <th>Địa chỉ:</th>
+                    <td> {{ school.address }}</td>
+                </tr>
+                <tr>
+                    <th> Điện thoại: </th>
+                    <td> {{ school.phone }}</td>
+                </tr>
+                <tr>
+                    <th> Email: </th>
+                    <td> {{ school.email }}</td>
+                </tr>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

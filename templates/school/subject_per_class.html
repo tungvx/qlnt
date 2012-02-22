@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+{% if pos > 3 %}
+    {% block css %}
+{#        <link href="/static/css/googlePlusPopup.css?0.7" rel="stylesheet" type="text/css"/>#}
+        <style>
+            table.main-table th, table.main-table td {padding: 8px 2px 8px 2px;}
+        </style>
+        <style>
+            .ui-button { margin-left: -36px; background: transparent; border: 0; padding: 0;}
+            .ui-button-icon-only .ui-button-text { padding: 0.35em; }
+            .ui-autocomplete-input { padding: 2px 33px 2px 2px;}
+        </style>
+    {% endblock %}
+    {% block js %}
+        <script type="text/javascript" src="/static/js/template_js/sortable_table.js?0.7"></script>
+    {% endblock %}
+{% endif %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb class 'school.views.viewClassDetail' class.id %}
+    {% add_crumb 'Môn học' %}
+{% endblock %}
+
+{% block content %}
+    <script type="text/javascript">
+        function submitClass() {
+            if (document.info.class.value !={{class.id}})
+                if (document.info.class.value != -1) {
+                    window.location = "{%url school.views.school_index  %}subjectPerClass/" + document.info.class.value;
+                }
+        }
+    </script>
+
+    {% if pos > 3 %}
+        <script>
+            function confirmDelete() {
+                return confirm("Bạn có chắc chắn xóa không?");
+            }
+        </script>
+        <script type="text/javascript" src="/static/js/template_js/subject_per_class.js"></script>
+{#        <script type="text/javascript" src="/static/js/ggplus_popup.js"></script>#}
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var init = function (p) {
+                    alert(p);
+                };
+                var callback = function (e, window) {
+                    console.log(e);
+                    console.log(window);
+                };
+//                $(".sortable").each(function () {
+////                    $(this).find('#id_primary').googlePlusPopup();
+////                    $(this).find('#id_type').googlePlusPopup();
+//                    //$(this).find('#id_nx').addClass('googlePlusPopupCheckbox');
+//                });
+////                $("#subject_form").find('#id_primary').googlePlusPopup();
+////                $("#subject_form").find('#id_type').googlePlusPopup();
+//                //$("#id_primary").googlePlusPopup();
+            });
+        </script>
+    {% endif %}
+    <form action="" name="info" method="post">{% csrf_token %}
+        <p>Lớp
+            <select name="class" onchange="submitClass()">
+                {% for cl in classList %}
+                    {% if cl.id != class.id %}
+                        <option value={{ cl.id }}> {{ cl }}</option>
+                    {% else %}
+                        <option selected="selected" value={{ cl.id }}> {{ cl }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </p>
+    </form>
+
+    <form action="/school/subjectPerClass/{{class.id}}" method="post">{% csrf_token %}
+        <div id="tableFunction">
+{#            <div class="g-button-group">#}
+                {% if pos > 3 %}
+                    <input class="g-button red" type="button" id="sort" value="Sắp xếp"/>
+
+                    <a id="guide" class="g-button" href="" title="Dùng các phím mũi tên để chọn môn học,
+                sau đó Enter để thay đổi thứ tự hoặc bỏ chọn môn đó. Kết thúc bằng việc ấn 'Lưu thứ tự'.">
+                        Hướng dẫn</a>
+                    <input id="save" class="g-button submitbutton" type="submit" value="Lưu"/>
+                {% endif %}
+{#            </div>#}
+        </div>
+
+        <table class="main-table table-striped" id="sortable">
+            <thead>
+{#            <colgroup>#}
+{#                <col class="navicol" style="width: 2.5%; display: none;">#}
+{#                <col class="navicol" style="width: 2.5%; display: none;">#}
+{#                <col style="width: 5%; ">#}
+{#                <col style="width: 10%;">#}
+{#                <col style="width: 5%;">#}
+{#                <col style="width: 5%; min-width: 50px; max-width: 50px;">#}
+{#                <col style="width: 10%;">#}
+{#                <col style="width: 5%;">#}
+{#                <col style="width: 5%;">#}
+{#                {% if pos > 3 %}#}
+{#                    <col style="width: 1%;"/>#}
+{#                {% endif %}#}
+{#            </colgroup>#}
+            <tr>
+                <th class="naviButton" style="display: none;"></th>
+                <th class="naviButton" style="display: none;"></th>
+                <th class="centerAlign"><a
+                        href="{%url school.views.school_index  %}subjectPerClass/{{class.id}}/4/{{next_status}}">
+                    STT </a></th>
+                <th class="leftAlign"><a
+                        href="{%url school.views.school_index  %}subjectPerClass/{{class.id}}/1/{{next_status}}">
+                    Môn học
+                </a></th>
+                <th class="leftAlign">
+                    Chuyên môn
+                </th>
+                <th class="leftAlign"><a
+                        href="{%url school.views.school_index  %}subjectPerClass/{{class.id}}/2/{{next_status}}">
+                    Hệ số </a></th>
+                <th class="leftAlign"><a
+                        href="{%url school.views.school_index  %}subjectPerClass/{{class.id}}/3/{{next_status}}">
+                    Giáo viên</a></th>
+                <th class="leftAlign">
+                    Cách tính điểm</th>
+                <th class="leftAlign">
+                    Môn nhận xét</th>
+                {% if pos > 3 %}
+                    <th></th>
+                {% endif %}
+            </tr>
+            </thead>
+
+            {% if message != None %}
+                {{ message }}
+                <br>
+            {% endif %}
+
+            {% for ss,f, iteacher, rteacher in list %}
+                <tr class="sortable" id="{{ ss.id }}">
+                    <th class="naviButton" style="display: none;">
+                        <button class="naviButton-up g-button">Lên</button>
+                    </th>
+                    <th class="naviButton" style="display: none;">
+                        <button class="naviButton-down g-button">Xuống</button>
+                    </th>
+
+                    <td class="index" >
+{#                        <span class="ui-icon ui-icon-arrowthick-2-n-s" style="display: none; float: left;">#}
+{#                        </span>#}
+                        <p>{{ forloop.counter }}</p>
+                    </td>
+
+                    {% if pos > 3 %}
+                        <td>
+                            <a title="Chỉnh sửa thông tin môn học"
+                               href="{%url school.views.school_index  %}viewSubjectDetail/{{ss.id}}">{{ ss.name }}</a>
+                        </td>
+                        <td > {{ f.type }} </td>
+                        <td> {{ f.hs }} </td>
+                        <td >
+                            {{ f.teacher_id }}
+                            <div class="ui-widget">
+                                <select class="combobox" style="display: none;">
+                                    <option value="">----------</option>
+{#                                    <option value="">----- giáo viên môn học -----</option>#}
+                                    {% for teacher in iteacher %}
+                                        {% if teacher == ss.teacher_id %}
+                                            <option selected="selected"
+                                                    value="{{ teacher.id}}">{{ teacher }}</option>
+                                        {% else %}
+                                            <option value="{{ teacher.id}}">{{ teacher }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+{#                                    <option value="">----- giáo viên khác -----</option>#}
+                                    {% for teacher in rteacher %}
+                                        {% if teacher == ss.teacher_id %}
+                                            <option selected="selected"
+                                                    value="{{ teacher.id}}">{{ teacher }}</option>
+                                        {% else %}
+                                            <option value="{{ teacher.id}}">{{ teacher }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </td>
+                        <td > {{ f.primary }} </td>
+                        <td class="centerAlign"> {{ f.nx }} </td>
+                        <td><a class="g-button no-text sm "
+                               href="{%url school.views.school_index  %}deleteSubject/{{ss.id}}"
+                               onclick="return confirmDelete();">
+                            Xóa</a></td>
+                    {% else %}
+                        <td > {{ ss.name }}</td>
+                        <td > {{ ss.type }}</td>
+                        <td > {{ ss.hs }} </td>
+                        <td >
+                            {% if ss.teacher_id != "None" %}
+                                Chưa gán
+                            {% else %}
+                                {{ ss.teacher_id }}
+                            {% endif %}
+                        </td>
+                        <td > {{ ss.get_primary }} </td>
+                        <td >
+                            {% if ss.nx == true %}
+                                Có
+                            {% else %}
+                                Không
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+
+            {% if pos > 3 %}
+                <tr id="subject_form">
+                    {{ form.non_field_errors }}
+                    <td></td>
+                    <td >
+                        {{ form.name.errors }}
+                        <p>{{ form.name }}</p>
+                    </td>
+
+                    <td >
+                        {{ form.type.errors }}
+                        <p>{{ form.type }}</p>
+                    </td>
+
+                    <td >
+                        {{ form.hs.errors }}
+                        <p>{{ form.hs }}</p>
+                    </td>
+
+                    <td >
+                        <div id="teacher">
+                            {{ form.teacher_id.errors }}
+                            <div class="autocomplete">
+                                {{ form.teacher_id }}
+                            </div>
+                        </div>
+                    </td>
+                    <td >
+                        {{ form.primary.errors }}
+                        <p>{{ form.primary }} </p>
+                    </td>
+                    <td >
+                        {{ form.nx.errors }}
+                        <p>{{ form.nx }} </p>
+                    </td>
+                    <td><input class="g-button no-text red sm" type="submit" value="Thêm"/></td>
+                </tr>
+            {% endif %}
+        </table>
+    </form>
+
+    <p id="ajax_to" style="display: none;">{% url school.views.change_index 'subject' class.id %}</p>
+    <p id="redirect_link" style="display: none;">{% url school.views.subjectPerClass class.id %}</p>
+
+{#    <div id="popupTest" class="googlePlusPopupButton" style="display: none; margin: 0; height: 100px;">#}
+{#        Thís is a testing div#}
+{#    </div>#}
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Giới thiệu' %}
+{% endblock %}
+
+{% block content %}
+    {% if not user.is_authenticated %}
+        <div id="submenu">
+            <a class="g-button blue" id="login" href="/login"
+               title="Nếu bạn đã có tài khoản thì chọn đăng nhập để sử dụng hệ thống">Đăng nhập</a>
+            <a class="g-button red" href="/register"
+               title="Nếu bạn chưa có tài khoản và phụ trách tin học của trường thì đăng ký để sử dụng hệ thống">Đăng
+                ký</a>
+        </div>
+    {% endif %}
+
+    <table>
+    <colgroup>
+        <col width="*">
+        <col width="50%">
+    </colgroup>
+        <tr>
+            <td style="vertical-align: top">
+                <h3>Giới thiệu</h3>
+
+                <p>TrườngNhà không chỉ là hệ thống thông tin cho các trường học phổ thông mà còn là cầu nối giữa nhà
+                    trường và
+                    gia đình.
+                    Nhà trường sẽ quản lý được các thông tin về học tập và rèn luyện của học sinh và in các sổ sách, báo
+                    cáo
+                    theo qui định của Bộ Giáo dục và Đào tạo.
+                </p>
+
+                <p>Các thông tin nhà trường này sẽ được cung cấp cho học sinh, phụ huynh, giáo viên và qua tin nhắn điện
+                    thoại
+                    (SMS) và Internet.
+                    Ngoài các thông tin về học tập và rèn luyện, mỗi giáo viên, học sinh, và phụ huynh đều có tài khoản
+                    truy cập
+                    qua Internet để nắm thông tin về lịch học, kế hoạch học tập từng tiết học trên lớp.
+                </p>
+
+                <p>
+                    Các Sở Giáo dục và Đào tạo luôn nắm được tình hình của các trường cũng như các thông tin thống kê,
+                    báo cáo
+                    tổng hợp.</p>
+            </td>
+            <td style="vertical-align: top">
+                <img src="/static/images/slogan.png">
+            </td>
+        </tr>
+    </table>
+{% endblock %}

@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load upload_tags %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb selectedClass 'school.views.viewClassDetail' selectedClass.id %}
+    {% add_crumb sub.class_id 'school.views.subjectPerClass' sub.class_id.id %}
+    {% add_crumb 'Kế hoạch giảng dạy' %}
+{% endblock %}
+
+{% block content %}
+    {% if pos > 3 %}
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#notify").ajaxSuccess(function(event, request, settings, json) {
+                    if (json.message != null) {
+                        $(this).html("<ul>" + json.message + "</ul>");
+                        $(this).delay(1000).fadeOut(10000);
+                        if (json.message == 'Đã lưu. Vui lòng cập nhật các tiết học mới') window.location.reload(true);
+                    }
+                    else {
+                        $(this).text("Lưu");
+                        $(this).delay(1000).fadeOut('fast');
+                    }
+                });
+
+                $("#import").click(function() {
+                    $("#fileupload").dialog('open');
+                });
+
+                $("#fileupload").dialog({
+                    modal : true,
+                    buttons: {
+                        Đóng: function() {
+                            location.reload('true');
+                            $(this).dialog('close');
+                        }
+                    },
+                    autoOpen: false,
+                    width: 700,
+                    height: 400,
+                    maxWidth: 700,
+                    maxHeight: 400,
+                    title: "Nhập chương trình học từ file Excel"
+                });
+
+                $("input[name=nLesson]").each(function() {
+                    $(this).change(function() {
+                        var value = $(this).val();
+                        var data = {value: value, request_type:'nLesson'};
+                        var arg = { type:"POST",
+                            url:"",
+                            data: data,
+                            datatype:"json"
+                        };
+                        $.ajax(arg);
+                        return false;
+                    });
+                });
+
+                $("textarea[name=title]").each(function() {
+                    $(this).change(function() {
+                        var value = $(this).val();
+                        var id = $(this).parents("tr").attr('id').split(' ')[0];
+                        var data = {value : value, id : id, request_type:'title'};
+                        var arg = { type:"POST",
+                            url:"",
+                            data: data,
+                            datatype:"json"
+                        };
+                        $.ajax(arg);
+                        return false;
+                    })
+                });
+
+                $("input[name=ngay_day]").each(function() {
+                    $(this).change(function() {
+                        var value = $(this).val();
+                        var id = $(this).parents("tr").attr('id').split(' ')[0];
+                        var data = {value : value, id : id, request_type:'ngay_day'};
+                        var arg = { type:"POST",
+                            url:"",
+                            data: data,
+                            datatype:"json"
+                        };
+                        $.ajax(arg);
+                        return false;
+                    });
+
+                });
+
+                 $("textarea[name=note]").each(function() {
+                    $(this).change(function() {
+                        var value = $(this).val();
+                        var id = $(this).parents("tr").attr('id').split(' ')[0];
+                        var data = {value : value, id : id, request_type:'note'};
+                        var arg = { type:"POST",
+                            url:"",
+                            data: data,
+                            datatype:"json"
+                        };
+                        $.ajax(arg);
+                        return false;
+                    });
+                });
+
+                $("form").submit(function() {
+                    return false;
+                });
+
+            });
+        </script>
+    {% endif %}
+
+    {% if nLesson == 0 %}
+        Chưa có chương trình học môn {{ sub }}
+    {% else %}
+        <p>Chương trình học môn {{ sub }}</p>
+    {% endif %}
+
+    {% if pos > 3 %}
+        <div id="submenu">
+            <a class="g-button blue"
+               title="Nhập chương trình học từ file Excel"
+               href="#popupDiv"
+               id="import"> Nhập từ Excel </a>
+        </div>
+        
+        <form action="/school/subjectAgenda/{{sub.id}}" method="post">{% csrf_token %}
+            <b>Số tiết:</b> <input name="nLesson" type="text"
+                            title="Số tiết học của môn {{sub}}. Giá trị mới không bé hơn giá trị hiện tại."
+                            value="{{ nLesson }}"/>
+            <table class="main-table table-striped table-bordered">
+                <tr>
+                    <th>STT</th>
+                    <th>Tiêu đề</th>
+                    <th>Ghi chú</th>
+                    <th>Ngày dạy</th>
+                </tr>
+                {% for u, v in list %}
+                    <tr id="{{ u.id }}">
+                        <td>{{ u.index }}</td>
+                        <td>{{ v.title }}</td>
+                        <td>{{ v.note }}</td>
+                        <td><input id ="id_{{ u.id }}" class="datepicker" type="text" name="ngay_day" value="{{ u.ngay_day|date:"SHORT_DATE_FORMAT" }}"/></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </form>
+    {% else %}
+        <b>Số tiết:</b> {{ nLesson }}
+        <table class="main-table table-striped table-bordered">
+            <tr>
+                <th>STT</th>
+                <th>Tiêu đề</th>
+                <th>Ghi chú</th>
+                <th>Ngày dạy</th>
+            </tr>
+            {% for u, v in list %}
+                <tr id="{{ u.id }}">
+                    <td>{{ u.index }}</td>
+                    <td>{{ u.title }}</td>
+                    <td>{{ u.note }}</td>
+                    <td>{{ u.ngay_day|date:"SHORT_DATE_FORMAT" }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <div style="display: none;">
+        <div id="fileupload">
+            <form method="post" action="" enctype="multipart/form-data">
+                <div class="fileupload-buttonbar">
+                    {% csrf_token %}
+                    <label class="fileinput-button">
+                        <span>Chọn file...</span>
+                        <input type="file" name="file" multiple>
+                    </label>
+                </div>
+            </form>
+            <div class="fileupload-content">
+                <table class="files"></table>
+                <div class="fileupload-progressbar"></div>
+            </div>
+            <div id="errorDetail" class="errorlist errorDiv" style="display: none;">
+            </div>
+            <p>
+                Chú ý: Phải dùng file Excel theo <a href="{{ MEDIA_URL }}template_files/ChuongTrinhHoc_template.xls">mẫu
+                này</a>.
+            </p>
+        </div>
+    </div>
+    {% upload_js %}
+    <script type="text/javascript" src="/static/js/jquery_file_upload/qlnt_upload_for_agenda.js"></script>
+{% endblock %}

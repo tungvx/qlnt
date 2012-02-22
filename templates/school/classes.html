@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Thiết lập' 'school.views.info' %}
+    {% if pos > 1 %}
+        {% add_crumb 'Các lớp học' %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% if message != None %}
+    {{ message }}
+  {% endif %}
+
+  <script>
+    $(document).ready(function() {
+        $("#tabs").show();
+        $("#tabs").tabs({
+            ajaxOptions: {
+                error: function( xhr, status, index, anchor ) {
+                    $( anchor.hash ).html(
+                        "Có lỗi khi lấy dữ liệu từ máy chủ. Xin hãy thử lại" );
+                },
+                global: false
+            },
+            load: function(event, ui) {
+                $("a.delete").click(function() {
+                    var i = confirm("Bạn có chắc chắn xóa không?");
+                    if (i){
+                        //self = $(ui.panel).load(this.href);
+                        self = $(ui.panel);
+                        $.ajax({
+                            url: this.href,
+                            global: false,
+                            dataType: 'html',
+                            type: 'GET',
+                            complete: function(jqXHR, status, responseText){
+                                if (jqXHR.isResolved()){
+                                    self.html(jqXHR.responseText);
+                                }
+                            }
+
+                        });
+                    }
+                    return false;
+                });
+            }
+        });
+    });
+  </script>
+
+  <div id="tabs" style="display: none;">
+      <ul>
+{#          <li></li>#}
+          <li><a href="classtab">Cả trường</a></li>
+          {% for b in blockList %}
+              <li><a href="classtab/{{b.id}}">Khối {{b}}</a></li>
+          {% endfor %}
+      </ul>
+  </div>
+
+{% endblock %}

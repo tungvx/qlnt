@@ -1,0 +1,633 @@
+{% extends "base.html" %}
+{% load upload_tags %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb class 'school.views.viewClassDetail' class.id %}
+    {% add_crumb 'Thời khóa biểu' %}
+{% endblock %}
+
+{% block content %}
+    <link href="/static/css/template_css/timetable.css" rel="stylesheet" type="text/css"/>
+    <script>
+
+    $(document).ready(function() {
+        function findClass(sub){
+            if (sub == "Toán") return ("toan");
+            else if (sub == "Vật lí")return("li");
+            else if (sub == "Hóa học")return("hoa");
+            else if (sub == "Sinh học")return("sinh");
+            else if (sub == "Tin học")return("tinhoc");
+            else if (sub == "Ngữ văn")return("van");
+            else if (sub == "Lịch sử")return("su");
+            else if (sub == "Địa lí")return("dia");
+            else if (sub == "Ngoại ngữ")return("ngoaingu");
+            else if (sub == "NN2")return("ngoaingu2");
+            else if (sub == "GDCD")return("gdcd");
+            else if (sub == "Công nghệ")return("congnghe");
+            else if (sub == "Thể dục")return("theduc");
+            else if (sub == "GDQP-AN")return("gdqp");
+            else if ((sub != "None") && (sub) && (sub != "---------"))return("other");
+        }
+        $("td").each(function() {
+            var sub;
+            $(this).children("select").each(function() {
+                sub = $(this).children("option:selected").text();
+            });
+        
+            {% if pos < 4 %}
+                sub = $(this).children("p:first").text();
+            {% endif %}
+
+            $(this).addClass(findClass(sub));
+        });
+        {% if pos > 3 %}
+            $(".submitbutton").attr("disabled", true);
+
+            $("select[name=period_1]").each(function() {
+                $(this).change(function() {
+                    var day = $(this).parents("td").attr('id').split(' ')[0];
+                    var val = $(this).val();
+                    sub = ($(this).children("option:selected").text());
+                    $(this).parents("td").removeClass();
+                    $(this).parents("td").addClass(findClass(sub));
+                    {% for s in subject %}
+                        var tmp = "{{ s.id }}";
+                        if (tmp == val) {
+                            $(this).parents("td").children("p").replaceWith("<p>GV : {{ s.teacher_id }}</p>");
+                        }
+                    {% endfor %}
+                    var data = { day: day, sub : val, request_type:'period_1'}
+                    var arg = { type:"POST",
+                        url:"",
+                        data: data,
+                        datatype:"json",
+                        error: function() {
+                            $(".submitbutton").attr('disabled', false);
+                            $(".submitbutton").val('Lưu');
+                        },
+                        success: function() {
+                        }
+                    };
+                    $.ajax(arg);
+                    return false;
+                });
+            });
+
+            $("select[name=period_2]").each(function() {
+                $(this).change(function() {
+                    var day = $(this).parents("td").attr('id').split(' ')[0];
+                    var val = $(this).val();
+                    sub = ($(this).children("option:selected").text());
+                    $(this).parents("td").removeClass();
+                    $(this).parents("td").addClass(findClass(sub));
+                    {% for s in subject %}
+                        var tmp = "{{ s.id }}";
+                        if (tmp == val) {
+                            $(this).parents("td").children("p").replaceWith("<p>GV : {{ s.teacher_id }}</p>");
+                        }
+                    {% endfor %}
+                    var data = { day: day, sub : val, request_type:'period_2'}
+                    var arg = { type:"POST",
+                        url:"",
+                        data: data,
+                        datatype:"json",
+                        error: function() {
+                            $(".submitbutton").attr('disabled', false);
+                            $(".submitbutton").val('Lưu');
+                        },
+                        success: function() {
+                        }
+                    };
+                    $.ajax(arg);
+                    return false;
+                });
+            });
+
+            $("select[name=period_3]").each(function() {
+                $(this).change(function() {
+                    var day = $(this).parents("td").attr('id').split(' ')[0];
+                    var val = $(this).val();
+                    sub = ($(this).children("option:selected").text());
+                    $(this).parents("td").removeClass();
+                    $(this).parents("td").addClass(findClass(sub));
+                    {% for s in subject %}
+                        var tmp = "{{ s.id }}";
+                        if (tmp == val) {
+                            $(this).parents("td").children("p").replaceWith("<p>GV : {{ s.teacher_id }}</p>");
+                        }
+                    {% endfor %}
+                    var data = { day: day, sub : val, request_type:'period_3'}
+                    var arg = { type:"POST",
+                        url:"",
+                        data: data,
+                        datatype:"json",
+                        error: function() {
+                            $(".submitbutton").attr('disabled', false);
+                            $(".submitbutton").val('Lưu');
+                        },
+                        success: function() {
+                        }
+                    };
+                    $.ajax(arg);
+                    return false;
+                });
+            });
+
+            $("select[name=period_4]").each(function() {
+                $(this).change(function() {
+                    var day = $(this).parents("td").attr('id').split(' ')[0];
+                    var val = $(this).val();
+                    sub = ($(this).children("option:selected").text());
+                    $(this).parents("td").removeClass();
+                    $(this).parents("td").addClass(findClass(sub));
+                    {% for s in subject %}
+                        var tmp = "{{ s.id }}";
+                        if (tmp == val) {
+                            $(this).parents("td").children("p").replaceWith("<p>GV : {{ s.teacher_id }}</p>");
+                        }
+                    {% endfor %}
+                    var data = { day: day, sub : val, request_type:'period_4'}
+                    var arg = { type:"POST",
+                        url:"",
+                        data: data,
+                        datatype:"json",
+                        error: function() {
+                            $(".submitbutton").attr('disabled', false);
+                            $(".submitbutton").val('Lưu');
+                        },
+                        success: function() {
+                        }
+                    };
+                    $.ajax(arg);
+                    return false;
+                });
+            });
+
+            $("select[name=period_5]").each(function() {
+                $(this).change(function() {
+                    var day = $(this).parents("td").attr('id').split(' ')[0];
+                    var val = $(this).val();
+                    sub = ($(this).children("option:selected").text());
+                    $(this).parents("td").removeClass();
+                    $(this).parents("td").addClass(findClass(sub));
+                    {% for s in subject %}
+                        var tmp = "{{ s.id }}";
+                        if (tmp == val) {
+                            $(this).parents("td").children("p").replaceWith("<p>GV : {{ s.teacher_id }}</p>");
+                        }
+                    {% endfor %}
+                    var data = { day: day, sub : val, request_type:'period_5'}
+                    var arg = { type:"POST",
+                        url:"",
+                        data: data,
+                        datatype:"json",
+                        error: function() {
+                            $(".submitbutton").attr('disabled', false);
+                            $(".submitbutton").val('Lưu');
+                        },
+                        success: function() {
+                        }
+                    };
+                    $.ajax(arg);
+                    return false;
+                });
+            });
+
+            $("select[name=period_6]").each(function() {
+                $(this).change(function() {
+                    var day = $(this).parents("td").attr('id').split(' ')[0];
+                    var val = $(this).val();
+                    sub = ($(this).children("option:selected").text());
+                    $(this).parents("td").removeClass();
+                    $(this).parents("td").addClass(findClass(sub));
+                    {% for s in subject %}
+                        var tmp = "{{ s.id }}";
+                        if (tmp == val) {
+                            $(this).parents("td").children("p").replaceWith("<p>GV : {{ s.teacher_id }}</p>");
+                        }
+                    {% endfor %}
+                    var data = { day: day, sub : val, request_type:'period_6'}
+                    var arg = { type:"POST",
+                        url:"",
+                        data: data,
+                        datatype:"json",
+                        error: function() {
+                            $(".submitbutton").attr('disabled', false);
+                            $(".submitbutton").val('Lưu');
+                        },
+                        success: function() {
+                        }
+                    };
+                    $.ajax(arg);
+                    return false;
+                });
+            });
+
+            $("select[name=period_7]").each(function() {
+                $(this).change(function() {
+                    var day = $(this).parents("td").attr('id').split(' ')[0];
+                    var val = $(this).val();
+                    sub = ($(this).children("option:selected").text());
+                    $(this).parents("td").removeClass();
+                    $(this).parents("td").addClass(findClass(sub));
+                    {% for s in subject %}
+                        var tmp = "{{ s.id }}";
+                        if (tmp == val) {
+                            $(this).parents("td").children("p").replaceWith("<p>GV : {{ s.teacher_id }}</p>");
+                        }
+                    {% endfor %}
+                    var data = { day: day, sub : val, request_type:'period_7'}
+                    var arg = { type:"POST",
+                        url:"",
+                        data: data,
+                        datatype:"json",
+                        error: function() {
+                            $(".submitbutton").attr('disabled', false);
+                            $(".submitbutton").val('Lưu');
+                        },
+                        success: function() {
+                        }
+                    };
+                    $.ajax(arg);
+                    return false;
+                });
+            });
+
+            $("select[name=period_8]").each(function() {
+                $(this).change(function() {
+                    var day = $(this).parents("td").attr('id').split(' ')[0];
+                    var val = $(this).val();
+                    sub = ($(this).children("option:selected").text());
+                    $(this).parents("td").removeClass();
+                    $(this).parents("td").addClass(findClass(sub));
+                    {% for s in subject %}
+                        var tmp = "{{ s.id }}";
+                        if (tmp == val) {
+                            $(this).parents("td").children("p").replaceWith("<p>GV : {{ s.teacher_id }}</p>");
+                        }
+                    {% endfor %}
+                    var data = { day: day, sub : val, request_type:'period_8'}
+                    var arg = { type:"POST",
+                        url:"",
+                        data: data,
+                        datatype:"json",
+                        error: function() {
+                            $(".submitbutton").attr('disabled', false);
+                            $(".submitbutton").val('Lưu');
+                        },
+                        success: function() {
+                        }
+                    };
+                    $.ajax(arg);
+                    return false;
+                });
+            });
+
+            $("select[name=period_9]").each(function() {
+                $(this).change(function() {
+                    var day = $(this).parents("td").attr('id').split(' ')[0];
+                    var val = $(this).val();
+                    sub = ($(this).children("option:selected").text());
+                    $(this).parents("td").removeClass();
+                    $(this).parents("td").addClass(findClass(sub));
+                    {% for s in subject %}
+                        var tmp = "{{ s.id }}";
+                        if (tmp == val) {
+                            $(this).parents("td").children("p").replaceWith("<p>GV : {{ s.teacher_id }}</p>");
+                        }
+                    {% endfor %}
+                    var data = { day: day, sub : val, request_type:'period_9'}
+                    var arg = { type:"POST",
+                        url:"",
+                        data: data,
+                        datatype:"json",
+                        error: function() {
+                            $(".submitbutton").attr('disabled', false);
+                            $(".submitbutton").val('Lưu');
+                        },
+                        success: function() {
+                        }
+                    };
+                    $.ajax(arg);
+                    return false;
+                });
+            });
+
+            $("select[name=period_10]").each(function() {
+                $(this).change(function() {
+                    var day = $(this).parents("td").attr('id').split(' ')[0];
+                    var val = $(this).val();
+                    sub = ($(this).children("option:selected").text());
+                    $(this).parents("td").removeClass();
+                    $(this).parents("td").addClass(findClass(sub));
+                    {% for s in subject %}
+                        var tmp = "{{ s.id }}";
+                        if (tmp == val) {
+                            $(this).parents("td").children("p").replaceWith("<p>GV : {{ s.teacher_id }}</p>");
+                        }
+                    {% endfor %}
+                    var data = { day: day, sub : val, request_type:'period_10'}
+                    var arg = { type:"POST",
+                        url:"",
+                        data: data,
+                        datatype:"json",
+                        error: function() {
+                            $(".submitbutton").attr('disabled', false);
+                            $(".submitbutton").val('Lưu');
+                        },
+                        success: function() {
+                        }
+                    };
+                    $.ajax(arg);
+                    return false;
+                });
+            });
+            {% endif %}
+            });
+
+    </script>
+
+    <script language="JavaScript" type="text/javascript">
+        function submitClass() {
+            if (document.info.classChange.value !={{class.id}}) {
+                window.location = "{%url school.views.school_index  %}timeTable/" + document.info.classChange.value;
+            }
+        }
+    </script>
+
+
+    <form action="" name="info" method="post" class="centerAlign">{% csrf_token %}
+        {% if pos > 1 %}
+            <p>Lớp
+                <select name="classChange" onchange="submitClass()">
+                    {% for cl in classList %}
+                        {% if cl.id != class.id %}
+                            <option value={{ cl.id }}> {{ cl }}</option>
+                        {% else %}
+                            <option selected="selected" value={{ cl.id }}> {{ cl }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </p>
+        {% else %}
+            <p> Lớp {{ class }}</p>
+        {% endif %}
+    </form>
+
+
+    <form action="/school/timeTable/{{class.id}}" method="post" class="centerAlign">{% csrf_token %}
+    <table class="main-table table-bordered" id="school-timetable">
+    <colgroup style="width: 5%;"></colgroup>
+    <colgroup style="width: 12%;"></colgroup>
+    <colgroup style="width: 12%;"></colgroup>
+    <colgroup style="width: 12%;"></colgroup>
+    <colgroup style="width: 12%;"></colgroup>
+    <colgroup style="width: 12%;"></colgroup>
+    <colgroup style="width: 12%;"></colgroup>
+    <tr>
+        <th>Thứ</th>
+        <th>Thứ 2</th>
+        <th>Thứ 3</th>
+        <th>Thứ 4</th>
+        <th>Thứ 5</th>
+        <th>Thứ 6</th>
+        <th>Thứ 7</th>
+    </tr>
+    {% for i in lesson %}
+        <tr>
+        <th>Tiết {{ i }}</th>
+        {% for w in week %}
+            {% for t, f in list %}
+                {% if t.day == w %}
+                    {% if i == 1 %}
+                        {% if pos < 4 %}
+                            {% if t.period_1 %}
+                                <td>
+                                    <p>{{ t.period_1 }}</p>
+
+                                    <p title="Giáo viên">{{ t.period_1.teacher_id }}</p>
+                                </td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% else %}
+                            <td id="{{w}}"> {{ f.period_1 }}
+                                <p class="teacher">
+                                    {% if t.period_1 %}
+                                        {{ t.period_1.teacher_id }}
+                                    {% endif %}
+                                </p>
+                            </td>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if i == 2 %}
+                        {% if pos < 4 %}
+                            {% if t.period_2 %}
+                                <td>
+                                    <p>{{ t.period_2 }}</p>
+
+                                    <p>{{ t.period_2.teacher_id }}</p>
+                                </td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% else %}
+                            <td id="{{w}}"> {{ f.period_2 }}
+                            <p class="teacher">
+                                {% if t.period_2 %}
+                                    {{ t.period_2.teacher_id }}
+                                {% endif %}
+                            </p>
+                        {% endif %}
+                    {% endif %}
+
+                {% if i == 3 %}
+                    {% if pos < 4 %}
+                        {% if t.period_3 %}
+                            <td>
+                                <p>{{ t.period_3 }}</p>
+
+                                <p>{{ t.period_3.teacher_id }}</p>
+                            </td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                    {% else %}
+                        <td id="{{w}}"> {{ f.period_3 }}
+                            <p class="teacher">
+                                {% if t.period_3 %}
+                                    {{ t.period_3.teacher_id }}
+                                {% endif %}
+                        </td>
+                        </p>
+                    {% endif %}
+                {% endif %}
+
+                    {% if i == 4 %}
+                        {% if pos < 4 %}
+                            {% if t.period_4 %}
+                                <td>
+                                    <p>{{ t.period_4 }}</p>
+
+                                    <p>{{ t.period_4.teacher_id }}
+                                    </p>
+                                </td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% else %}
+                            <td id="{{w}}"> {{ f.period_4 }}
+                            <p class="teacher">
+                                {% if t.period_4 %}
+                                    {{ t.period_4.teacher_id }}
+                                {% endif %}
+                            </p>
+                        {% endif %}
+                    {% endif %}
+
+                {% if i == 5 %}
+                    {% if pos < 4 %}
+                        {% if t.period_5 %}
+                            <td>
+                                <p>{{ t.period_5 }}</p>
+
+                                <p>{{ t.period_5.teacher_id }}</p>
+                            </td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                    {% else %}
+                        <td id="{{w}}"> {{ f.period_5 }}
+                        <p class="teacher">
+                            {% if t.period_5 %}
+                                {{ t.period_5.teacher_id }}
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                {% endif %}
+
+                {% if i == 6 %}
+                    {% if pos < 4 %}
+                        {% if t.period_6 %}
+                            <td>
+                                <p>{{ t.period_6 }}</p>
+
+                                <p>{{ t.period_6.teacher_id }}</p>
+                            </td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                    {% else %}
+                        <td id="{{w}}"> {{ f.period_6 }}
+                            <p class="teacher">
+                                {% if t.period_6 %}
+                                    {{ t.period_6.teacher_id }}
+                                {% endif %}
+                            </p>
+                        </td>
+                    {% endif %}
+                {% endif %}
+
+                    {% if i == 7 %}
+                        {% if pos < 4 %}
+                            {% if t.period_7 %}
+                                <td>
+                                    <p>{{ t.period_7 }}</p>
+
+                                    <p>{{ t.period_7.teacher_id }}</p>
+                                </td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% else %}
+                            <td id="{{w}}"> {{ f.period_7 }}
+                                <p class="teacher">
+                                    {% if t.period_7 %}
+                                        {{ t.period_7.teacher_id }}
+                                    {% endif %}
+                                </p>
+                            </td>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if i == 8 %}
+                        {% if pos < 4 %}
+                            {% if t.period_8 %}
+                                <td>
+                                    <p>{{ t.period_8 }}</p>
+
+                                    <p>{{ t.period_8.teacher_id }}</p>
+                                </td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% else %}
+                            <td id="{{w}}"> {{ f.period_8 }}
+                                <p class="teacher">
+                                    {% if t.period_8 %}
+                                        {{ t.period_8.teacher_id }}
+                                    {% endif %}
+                                </p>
+                            </td>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if i == 9 %}
+                        {% if pos < 4 %}
+                            {% if t.period_9 %}
+                                <td>
+                                    <p>{{ t.period_9 }}</p>
+
+                                    <p>{{ t.period_9.teacher_id }}</p>
+                                </td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% else %}
+                            <td id="{{w}}"> {{ f.period_9 }}
+                                <p class="teacher">
+                                    {% if t.period_9 %}
+                                        {{ t.period_9.teacher_id }}
+                                    {% endif %}
+                                </p>
+                            </td>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if i == 10 %}
+                        {% if pos < 4 %}
+                            {% if t.period_10 %}
+                                <td>
+                                    <p>{{ t.period_10 }}</p>
+
+                                    <p>{{ t.period_10.teacher_id }}</p>
+                                </td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% else %}
+                            <td id="{{w}}"> {{ f.period_10 }}
+                                <p class="teacher">
+                                    {% if t.period_10 %}
+                                        {{ t.period_10.teacher_id }}
+                                    {% endif %}
+                                </p>
+                            </td>
+                        {% endif %}
+                    {% endif %}
+
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        </tr>
+    {% endfor %}
+    </table>
+    <br>
+    {% if pos > 3 %}
+    <input type="submit" class="submitbutton g-button" disabled="disabled" value="Lưu"/>
+    {% endif %}
+    </form>
+{% endblock %}

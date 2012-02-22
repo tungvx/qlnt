@@ -1,0 +1,52 @@
+{% block content %}
+    {{ message }}
+        <form action="/school/movestudent/{{ student.id }}" method="post" class="moveStudent">
+            {% csrf_token %}
+        
+			
+            <table class="dataform" >
+                {{ form.as_table }}
+				<tr>
+				<th></th>
+				<td>
+			            <input style="display: none" name="request_type" value="movestudent">
+			            <input class="g-button blue" type="submit" value="Chuyển">
+				</td>
+				</tr> 
+            </table>
+		<br>	
+		<table class="main-table">
+		<caption>Lịch sử chuyển lớp</caption>
+            <thead>
+            <tr>
+                <th class="leftAlign"> Lớp </th>
+                <th class="leftAlign"> Thời gian nhập lớp </th>
+                <th class="leftAlign"> Thời gian rời lớp </th>
+                <th class="leftAlign"> </th>
+            </tr>
+            </thead>
+            {% for a,c in attendlist %}
+                <tr>
+                    <td> {{ a.get_class }}</td>
+                    <td> {{ a.attend_time|date:"SHORT_DATE_FORMAT" }}</td>
+                    <td> {% if a.leave_time != None %}
+                        {{ a.leave_time|date:"SHORT_DATE_FORMAT" }}
+                    {% endif %}
+                    </td>
+                    {% if a.leave_time != None %}
+                        {% if c %}
+                            <td> <button class="{{ a.id }} g-button blue sm history warning" > Xóa </button> </td>
+                        {% else %}
+                            <td> <button class="{{ a.id }} g-button blue sm history" > Xóa </button> </td>
+                        {% endif %}
+                    {% else %}
+                        <td> </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>			
+        </form>
+
+
+
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% if user.userprofile.position != "GIAO_VIEN" %}
+        {% if selectedClass %}
+            {% add_crumb selectedClass 'school.views.viewClassDetail' selectedClass.id  %}
+        {% endif %}
+        {% if selectedSubject %}
+            {% add_crumb selectedSubject %}
+        {% else %}
+            {% add_crumb 'Chọn môn' %}
+        {% endif %}
+    {% else %}
+        {% if selectedSubject %}
+            {% add_crumb selectedSubject %}
+        {% else %}
+            {% add_crumb 'Bảng điểm' %}
+        {% endif %}
+    {% endif %}
+
+{% endblock %}
+
+
+{% block content %}
+
+  <script language="JavaScript" type="text/javascript">
+    function submitSubject()
+	{
+		if (document.info.subject.value != -1) 
+			if (document.info.nextcell && document.info.nextcell[0].checked)
+					window.location.href="/school/markTable/"  +  {{termChoice}} + "/" + {{classChoice}} + "/" + document.info.subject.value + "/move-right";
+				else	
+					window.location.href="/school/markTable/"  +  {{termChoice}} + "/" + {{classChoice}} + "/" + document.info.subject.value;
+				
+	}
+    function submitSubject1()
+	{
+		if (document.info.subject.value != -1) 
+			if (document.info.nextcell && document.info.nextcell[0].checked)
+					window.location.href="/school/markForTeacher/" + {{type}} + "/" +{{termChoice}} + "/" + document.info.subject.value + "/move-right";
+				else	
+					window.location.href="/school/markForTeacher/" + {{type}} + "/" +{{termChoice}} + "/" + document.info.subject.value;
+				
+	}
+	
+	function submitClass()
+	{
+        if (document.info.class1.value != -1)
+		{	
+			document.info.subject.value =-1;
+			//document.info.submit();
+			window.location.href="/school/markTable/" + {{termChoice}} + "/" + document.info.class1.value;
+		}	
+	}
+	function submitTerm()
+	{
+		var position  = "{{user.userprofile.position}}";
+		
+		if (position!="GIAO_VIEN")
+			window.location.href="/school/markTable/"+document.info.term.value;
+		else	
+			window.location.href="/school/markForTeacher/" + {{type}}+ "/" +document.info.term.value;
+	}
+	</script>
+  
+ 
+
+<form action="/school/markTable" name="info" method="post" id='myform'
+    onsubmit="return false">{% csrf_token %}
+	<input type="hidden" name="submitChoice" value="" style="display: none;">
+	{# <div id="myDiv2" style="display: none;" > </div> #}
+	{# <div id="myDiv3" style="display: none;" > </div> #}
+	<input type="text" id="mainInput" class="mark" style="display: none;" >
+    <p class="centerAlign">Bảng điểm học kỳ
+		<select name="term" onchange="submitTerm();">
+        {% for term in termList %}
+			<option value={{ term.id }} selected> {{ term }} </option>
+        {% endfor %}
+		</select>
+		{% if user.userprofile.position != "GIAO_VIEN" %}
+			lớp 
+			<select name="class1" onchange="submitClass()">
+					<option value="-1" selected> Chọn lớp </option>
+				{% for class in classList %}
+					<option value={{ class.id }}> {{ class.name }} </option>
+				{% endfor %}
+			</select>		
+			môn  
+			<select name="subject" onchange="submitSubject()">
+					<option value=-1 selected>Chọn môn </option>
+				{% for subject in subjectList %}
+					<option value={{ subject.id }}> {{ subject.name }} </option>
+				{% endfor %}
+			</select>
+		{% else %}
+			môn  
+			<select name="subject" onchange="submitSubject1()">
+					<option value=-1 selected>Chọn môn </option>
+				{% for subject in subjectList %}
+					<option value={{ subject.id }}> {{ subject.name }} - {{subject.class_id.name}} </option>
+				{% endfor %}
+			</select>
+		{% endif %}	
+    </p>
+	
+    <script type="text/javascript">
+		var position = "{{user.userprofile.position}}";
+		if (position!="GIAO_VIEN")
+			document.info.class1.value = {{classChoice}};
+		document.info.term.value = {{termChoice}};
+		document.info.subject.value ={{subjectChoice}};
+    </script>
+	
+	{% include  "school/mark/js_initiate.html" %}	 
+	{% include  "school/mark/js_control.html" %}	 
+	
+	{% ifnotequal subjectChoice -1 %} 	
+	
+		{% include  "school/mark/header_mark.html" %}		
+		{% include  "school/mark/mark_for_headmaster.html" %}		
+		{% include  "school/mark/mien_giam_mark.html" %} 
+		
+		{% include  "school/mark/js_save.html" %} 
+		{% include  "school/mark/js_sms.html" %} 
+		{% include  "school/mark/js_other.html" %}  
+		
+	{% else %}
+		</form>
+	{% endifnotequal %}	
+
+
+{% endblock %}

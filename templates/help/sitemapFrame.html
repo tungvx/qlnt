@@ -1,0 +1,135 @@
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Quản lý nhà trường</title>
+	<link rel="stylesheet" type="text/css" media="screen, print" href="/static/css/sitemap.css" />
+	<link rel="stylesheet" type="text/css" media="screen, print" href="/static/css/tipTip.css" />
+	
+	<script type="text/javascript" src="/static/js/sitemap_drawmap.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.tipTip.minified.js"></script>
+
+<script type="text/javascript"> 
+    $(document).ready(function(){
+    $(".tip").tipTip({delay: 200});
+    });
+</script>    
+</head>
+
+<body onLoad="draw()" >
+	<div class="sitemap" >
+		<ul id="primaryNav" class="col5" >
+        	<li id ="home" title="Giới thiệu về hệ thống tiện ích phần mềm Trường Nhà" class="tip"> <a href="/" target="_blank" ><b> Trường Nhà </b></a></li>
+			<canvas id="myCanvas" width ="1000" height = "1000">Error, canvas is not supported</canvas>
+            <li>
+				<ul>
+ 		   		    <li id ="first"  title="Đăng nhập vào hệ thống" class="tip"><a href="/login/" target="_blank" ><b >Đăng nhập</b></a></li>
+                    <li ><a title="Xem danh sách các lớp học toàn trường, theo từng khối; Thêm, sửa, xóa lớp học; Quản lý thông tin từng lớp học qua điểm danh, điểm, hạnh kiểm, tổng kết, môn học, giáo viên chủ nhiệm" class="tip" href="/school/" target="_blank"><b >Trang đầu: Lớp học</b></a>
+                        <ul>
+                            <li title="Xem, chỉnh sửa toàn bộ thông tin của từng học sinh trong lớp. Như: Thông tin cá nhân, liên lạc, gia đinh, đoàn đội..." class="tip"> <a href="/school/" target="_blank">Học sinh</a></li>
+                            <li title="Click vào tên học sinh, chọn tab Tài khoản, click Tạo lại mật khẩu. Mật khẩu sẽ được tại lại giống như tên tài khoản học sinh" class="tip"> <a href="/school/" target="_blank">Tạo lại mật khẩu học sinh</a></li>
+                            <li title="Thêm học sinh mới vào lớp học" class="tip"> <a href="/school/" target="_blank">Thêm học sinh mới</a></li>
+                            <li title="Sắp xếp thứ tự học sinh trong lớp, sắp xếp theo thứ tự abc hoặc tự sắp xếp bằng thao tác kéo thả đơn giản; Để sắp xếp nên xem Hướng dẫn" class="tip"> <a href="/school/" target="_blank">Sắp xếp học sinh</a></li>
+                            <li title="Nhắn tin kết quả học tập hoặc thông báo đến những học sinh đã chọn từ danh sách học sinh trong lớp" class="tip"> <a href="/school/" target="_blank">Nhắn tin</a></li>
+                            <li title="Cập nhật điểm danh cho lớp học hiện tại" class="tip"> <a href="/school/" target="_blank">Điểm danh</a></li>
+                            <li title="Nhập điểm, Nhắn tin thông báo điểm cho lớp hiện tại" class="tip"> <a href="/school/" target="_blank">Điểm</a></li>
+                            <li title="Đánh giá hạnh kiểm của học sinh trong lớp kỳ I, kỳ II và cả năm" class="tip"> <a href="/school/" target="_blank">Hạnh kiểm</a></li>
+                            <li title="Tính điểm trung bình của cả lớp; Sau khi tính điểm trung bình sẽ có thông báo số học sinh chưa đủ điểm, số học sinh chưa có hạnh kiểm" class="tip"> <a href="/school/" target="_blank">Tổng kết</a></li>
+                            <li title="Xếp loại giỏi, tiên tiến, xét lên lớp, ở lại lớp, kiểm tra lại, rèn luyện thêm trong hè" class="tip"> <a href="/school/" target="_blank">Xếp loại...</a></li>
+                            <li title="Xem, chỉnh sửa, thêm, xóa, sắp xếp các môn học của lớp học" class="tip"> <a href="/school/" target="_blank">Môn học</a></li>
+                            <li title="Nhập danh sách học sinh từ file Excel" class="tip"> <a href="/school/" target="_blank">Nhập từ Excel</a></li>
+                            <li title="Xuất danh sách học sinh ra file Excel" class="tip"> <a href="/school/" target="_blank">Xuất ra Excel</a></li>
+                        </ul>
+                    </li>
+                  </ul>
+			</li>
+			<li>
+				<ul>
+     	      		<li id ="first"  title="Đăng ký tài khoản cho trường mới" class="tip"> <a  href="/register/" target="_blank""><b>Đăng ký</b></a></li>
+					<li ><a title = "Quản lý thông tin giáo viên theo Tổ, Nhóm, Dạy môn" class="tip" href="/school/teachers" target="_blank"><b >Thiết lập: Giáo viên</b></a>
+                    <ul>
+                        <li title = "Thêm, đổi tên, xóa Tổ" class="tip"><a href="/school/teachers" target="_blank"><b >Thêm, đổi tên, xóa Tổ</b></a>
+                    	<li title = "Thêm, đổi tên, xóa Nhóm" class="tip"><a href="/school/teachers" target="_blank"><b >Thêm, đổi tên, xóa Nhóm</b></a>
+                        <li title = "Click vào tên giáo viên để xem và sửa các thông tin về giáo viên. " class="tip"><a href="/school/teachers" target="_blank"><b >Sửa thông tin giáo viên</b></a>
+						<li title = "Click vào tên giáo viên, chọn tab Tài khoản, Click Tạo lại mật khẩu, mật khẩu sẽ được tạo lại giống tên tài khoản của giáo viên đó" class="tip"><a href="/school/teachers" target="_blank"><b >Tạo lại mật khẩu giáo viên</b></a>
+                        <li title = "Thêm giáo viên mới" class="tip"><a href=/school/teachers" target="_blank"><b >Thêm giáo viên</b></a>
+                        <li title = "Chọn giáo viên từ danh sách rồi Xóa giáo viên đã chọn" class="tip"><a href="/school/teachers" target="_blank"><b >Xóa giáo viên</b></a>
+            			<li title = "Nhập danh sách giáo viên từ file Excel" class="tip"><a href="/school/teachers" target="_blank"><b >Nhập từ Excel</b></a>
+                        <li title = "Xuất danh sách giáo viên ra file Excel" class="tip"><a href="/school/teachers" target="_blank"><b >Xuất ra Excel</b></a>
+       
+                    </ul>
+                    </li>
+                    <li><a title="Thiết lập: Thêm xóa lớp học và gán giáo viên chủ nhiệm cho lớp" class="tip" href="/school/classes" target="_blank"><b>Thiết lập:Lớp,Chủ nhiệm</b> </a>
+                        <ul>
+                            <li title="Thêm lớp học mới" class="tip"> <a href="/school/addclass" target="_blank">Thêm lớp học</a></li>
+                            <li title="Xóa lớp học" class="tip"> <a href="/school/classes" target="_blank">Xóa lớp học</a></li>
+                            <li title="Gán giáo viên chủ nhiệm cho lớp học" class="tip"> <a href="/school/classes" target="_blank">Gán giáo viên chủ nhiệm</a></li>
+                            <li title="Click vào từng lớp để quản lý lớp học" class="tip"> <a href="/school/classes" target="_blank">Quản lý từng lớp học</a></li>
+                        </ul>
+                    </li>
+ 				</ul>
+			</li>
+			<li>
+				<ul>
+                    <li id ="first"  title="Xem hướng dẫn sử dụng" class="tip"> <a  href="/help/" target="_blank""><b>Trợ giúp</b></a></li> 
+                    <li ><a title = "Thiết lập: Chuyển lớp cho học sinh" class="tip" href="/school/movestudents" target ="_blank"><b>Thiêt lập: Chuyển lớp</b></a></li>
+                    <li ><a title = "Chọn Học kỳ, chọn lớp, chọn môn để bắt đầu nhập điểm" class="tip" href="/school/markTable" target="_blank"><b>Điểm</b> </a>
+                        <ul>
+                            <li title = "Nhập điểm trực tiếp theo kiểu ngang hoặc dọc; Có thể tham khảo Gõ tắt để nhâp điểm nhanh hơn" class="tip"><a href="http://qlnt.hocbadientu.com/school/markTable" target="_blank"><b>Nhập điểm trực tiếp</b> </a>
+                            <li title = "Nhập điểm từ file Excel theo mẫu" class="tip"><a href="/school/markTable" target="_blank"><b>Nhập điểm từ Excel</b> </a>
+                            <li title = "Xuất điểm ra file Excel theo mẫu" class="tip"><a href="/school/markTable" target="_blank"><b>Xuất điểm ra Excel</b> </a>
+                            <li title = "Chọn danh sách học sinh, chọn những đầu điểm cần thông báo, click Gửi để nhắn tin thông báo điểm tới học sinh đã chọn" class="tip"><a href="http://qlnt.hocbadientu.com/school/markTable" target="_blank"><b>Nhắn tin thông báo điểm</b> </a>
+                        </ul>
+                    </li>
+                    <li ><a title = "Điểm danh: Chọn lớp, chọn ngày để bắt đầu điểm danh" class="tip" href="/school/" target="_blank"><b >Điểm danh</b></a>
+                        <ul>
+                            <li ><a title = "Gửi SMS thông báo tình trạng đi học của từng học sinh" class="tip" href="/school/" target="_blank"><b >sms: Nhắn tin điểm danh <br>cho từng học sinh</b></a>
+                            <li ><a title = "Gửi SMS thông báo tình trạng đi học của những học sinh được chọn từ danh sách" class="tip" href="/school/" target="_blank"><b >Nhắn tin điểm danh <br>cho những học sinh đã chọn</b></a>
+                        </ul>
+                    </li>
+                    <li ><a title="Gửi tin nhắn SMS cho học sinh" class="tip" href="/school/sendSMSResult/1" target="_blank"><b>Nhắn tin </b></a>
+                        <ul>
+	                        <li title="Nhắn tin kết quả học tập: kỳ I, II hay cả năm cho học sinh" class="tip"><a href="/school/sendSMSResult/1" target="_blank"><b>Nhắn tin kết quả học tập </b></a>
+	                        <li title="Gửi tin nhắn đến nhưng học sinh đã chọn (thông báo, nhắc nhở...) với nội dung tự soạn" class="tip"><a href="/school/sendSMSResult/1" target="_blank"><b>Nhắn tin cho học sinh</b></a>
+                        </ul>
+                    </li>
+				</ul>
+			</li>
+			<li>
+				<ul>
+                    <li id ="first" title="Gửi thông tin về hệ thống" class="tip"><a href="/app/feedback/" target="_blank"><b>Liên hệ</b></a></li>
+ 				    <li ><a title = "Các báo cáo thống kê, tổng kết toàn trường" class="tip" href="/school/report" target="_blank"><b>Báo cáo</b></a>
+						<ul>
+				            <li title = "Tính điểm tổng kết toàn trường học kỳ I, Có thể khóa sổ điểm và chuyển sang học kỳ tiếp theo" class="tip"><a href="/school/finishTerm/1" target="_blank">Tính tổng kết học kỳ I </a></li>
+							<li title = "Tính điểm tổng kết toàn trường của kỳ II; Tính năng này sẽ bị vô hiệu hóa khi học kỳ trước đó còn chưa kết thúc" class="tip"><a href="/school/finishTerm/1" target="_blank">Tính tổng kết học kỳ II </a></li>
+							<li title = "Tính điểm tổng kết toàn trường cả năm; Tính năng này sẽ bị vô hiệu hóa khi còn học kỳ trong năm học chưa kết thúc " class="tip"><a href="/school/finishYear/1" target="_blank">Tính tổng kết cả năm</a></li>
+							<li title = "Chọn học kỳ, giáo viên hoặc lớp, môn học để xem thống kê học lực, hạnh kiểm, danh hiệu; có thể xuất thống kê ra Excel" class="tip"><a href="/school/count1" target="_blank">Học lực, hạnh kiểm, danh hiệu</a></li>
+							<li title = "Chọn học kỳ, giáo viên hoặc lớp, môn học để xem thống kê điểm trung bình; có thể xuất thống kê ra Excel" class="tip"><a href="/school/count2/1/1" target="_blank">Thống kê điểm trung bình</a></li>
+							<li title = "Chọn học kỳ, giáo viên hoặc lớp, môn học để xem thống kê điểm cuối kỳ; có thể xuất thống kê ra Excel" class="tip"><a href="/school/count2/2/1" target="_blank">Thống kê điểm cuối kì</a></li>
+							<li title = "Chọn học kỳ và lớp để tải file Sổ gọi tên và ghi điểm Excel về. Sau đó bạn có thể mở file Excel xem báo cáo trên máy" class="tip"><a href="/school/printMarkBook" target="_blank">In sổ gọi tên và ghi điểm</a></li>
+							<li title = "Chọn học kỳ và lớp để tải file Phiếu báo cáo điểm Excel về. Sau đó bạn có thể mở file Excel xem báo cáo trên máy" class="tip"><a href="/school/printMarkForClass" target="_blank">In phiếu báo điểm</a></li>
+						    <li title = "Hệ thống tự động lọc ra danh sách nhưng học sinh có danh hiệu (Giỏi, tiên tiến...)" class="tip"><a href="/school/printDanhHieu" target="_blank">Học sinh có danh hiệu<br> (giỏi, khá...)</a></li>
+						    <li title = "Danh sách nhưng học sinh không lên lớp, thi lại, rèn luyện thêm" class="tip"><a href="/school/printNoPass" target="_blank">Học sinh không lên lớp,<br> thi lại, rèn luyện thêm</a></li>
+						    <li title = "Thống kê tin nhắn, số lượng thành công, không thành công" class="tip"><a href="/school/countSMS" target="_blank">Thống kê tin nhắn</a></li>
+						
+						</ul>
+					</li>
+				</ul>
+			</li>	
+			<li>
+				<ul>
+                    <li id ="first" title="Click 'Góp ý', điền nội dung góp ý hoặc báo lỗi về hệ thống, rồi click 'Gửi'" class="tip"><a  ><b>Góp ý</b></a></li>
+                    <li ><a title = "Click vào tên tài khoản ở góc trên bên phải để bắt đầu xem và chỉnh sửa thông tin người sử dụng" class="tip"><b>Người sử dụng</b></a>
+						<ul>
+							<li title = "Sửa thông tin người sửa dụng: điện thoại, ghi chú" class="tip"><a href="/profiles/edit/" target="_blank">Chỉnh sửa thông tin</a></li>
+							<li title = "Đổ mật khẩu" class="tip"><a href="/school/password_change" target="_blank">Đổi mật khẩu</a></li>
+							<li title = "Đổi tên tài khoản, lưu ý tên tài khoản chỉ được thay đổi một lần duy nhất" class="tip"><a href="/school/username_change" target="_blank">Đổi tên tài khoản</a></li>
+						</ul>							
+					</li>
+                    <li title="Góp ý hoặc báo lỗi về hệ thống" class="tip"><a  ><b>Góp ý</b></a></li>
+                    <li title="Đăng xuất khỏi hệ thống" class="tip" ><a><b>Đăng xuất</b></a>
+                </ul>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>

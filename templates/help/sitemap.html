@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Sơ đồ trang' %}
+{% endblock %}
+{% block content %}
+    <iframe scrolling="no" src="sitemapFrame" width=100% height=800px frameborder="3px" style="border:thick; border-color: #a9a9a9; overflow: hidden;">
+    </iframe>
+{% endblock %}
+

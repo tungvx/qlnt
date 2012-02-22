@@ -1,0 +1,262 @@
+﻿{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Báo cáo' '/school/report' %}
+    {% if type == 1 %}
+        {% add_crumb 'Điểm trung bình' %}
+    {% else %}
+        {% if type == 2 %}
+            {% add_crumb 'Điểm thi cuối kì' %}
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{# TODO @Lưu: chỉnh lại vì không để termString trong breadcrumb #}
+{#{% block backward_link %}#}
+{#<div id="termString">#}
+{#  <a href="{% url school.views.school_index %}"> Trang chủ </a>#}
+{#  > <a href="/school/report"> Báo cáo, thống kê </a> #}
+{#    {% if type == 1 %}#}
+{#      > <a href="/school/count2/{{type}}/1">#}
+{#       Điểm trung bình#}
+{#      </a> >#}
+{#    {% else %}#}
+{#      {% if type == 2 %}#}
+{#        > <a href="/school/count2/{{type}}/1">#}
+{#         Điểm thi cuối kì#}
+{#        </a> >#}
+{#      {% endif %}#}
+{#    {% endif %}#}
+{#  </div>#}
+{#{% endblock %}#}
+
+{% block content %}
+{#    <h2>#}
+{#        {% if type == 1 %}#}
+{#            Điểm trung bình#}
+{#        {% else %}#}
+{#            {% if type == 2 %}#}
+{#                Điểm thi cuối kỳ#}
+{#            {% endif %}#}
+{#        {% endif %}#}
+{#    </h2>#}
+
+    <table width="100%">
+        <tr>
+            <td>
+                Học kì
+                <select id="term" style="width:100px">
+                    <option value='1'> Học kì I</option>
+                    <option value='2'> Học kì II</option>
+                    {% if type == 1 %}
+                        <option value='3'> Cả năm</option>
+                    {% endif %}
+                </select>
+                &nbsp&nbsp&nbsp&nbsp
+                Thống kê theo
+                <select id="modeView" style="width:100px">
+                    <option value='1'>Lớp</option>
+                    <option value='2'>Giáo viên</option>
+                </select>
+                &nbsp&nbsp&nbsp&nbspMôn
+
+                <select id="subject">
+                    <option value="-1"> Chọn môn</option>
+                    {% for s in subjectList %}
+                        <option value="{{forloop.counter}}"> {{ s }} </option>
+                    {% endfor %}
+                </select>
+            </td>
+            {% if index != -1 %}
+                <td align="right">
+                    <a class="g-button blue" href="/school/count2/{{type}}/{{modeView}}/{{year_id}}/{{number}}/{{index}}/1">Xuất
+                        ra Excel </a>
+                </td>
+            {% endif %}
+        </tr>
+    </table>
+
+    {% if index != -1 %}
+        <table width="100%" class="main-table">
+            <tr>
+                <th rowspan=2 width="12%" align="center">
+                    Lớp
+                </th>
+                <th rowspan=2 width="6%">
+                    Sĩ Số
+                </th>
+                <th rowspan=2 width="18%">
+                    Giáo viên giảng dạy
+                </th>
+                <th colspan=2>
+                    Giỏi <br> 8 -> 10
+                </th>
+                <th colspan=2>
+                    Khá <br> 6.5 -> 7.9
+                </th>
+                <th colspan=2>
+                    TB <br> 5 -> 6.4
+                </th>
+                <th colspan=2>
+                    Yếu <br> 3.5 -> 4.9
+                </th>
+                <th colspan=2>
+                    Kém <br> 0 -> 3.4
+                </th>
+            </tr>
+            <tr>
+                <th width="6%">
+                    sl
+                </th>
+                <th width="6%">
+                    %
+                </th>
+                <th width="6%">
+                    sl
+                </th>
+                <th width="6%">
+                    %
+                </th>
+                <th width="6%">
+                    sl
+                </th>
+                <th width="6%">
+                    %
+                </th>
+                <th width="6%">
+                    sl
+                </th>
+                <th width="6%">
+                    %
+                </th>
+                <th width="6%">
+                    sl
+                </th>
+                <th width="6%">
+                    %
+                </th>
+            </tr>
+            {% for b,sum,total,list1 in 	 list %}
+                {% for name,ss,teacherName,l in list1 %}
+                    <tr>
+                        <td>
+                            {{ name }}
+                        </td>
+
+                        <td>
+                            {{ ss|floatformat:"0" }}
+                        </td>
+                        <td>
+                            {{ teacherName }}
+                        </td>
+                        {% for u,v in l %}
+                            <td>
+                                {{ u }}
+                            </td>
+
+                            <td>
+                                {{ v|floatformat:"2" }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td>
+                        {#Khối {{ b.number }} #}
+                        {{ b }}
+                    </td>
+                    <td>
+                        {{ sum|floatformat:"0" }}
+                    </td>
+                    <td> &nbsp
+                    </td>
+                    {% for sl,pt in total %}
+                        <td>
+                            {{ sl }}
+                        </td>
+                        <td>
+                            {{ pt|floatformat:"2" }}
+                        </td>
+                    {% endfor %}
+                </tr>
+                <tr class='lastblock'>
+                    <td> &nbsp</td>
+                    <td> &nbsp</td>
+                    <td> &nbsp</td>
+                    {% for sl,pt in total %}
+                        <td> &nbsp</td>
+                        <td> &nbsp</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>
+                    Toàn trường
+                </td>
+                <td>
+                    {{ sumsumsum|floatformat:"0" }}
+                </td>
+                <td>&nbsp</td>
+                {% for sl,pt in allList %}
+                    <td>
+                        {{ sl }}
+                    </td>
+                    <td>
+                        {{ pt|floatformat:"2" }}
+                    </td>
+                {% endfor %}
+
+            </tr>
+        </table>
+    {% endif %}
+
+
+    <script>
+        $(document).ready(function () {
+            function changeTerm() {
+                $('#subject').val('-1');
+                var termNumber = $('#term').val();
+                var str = ''
+                if (termNumber == 1)
+                    str = 'Học kì I ';
+                else
+                if (termNumber == 2)
+                    str = 'Học kì II';
+                else
+                    str = 'Cả năm';
+
+                var strs = document.getElementById('termString').innerHTML;
+                var str1 = ''
+                for (var t = strs.length - 1; t > 0; t--)
+                    if (strs[t] == '>') break;
+                for (var i = 0; i < t; i++)
+                    str1 += strs[i];
+
+                str1 += '> > ' + str
+                document.getElementById('termString').innerHTML = str1;
+            }
+
+            $('#term').change(function () {
+                changeTerm();
+            })
+            $('#subject').change(function () {
+                var termNumber = $('#term').val();
+                var subjectIndex = $('#subject').val();
+                var modeView = $('#modeView').val();
+                if (subjectIndex != '-1')
+                    window.location.href = "/school/count2/" + {{type}}+'/' + modeView + '/' + {{year_id}} +
+                            "/" + termNumber + '/' + subjectIndex;
+            })
+
+            $('#modeView').change(function () {
+                $('#subject').val("-1");
+            });
+            $('#term').val("{{number}}");
+            $('#modeView').val("{{modeView}}");
+            $('#subject').val("{{index}}");
+        });
+
+    </script>
+{% endblock %}

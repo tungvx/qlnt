@@ -1,0 +1,27 @@
+{% extends "base_help.html" %}
+
+{% block explain %}
+    <li>Bước 1: Chọn lớp học cần nhập/sửa điểm từ trang chủ, Click 'Điểm' để bắt đầu nhập/sửa điểm cho học sinh lớp đã chọn</li>
+    <li>Bước 2: Chọn môn để bắt đầu thao tác nhập/sửa điểm</li>
+    <li>Bước 3: Nhập trực tiếp(Click vào bảng rồi gõ điểm bằng tay) hoặc Nhập điểm từ file excel theo mẫu</li>
+    <li>Lưu ý: Những điểm số đã nhập sẽ bị khóa(không được sửa) sau thời gian bằng 'Thời gian khóa điểm' đã được thiết lập ở mục thông tin trường học</li>
+    <br>
+{% endblock %}
+
+{% block help %}
+    <div style="background:transparent url('/static/images/helpImage/QLNT_QL_Diem.jpg') no-repeat; height:700px; width:100%;">
+    <div  id="icon2" style="margin:80px 0 0 100px">
+        <label><span style="width: 230px">Chọn học kỳ, lớp, môn học để bắt đầu thao tác nhập/sửa điểm cho học sinh</span>
+    </div>
+    <div  id="icon2" style="margin:220px 0 0 380px">
+        <label><span style="width: 230px">Nhập trực tiếp: Click vào bảng điểm rồi nhập điểm cho từng học sinh</span>
+    </div>
+    <div id="icon3" style="margin: 125px 0 0 720px">
+        <label><span style="width: 200px">Nhập điểm từ <br><a href="/"><u>file Excel theo mẫu này</u><img src='/static/images/helpImage/QLNT_Popup_NhapExcel.jpg'></span>
+        </label>
+    </div>
+    <div  id="icon3" style="margin:125px 0 0 800px">
+        <label><span style="width: 200px">Xuất điểm của học sinh trong lớp ra file excel</span>
+    </div>
+
+{% endblock %}

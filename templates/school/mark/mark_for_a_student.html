@@ -1,0 +1,397 @@
+﻿{% block content %}
+{% load mark %}
+{% if message != None %}
+{{message}}
+{% endif %}
+<script>
+    $(document).ready(function(){
+        $("select[name=term]").change(function(){
+			/*
+            if ($(this).val != -1){
+                var d = $(this).parents("form").serialize();
+                var arg = {data: d,
+                    type: $(this).parents("form").attr('method'),
+                    url: $(this).parents("form").attr('action'),
+                    success: function(response) {
+                        $('.ui-tabs-panel:visible').html(response);
+                    },
+                    global:false
+                };
+                $.ajax(arg);
+            }
+			*/
+			var arg = {				
+				url:"/school/markForAStudent/{{class_id}}/{{student_id}}/"+$(this).val() ,
+				success: function(response) {
+					$('.ui-tabs-panel:visible').html(response);
+				},
+				global:false
+			};
+			$.ajax(arg);				
+        });
+    });
+</script>
+<table width="100%" >
+<tr>
+	<td width="60%">
+		<form action="/school/markForAStudent/{{class_id}}/{{student_id}}"  name="info" method="post" id='myform' > {% csrf_token %}
+			Học kỳ 
+			<select name="term" >
+				{% for term in termList %}
+					<option   value={{ term.id }} selected> {{ term}} </option>
+				{% endfor %}
+
+			</select>
+		</form>
+	</td>
+	<td width="40%" style="text-align:right">
+		<a class="g-button blue" href="/school/markExcelForAStudent/{{class_id}}/{{student_id}}/{{termChoice}}"> Xuất ra bảng điểm </a>
+	</td>
+</tr>
+</table>	
+	<br>
+	<br>
+	<table class="main-table" style="width: 50%">
+		<tr>
+			<th rowspan =2 style="text-align: center;" width= "10%">
+				Học kỳ
+			</th>
+			<th colspan =2 style="text-align: center;" width= "20%" >
+				Kết quả xết loại
+			</th>
+			{% ifequal selectedTerm.number 2 %}
+				<th colspan =2 style="text-align: center;" width= "20%">
+					Xếp loại lại sau KT lại môn học hoặc rèn luyện thêm về học lực
+				</th>
+			{% endifequal %}
+				
+		</tr>
+		<tr>
+			<th  width= "10%">
+				TB
+			</th>
+			<th  width= "10%">
+				HL
+			</th>
+
+			{% ifequal selectedTerm.number 2 %}
+				<th  width= "10%">
+					TB
+				</th>
+				<th  width= "10%">
+					HL
+				</th>
+			{% endifequal %}						
+		</tr>
+		<tr>
+			<td style="text-align: center;" >
+				 Học Kỳ I
+			</td>
+			<td style="text-align: center;">
+				{{tbhk1.tb_hk|floatformat:"-1" }}					
+			</td>
+			<td style="text-align: center;">
+				{{ tbhk1.hl_hk|convertHlToVietnamese }}				
+			</td>
+			{% ifequal selectedTerm.number 2  %}
+				<td>
+				</td>
+				<td>
+				</td>
+			{% endifequal %}	
+		</tr>
+			{% ifequal selectedTerm.number 2  %}
+			<tr>
+				<td style="text-align: center;" >
+					Học Kỳ II
+				</td>
+				<td style="text-align: center;">
+					{{ tbhk2.tb_hk|floatformat:"-1"}}
+				</td>
+				<td style="text-align: center;">
+					{{ tbhk2.hl_hk|convertHlToVietnamese }}				
+				</td>				
+				<td>
+				</td>
+				<td>
+				</td>
+
+			</tr>	
+			
+			<tr>
+				<td style="text-align: center;" >
+				 Cả năm
+				</td>
+				<td style="text-align: center;">
+					
+				{{ tbCaNam.tb_nam|floatformat:"-1"}}
+				</td>
+				<td style="text-align: center;">
+				{{ tbCaNam.hl_nam|convertHlToVietnamese }}
+				</td>
+				<td>
+				</td>
+				<td>
+				</td>
+
+			</tr>	
+			{% endifequal %}
+		
+	</table>
+		<br>
+		
+<script type="text/javascript" >
+	document.info.term.value={{termChoice}}
+	
+</script>		
+		
+	
+	<table class="main-table" >
+		<tr>
+			<th rowspan=2 style="text-align: center;" width="4%">
+				Stt
+			</th>	
+			<th rowspan=2 style="text-align: center;" width="18%">
+			   Môn
+			</th>	
+			<th colspan=5 style="text-align: center;" width="20%" >
+				Miệng
+			</th>	
+
+			<th colspan=5 style="text-align: center;" width="20%">
+				15 phút
+			</th>	
+			<th colspan=5 style="text-align: center;" width="20%">
+				45 phút
+			</th>
+			<th rowspan=2 style="text-align: center;" width="5%">
+				Thi cuối kì
+			</th>	
+		{% ifequal selectedTerm.number 1 %}
+			<th rowspan=2 width="5%" >
+				TB
+			</th>	
+		{% else %}
+			<th colspan=3 style="text-align: center;"  >
+				<b>ĐIỂM TRUNG BÌNH </b>
+			</th>
+		{% endifequal %}
+			
+			
+		</tr>
+		
+		<tr>
+			<th width ="4%" style="text-align: center;"> 1</th>
+			<th width ="4%" style="text-align: center;"> 2</th>
+			<th width ="4%" style="text-align: center;"> 3</th>
+			<th width ="4%" style="text-align: center;"> 4</th>
+			<th width ="4%" style="text-align: center;"> 5</th>
+			<th width ="4%" style="text-align: center;" > 1</th>
+			<th width ="4%" style="text-align: center;"> 2</th>
+			<th width ="4%" style="text-align: center;"> 3</th>
+			<th width ="4%" style="text-align: center;"> 4</th>
+			<th width ="4%" style="text-align: center;"> 5</th>
+			<th width ="4%" style="text-align: center;" > 1</th>
+			<th width ="4%" style="text-align: center;"> 2</th>
+			<th width ="4%" style="text-align: center;"> 3</th>
+			<th width ="4%" style="text-align: center;"> 4</th>
+			<th width ="4%" style="text-align: center;"> 5</th>
+			{% ifequal selectedTerm.number 2 %}
+				<th class="leftAlign" >HK I  </th>
+				<th class="leftAlign" >HK II </th>
+				<th class="leftAlign" >CK </th>
+				
+			{% endifequal %}
+		
+		</tr>
+		
+		
+	{% ifequal selectedTerm.number 1 %} 
+		{% for s,m in list %}	
+		<tr>
+			<td style="text-align: center;">
+			 {{forloop.counter}}	
+			</td>
+			<td style="text-align: center;">
+				{{s}}
+			</td>
+
+			{% ifnotequal s.hs 	0 %}
+
+			<td align="right">
+				{{m.mieng_1|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mieng_2|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mieng_3|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mieng_4|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mieng_5|floatformat:"-1"}}  
+			</td>
+
+			<td align="right">
+				{{m.mlam_1|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mlam_2|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mlam_3|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mlam_4|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mlam_5|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mot_tiet_1|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mot_tiet_2|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mot_tiet_3|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mot_tiet_4|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mot_tiet_5|floatformat:"-1"}}  
+			</td>
+
+			<td align="right">
+				{{m.ck|floatformat:"1"}}  
+			</td>
+
+			<td align="right">
+				{{m.tb|floatformat:"1"}}  
+			</td>
+		</tr>		
+		{% else %}
+			<td colspan=5 style="text-align: center;">
+			{{ m.mieng_1|convertHlToVietnamese }}			
+			</td>
+			<td colspan=5>
+			</td>
+			<td colspan=5 style="text-align: center;">
+			{{ m.mot_tiet_1|convertHlToVietnamese }}			
+			</td>
+			<td  style="text-align: center;">
+			{{ m.ck|convertHlToVietnamese }}						
+			</td>
+			
+			<td style="text-align: center;">
+			{{ m.tb|convertHlToVietnamese }}						
+			</td>
+
+		{% endifnotequal %}
+			
+		{% endfor %}
+		
+		{%else %}
+		{% for s,m,hk1,tbnam in list %}		
+		<tr>
+			<td style="text-align: center;">
+			 {{forloop.counter}}	
+			</td>
+			<td style="text-align: center;">
+				{{s}}
+			</td>
+
+		{% ifnotequal s.hs 	0 %}
+
+			<td align="right">
+				{{m.mieng_1|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mieng_2|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mieng_3|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mieng_4|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mieng_5|floatformat:"-1"}}  
+			</td>
+
+			<td align="right">
+				{{m.mlam_1|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mlam_2|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mlam_3|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mlam_4|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mlam_5|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mot_tiet_1|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mot_tiet_2|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mot_tiet_3|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mot_tiet_4|floatformat:"-1"}}  
+			</td>
+			<td align="right">
+				{{m.mot_tiet_5|floatformat:"-1"}}  
+			</td>
+
+			<td align="right">
+				{{m.ck|floatformat:"1"}}  
+			</td>
+
+			<td align="right">
+				{{hk1|floatformat:"1"}}  
+			</td>			
+			<td align="right">
+				{{m.tb|floatformat:"1"}}  
+			</td>			
+			<td align="right">
+				{{tbnam|floatformat:"1"}}  
+			</td>	
+		{%else %}
+			<td colspan=5 style="text-align: center;">
+				{{ m.mieng_1|convertMarkToCharacter }}
+			</td>
+			<td colspan=5>
+			</td>
+			<td colspan=5 style="text-align: center;">
+				{{ m.mot_tiet_1|convertMarkToCharacter }}
+			</td>
+			<td  style="text-align: center;">
+				{{ m.ck|convertMarkToCharacter }}
+			</td>
+			<td style="text-align: center;">
+				{{ hk1|convertMarkToCharacter }}
+			</td>
+			<td style="text-align: center;">
+				{{ m.tb|convertMarkToCharacter }}
+			</td>
+			<td style="text-align: center;">
+				{{ tbnam|convertMarkToCharacter }}
+			</td>				
+		{% endifnotequal %}	
+		</tr>				
+		 {%endfor %}
+	{% endifequal %}
+
+	</table>
+{% endblock %}
+

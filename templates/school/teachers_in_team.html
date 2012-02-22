@@ -1,0 +1,159 @@
+{% block content %}
+    {% if pos > 3 %}
+        <script>
+            $(document).ready(function() {
+                $("select[name=team_id]").each(function() {
+                    $(this).change(function() {
+                        var id = $(this).parents("tr").attr('class').split(' ')[0];
+                        var team = $(this).val();
+                        var p = $(this).parents("tr");
+                        var data = { id: id, team:team, request_type:'team'};
+                        var arg = { type:"POST",
+                            url:"school/teachers_in_team/{{ team.id }}",
+                            data: data,
+                            datatype:"json",
+                            success:function(){
+                                p.remove();
+                            }
+                        };
+                        $.ajax(arg);
+                        return false;
+
+                    });
+                });
+
+                $("select[name=major]").each(function() {
+                    $(this).change(function() {
+                        var id = $(this).parents("tr").attr('class').split(' ')[0];
+                        var major = $(this).val();
+                        var data = { id: id, major:major, request_type:'major'};
+                        var arg = { type:"POST",
+                            url:"school/teachers_in_team/{{ team.id }}",
+                            data: data,
+                            datatype:"json",
+                            success:function() {
+                                applyListener();
+                            }
+                        };
+                        $.ajax(arg);
+                        return false;
+                    });
+                });
+
+                $("select[name=group_id]").each(function() {
+                    $(this).change(function() {
+                        var id = $(this).parents("tr").attr('class').split(' ')[0];
+                        var group = $(this).val();
+                        var data = { id: id, group:group, request_type:'group'};
+                        var arg = { type:"POST",
+                            url:"school/teachers_in_team/{{ team.id }}",
+                            data: data,
+                            datatype:"json",
+                            success:function(){
+                            }
+                        };
+                        $.ajax(arg);
+                        return false;
+
+                    });
+                });
+            });
+        </script>
+    {% endif %}
+
+{#    <h2>Tổ {{ team }}</h2>#}
+    <table class="main-table table-striped">
+        {% if pos > 3 %}
+            <colgroup style="width: 5%;"></colgroup>
+        {% endif %}
+        <colgroup style="width: 5%;"></colgroup>
+        <colgroup style="width: 20%;"></colgroup>
+        <colgroup style="width: 10%;"></colgroup>
+        <colgroup style="width: 25%;"></colgroup>
+        <colgroup style="width: 5%;"></colgroup>
+        <colgroup style="width: 10%;"></colgroup>
+        <colgroup style="width: 10%;"></colgroup>
+        <colgroup style="width: 10%;"></colgroup>
+
+
+        <tr class="thread">
+
+            {% if pos > 3 %}
+                <th title="Chọn cả tổ" class="" style="text-align: center;">
+                    <input type="checkbox" class="checkbox_all"/>
+                </th>
+            {% endif %}
+            <th class="leftAlign">STT</th>
+            <th class="leftAlign">Họ tên</th>
+            <th class="leftAlign">Ngày sinh</th>
+            <th class="leftAlign">Quê quán</th>
+            <th class="leftAlign">Giới tính</th>
+            <th class="leftAlign">Dạy môn</th>
+            <th class="leftAlign">Tổ</th>
+            <th class="leftAlign">Nhóm</th>
+        </tr>
+
+        {% if message != None %}
+            {{ message }}
+        {% endif %}
+
+        {% for ss, f in list %}
+            <tr class="{{ ss.id }}">
+                {% if pos > 3 %}
+                    <td  style="text-align: center;">
+                        <input type="checkbox" class="checkbox_{{ss.id}}"/>
+                    </td>
+                {% endif %}
+                <td class="leftAlign">{{ forloop.counter }}</td>
+                <td class="leftAlign">
+                    {% if pos > 3 or teacher_id == ss.id %}
+                        <a href="{%url school.views.school_index  %}viewTeacherDetail/{{ss.id}}">
+                            {{ ss.last_name }} {{ ss.first_name }} </a>
+                    {% else %}
+                        {{ ss.last_name }} {{ ss.first_name }}
+                    {% endif %}
+                </td>
+
+                <td class="leftAlign"> {{ ss.birthday|date:"SHORT_DATE_FORMAT" }}</td>
+                <td class="leftAlign"> {{ ss.home_town }}</td>
+                <td class="leftAlign"> {{ ss.sex }} </td>
+                {% if pos > 3 %}
+                    <td class="leftAlign"> {{ f.major }} </td>
+                    <td class="leftAlign"> {{ f.team_id }} </td>
+                    <td class="leftAlign"> {{ f.group_id }} </td>
+                    {% else %}
+                    <td class="leftAlign">
+                        {% if ss.major == '-1' %}
+                            Chưa có
+                        {% else %}
+                            {{ ss.major }}
+                        {% endif %}
+                    </td>
+                    <td class="leftAlign">
+                        {% if ss.team_id%}
+                            {{ ss.team_id }}
+                        {% else %}
+                            Chưa có
+                        {% endif %}
+                    </td>
+                    <td class="leftAlign">
+                        {% if ss.group_id %}
+                            {{ ss.group_id }}
+                        {% else %}
+                            Chưa có
+                        {% endif %}
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+
+    </table>
+
+
+    {% if pos > 3 %}
+        <tr>
+            <td class="leftAlign">&nbsp</td>
+        </tr>
+    {% endif %}
+    <input id="reload" type="hidden" onclick="location.replace(location.href)"/>
+{% endblock %}

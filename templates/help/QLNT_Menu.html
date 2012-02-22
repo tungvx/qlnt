@@ -1,0 +1,206 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SideBar</title>
+<script type="text/javascript">
+function showHS(){
+	var x =document.getElementById("hocsinh");
+	//x.style.backgroundColor ="#333"; 
+	if(x.childNodes[2].style.display !="block")
+		x.childNodes[2].style.display ="block";
+	else
+		x.childNodes[2].style.display ="none";
+	if(x.lastChild.className != "expanded")
+		x.lastChild.className="expanded";
+	else
+		x.lastChild.className="collapsed";		
+}
+function showGV(){
+	var x =document.getElementById("giaovien");
+	//x.style.backgroundColor ="#333"; 
+	if(x.childNodes[2].style.display !="block")
+		x.childNodes[2].style.display ="block";
+	else
+		x.childNodes[2].style.display ="none";
+	if(x.lastChild.className != "expanded")
+		x.lastChild.className="expanded";
+	else
+		x.lastChild.className="collapsed";
+}
+function showQL(){
+	var x =document.getElementById("quanli");
+	//x.style.backgroundColor ="#333"; 
+	if(x.childNodes[2].style.display !="block")
+		x.childNodes[2].style.display ="block";
+	else
+		x.childNodes[2].style.display ="none";
+	if(x.lastChild.className != "expanded")
+		x.lastChild.className="expanded";
+	else
+		x.lastChild.className="collapsed";
+}
+this.sitemapstyler = function(){
+	var sitemap = document.getElementById("sitemap")
+	if(sitemap){
+		this.listItem = function(li){
+			if(li.getElementsByTagName("ul").length > 0){
+				var ul = li.getElementsByTagName("ul")[0];
+				var span = document.createElement("span");
+				span.className = "collapsed";
+				span.onclick = function(){
+					ul.style.display = (ul.style.display == "none") ? "block" : "none";
+					this.className = (ul.style.display == "none") ? "collapsed" : "expanded";
+				};
+/*				var hocsinh = document.getElementById("hocsinh") ;
+				hocsinh.onclick = function(){
+					alert(hocsinh.href);
+					ul.style.display = (ul.style.display == "none") ? "block" : "none";
+					this.span.className = (ul.style.display == "none") ? "collapsed" : "expanded";						
+				} */
+				li.appendChild(span);
+			};
+		};
+		var items = sitemap.getElementsByTagName("li");
+		for(var i=0;i<items.length;i++){
+			listItem(items[i]);
+		};
+	};	
+};
+window.onload = sitemapstyler;
+</script>
+<style>
+body{
+	margin:0;
+	padding:0;
+    background-color: #eeeeee;
+	font:70% Arial, Helvetica, sans-serif;
+	color:#555;
+	line-height:150%;
+	text-align:left;
+}
+a{
+	text-decoration:none;
+	color:#666;
+}
+a:hover{
+	text-decoration:none;
+	color:#F30;
+}
+h1{
+	font-size:140%;
+	margin:0 0px;
+	line-height:80px;	
+}
+#container{
+	margin:0 auto;
+	width:220px;
+	background:#eeeeee;
+	padding-bottom:20px;
+}
+#content{margin:0 0px;}
+p{	
+	margin:0 auto;
+	width:680px;
+	padding:1em 0;
+}
+#sitemap, #sitemap ul, #sitemap li{
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+#sitemap{}
+#sitemap ul{
+	display:block;
+}
+#sitemap li{
+	line-height:220%;
+	margin-top:1px;
+	position:relative;
+	width:100%;
+}
+/* IE leaves a blank space where span is added so this is to avoid that */
+* html #sitemap li{
+	float:left;
+	display:inline;
+}
+#sitemap li a{padding-left:28px;}
+#sitemap li span{float:left;position:absolute;top:5px;left:5px;width:13px;height:13px;cursor:auto;font-size:0;}
+#sitemap li span, #sitemap li span.collapsed{background:url(/static/images/helpImage/collapsed.gif) no-repeat 0 0;}
+#sitemap li span.expanded{background:url(/static/images/helpImage/expanded.gif) no-repeat 0 0;}
+/* second level */
+#sitemap li li{
+	background:#fff;
+}
+#sitemap li li a{padding-left:15px;}
+#sitemap li li span{left:18px;}
+/* third level */
+#sitemap li li li a{padding-left:36px;}
+#sitemap li li li span{left:46px;}
+</style>
+</head>
+<body>
+<div id="container">
+	<h1><img  style="padding:20px 0px 10px 60px" src="/static/images/helpImage/truongminhMini.png"></h1>
+	<div id="content">
+		<ul id="sitemap">
+            {% if user.is_authenticated %}
+            {# Đã đăng nhập vào hệ thống #}
+                <li><a href="QLNT_Welcome" target="iFrame" ><strong>Xin chào {{ user.username }}</strong></a></li>
+                {% if user.userprofile.position == 'HOC_SINH' %}
+                    <li id="hocsinh" ><a href="QLNT_HS" target="iFrame" onClick="showHS()"><strong>Học sinh</strong></a>
+                        <ul>
+                            <li><a href="QLNT_HS" target="iFrame">Xem hồ sơ học sinh</a></li>
+                            <li><a href="QLNT_HS_Lophoc" target="iFrame">Lớp học: Danh sách lớp, môn học...</a></li>
+                            <li><a href="QLNT_QL_Thoikhoabieu" target="iFrame">Xem thời khóa biểu</a></li>
+                            <li><a href="QLNT_GV_Xem" target="iFrame">Xem thông tin trường mình</a></li>
+                            <li><a href="QLNT_QL_SuaTK" target="iFrame">Sửa thông tin tài khoản</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    {% if user.userprofile.position == 'GIAO_VIEN' %}
+                        <li id="giaovien"><a href="QLNT_GV" target="iFrame"  onClick="showGV()"><strong>Giáo viên</strong></a>
+                            <ul>
+                                <li><a href="QLNT_QL_Thoikhoabieu" target="iFrame">Xem thời khóa biểu</a></li>
+                                <li><a href="QLNT_QL_Lophoc" target="iFrame">Quản lý lớp chủ nhiệm</a></li>
+                                <li><a href="QLNT_GV_Quanlicaclop" target="iFrame">Quản lý các lớp đang giảng dậy</a></li>
+                                <li><a href="QLNT_GV_Danhsachloptoantruong" target="iFrame">Xem danh sách lớp học toàn trường</a></li>
+                                <li><a href="QLNT_GV_Giaovientoantruong" target="iFrame">Xem danh sách giáo viên toàn trường</a></li>
+                                <li><a href="QLNT_GV_Xem" target="iFrame">Xem thông tin trường mình</a></li>
+                                <li><a href="QLNT_QL_SuaTK" target="iFrame">Sửa thông tin tài khoản</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        {% if user.userprofile.position == 'HIEU_TRUONG' or user.userprofile.position == 'HIEU_PHO' or  user.userprofile.position == 'GIAO_VU'%}
+                            <li id="quanli"><a href="QLNT_QL" target="iFrame" onClick="showQL()" ><strong>Người quản lý</strong></a>
+                                <ul>
+                                    <li><a href="QLNT_QL_Thietlap" target="iFrame" title="Các thông tin tên, địa chỉ, điện thoại, email...">Thiết lập thông tin trường học</a></li>
+                                    <li><a href="QLNT_QL_Giaovien" target="iFrame" title="Thêm, xóa, sửa thông tin giáo viên, tạo lại mật khẩu giáo viên">Thiêt lập giáo viên</a></li>
+                                    <li><a href="QLNT_QL_Lopvachunhiem" target="iFrame" title="Thêm, xóa lớp, Gán giáo viên chủ nhiệm cho lớp">Thiết lập lớp và chủ nhiệm</a></li>
+                                    <li><a href="QLNT_QL_Chuyenlop" target="iFrame">Thiết lập chuyển lớp cho học sinh</a></li>
+                                    <li><a href="QLNT_QL_Thoikhoabieu" target="iFrame">Quản lý Thời khóa biểu toàn trường</a></li>
+                                    <li><a href="QLNT_QL_Lophoc" target="iFrame" title="Thêm, xóa học sinh, điểm danh, nhập điểm, xếp loại, tổng kết, nhắn tin điểm...">Quản lý lớp học:</a></li>
+                                    <li><a href="QLNT_QL_Diem" target="iFrame">Nhập/sửa điểm cho học sinh</a></li>
+                                    <li><a href="QLNT_QL_Diemdanh" target="iFrame">Cập nhật điểm danh cho học sinh</a></li>
+                                    <li><a href="QLNT_QL_Hanhkiem" target="iFrame">Đánh giá hạnh kiểm học sinh</a></li>
+                                    <li><a href="QLNT_QL_Tongket" target="iFrame">Tính tổng kết học lực cho lớp</a></li>
+                                    <li><a href="QLNT_QL_Xeploai" target="iFrame">Xếp loại, xét lên lơp, khen thưởng</a></li>
+                                    <li><a href="QLNT_QL_Monhoc" target="iFrame">Nhập/sửa thông tin môn học của lớp</a></li>
+                                    <li><a href="QLNT_QL_Sapxep" target="iFrame">Sắp xếp thứ tự danh sách học sinh</a></li>
+                                    <li><a href="QLNT_QL_Nhantin" target="iFrame">Nhăn tin kết quả học tập cho học sinh</a></li>
+                                    <li><a href="QLNT_QL_Lichhoc" target="iFrame">Xem thời khóa biểu từng lớp</a></li>
+
+                                    <li><a href="QLNT_QL_BaocaoTongket" target="iFrame">Báo cáo thống kê tổng kết</a></li>
+                                    <li><a href="QLNT_QL_SuaTK" target="iFrame" title="Sửa thông tin, đổi tên tài khoản, đổi mật khẩu">Sửa thông tin tài khoản</a></li>
+                                </ul>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <li><a href="QLNT_Welcome" target="iFrame" ><strong>Xin chào</strong></a></li>
+            {% endif %}
+		</ul>
+	</div>
+</div>
+</body>
+</html>

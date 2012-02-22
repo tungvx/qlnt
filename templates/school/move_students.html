@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'Thiết lập' 'school.views.info' %}
+    {% add_crumb 'Chuyển lớp'  %}
+{% endblock %}
+
+
+{% block content %}
+    <script type="text/javascript" src="/static/js/template_js/move_students.js"></script>
+{#    <h2> Chuyển lớp </h2>#}
+    <div class="centerAlign">
+        <table class="dataform">
+        <tr>
+            <th> Từ lớp: </th>
+            <td>
+                <label for="source_id"></label>
+                <select name="source" id="source_id">
+                    <option value="-1"> ------ </option>
+                    {% for cl in classList %}
+                        <option value="{{ cl.id }}">{{ cl }}</option>
+                    {% endfor %}
+                    <option value="0"> Chưa phân lớp </option>
+                </select>
+            </td>
+            <th> Đến lớp: </th>
+            <td>
+                <label for="target_id"></label>
+                <select name="target" id="target_id">
+                    <option> ------ </option>
+                </select>
+            </td>
+            <td >
+                <button class="g-button red centerAlign" id="moveSelected" style="display: none"> Chuyển lớp </button>
+            </td>
+        </tr>
+        </table>
+    </div>
+
+    <div id="students_table">
+
+    </div>
+
+    <div class="centerAlign">
+    <button class="g-button " id="selectAll"  style="display: none;"> Đảo chọn </button>
+    </div>
+{% endblock %}

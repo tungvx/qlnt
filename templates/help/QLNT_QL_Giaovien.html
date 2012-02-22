@@ -1,0 +1,45 @@
+{% extends "base_help.html" %}
+
+{% block explain %}
+    <li>Thêm giáo viên: Điền đầy đủ thông tin về giáo viên, sau đó click 'Thêm' để thêm giáo viên</li>
+    <li>Thêm Tổ( 1 tổ gồm nhiều nhóm): Click 'Thêm tổ', điền tên tổ rồi click 'Thêm' để thêm tổ mới</li>
+    <li>Thêm Nhóm (Nhóm là đơn vị nhỏ hơn trong Tổ): Click vào tổ, sau đó 'Thêm nhóm', điền tên nhóm rồi click 'Thêm' </li>
+    <li>Nhập danh sách giáo viên từ file Excel, lưu ý file excel phải đúng định dạng mẫu có sẵn.</li>
+    <li>Click 'Xuất ra excel' để xuất danh sách giáp viên ra file excel</li>
+
+{% endblock %}
+
+{% block help %}
+    <div style="background:transparent url('/static/images/helpImage/QLNT_QL_Giaovien.jpg') no-repeat; height:700px; width:100%;">
+    <div  id="icon1" style="margin: 100px 0 0 60px">
+        <label><span>Danh sách các lớp toàn trường phân chia theo Tổ, Click vào từng Tổ để xem chi tiết giáo viên trong tổ</span>
+        </label>
+    </div>
+    <div  id="icon1" style="margin: 100px 0 0 230px">
+        <label><span style="width: 200px">Click 'thêm tổ' để thêm Tổ mới <img src='/static/images/helpImage/QLNT_QL_Themto.jpg' style="opacity: 0.9"></span>
+        </label>
+    </div>
+    <div  id="icon2" style="margin: 250px 0 0 400px">
+        <label><span style="width: 250px">Danh sách giáo viên, có thể chỉnh sửa môn giảng dậy, gán tổ, nhóm cho giáo viên ở đây. Click vào tên giáo viên để chính sửa thông tin giáo viên</span>
+        </label>
+    </div>
+    <div  id="icon3" style="margin: 300px 0 0 750px">
+        <label><span >Thêm giáo viên: Điền đầy đủ thông tin giáo viên theo yêu cầu, sau đó click 'Thêm' để thêm giáo viên mới</span>
+        </label>
+    </div>
+    <div  id="icon3" style="margin: 63px 0 0 815px">
+        <label><span style="width: 200px">Xóa giáo viên: Chọn giáo viên muốn xóa từ danh sách bên dưới, sau đó click 'Xóa' để xóa giáo viên đã chọn </span>
+        </label>
+    </div>
+    <div  id="icon3" style="margin: 63px 0 0 770px">
+            <label><span style="width: 200px">Click 'Xuất ra Excel' để xuất danh sách giáo viên ra file Excel</span>
+            </label>
+        </div>
+    <div  id="icon3" style="margin: 63px 0 0 710px">
+            <label><span style="width: 200px">Nhập danh sách giáo viên từ<br><a href="/static/template_files/teacher_template.xls"><u>file Excel theo mẫu
+                <này></này></u></a> <img src='/static/images/helpImage/QLNT_QL_Nhapexcel.jpg' style="opacity: 0.9"></span>
+            </label>
+    </div>
+
+    
+{% endblock %}
