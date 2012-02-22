@@ -516,6 +516,8 @@ class Pupil(BasicPersonInfo):
     classes = models.ManyToManyField(Class, through="Attend", related_name='student_set')
 
     def thuoc_dien(self, request):
+        if int(request.session.get('termNumber')) == 1:
+            return ''
         tbNam = TBNam.objects.filter(student_id__id = self.id, student_id__classes = int(request.session.get('class_id')))[0]
         if   tbNam.len_lop:
             return 'Thuộc diện: Được lên lớp.'
