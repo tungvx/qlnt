@@ -162,26 +162,62 @@ class Block(models.Model):
     school_id = models.ForeignKey(Organization, verbose_name = "Trường(*)")
 
     def TkDh(self, request):
+        so_luong  =[0,0,0,0]
+        phan_tram =[0,0,0,0]
+        sum=0.0
+
         classList = Class.objects.filter(block_id=self.id ,year_id=int(request.session.get('year_id')))
-        result = ([0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], 0)
+
         for c in classList:
-            tkdh = c.TkDh(request)
+            so_luong_c, phan_tram_c, sum_c = c.TkDh(request)
+            for i in range(len(so_luong_c)):
+                so_luong[i] += so_luong_c[i]
+            sum += sum_c
 
+        if sum!=0:
+            for i in range(len(so_luong)):
+                phan_tram[i]=so_luong[i]/sum *100
 
-        return result;
+        return so_luong, phan_tram, int(sum)
 
     def TkHk(self, request):
-        if int(request.session.get('term_number')) < 3:
-            return self.TkHkKy(request)
-        else:
-            return self.TkHkNam()
+        so_luong  =[0,0,0,0,0]
+        phan_tram =[0,0,0,0,0]
+        sum=0.0
+
+        classList = Class.objects.filter(block_id=self.id ,year_id=int(request.session.get('year_id')))
+
+        for c in classList:
+            so_luong_c, phan_tram_c, sum_c = c.TkHk(request)
+            for i in range(len(so_luong_c)):
+                so_luong[i] += so_luong_c[i]
+            sum += sum_c
+
+        if sum!=0:
+            for i in range(len(so_luong)):
+                phan_tram[i]=so_luong[i]/sum *100
+
+        return so_luong, phan_tram, int(sum)
 
     def TkHl(self, request):
-        if int(request.session.get('term_number')) < 3:
-            return self.TkHlKy(request)
-        else:
-            return self.TkHlNam()
+        so_luong  =[0,0,0,0,0,0]
+        phan_tram =[0,0,0,0,0,0]
+        sum=0.0
 
+        classList = Class.objects.filter(block_id=self.id ,year_id=int(request.session.get('year_id')))
+
+        for c in classList:
+            so_luong_c, phan_tram_c, sum_c = c.TkHl(request)
+            for i in range(len(so_luong_c)):
+                so_luong[i] += so_luong_c[i]
+            sum += sum_c
+
+        if sum!=0:
+            for i in range(len(so_luong)):
+                phan_tram[i]=so_luong[i]/sum *100
+
+        return so_luong, phan_tram, int(sum)
+        
     class Meta:
         verbose_name = "Khối"
         verbose_name_plural = "Khối"
@@ -268,6 +304,63 @@ class Teacher(BasicPersonInfo):
 class Year(models.Model):
     time = models.IntegerField("Năm", max_length = 4, validators = [validate_year]) # date field but just use Year
     school_id = models.ForeignKey(Organization, verbose_name = "Trường")
+
+    def TkDh(self, request):
+        so_luong  =[0,0,0,0]
+        phan_tram =[0,0,0,0]
+        sum=0.0
+
+        blockList = Block.objects.filter(school_id=self.school_id)
+
+        for c in blockList:
+            so_luong_c, phan_tram_c, sum_c = c.TkDh(request)
+            for i in range(len(so_luong_c)):
+                so_luong[i] += so_luong_c[i]
+            sum += sum_c
+
+        if sum!=0:
+            for i in range(len(so_luong)):
+                phan_tram[i]=so_luong[i]/sum *100
+
+        return so_luong, phan_tram, int(sum)
+
+    def TkHk(self, request):
+        so_luong  =[0,0,0,0,0]
+        phan_tram =[0,0,0,0,0]
+        sum=0.0
+
+        blockList = Block.objects.filter(school_id=self.school_id)
+
+        for c in blockList:
+            so_luong_c, phan_tram_c, sum_c = c.TkHk(request)
+            for i in range(len(so_luong_c)):
+                so_luong[i] += so_luong_c[i]
+            sum += sum_c
+
+        if sum!=0:
+            for i in range(len(so_luong)):
+                phan_tram[i]=so_luong[i]/sum *100
+
+        return so_luong, phan_tram, int(sum)
+
+    def TkHl(self, request):
+        so_luong  =[0,0,0,0,0,0]
+        phan_tram =[0,0,0,0,0,0]
+        sum=0.0
+
+        blockList = Block.objects.filter(school_id=self.school_id)
+
+        for c in blockList:
+            so_luong_c, phan_tram_c, sum_c = c.TkHl(request)
+            for i in range(len(so_luong_c)):
+                so_luong[i] += so_luong_c[i]
+            sum += sum_c
+
+        if sum!=0:
+            for i in range(len(so_luong)):
+                phan_tram[i]=so_luong[i]/sum *100
+
+        return so_luong, phan_tram, int(sum)
     
     class Meta:
         verbose_name = "Năm học"
@@ -301,7 +394,7 @@ class Term(models.Model):
         return str(self.number) + " " + str(self.year_id)         
     #class Admin: pass
 
-class Class(models.Model):    
+class Class(models.Model):
     name = models.CharField("Tên lớp(*)", max_length = 20)
     index = models.IntegerField("Số thứ tự", default=0)
     phan_ban = models.CharField("Phân ban", max_length=5, choices= BAN_CHOICE, default=u'CB', null = True)
