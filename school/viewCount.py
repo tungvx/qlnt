@@ -725,6 +725,9 @@ def count1(request,year_id=None,number=None,type=None,):
         request.session['term_number'] = number
         message, response = generate('tong ket hoc luc hanh kiem.xls', request)
         print message
+        request.session['year_id'] = None
+        request.session['school_id'] = None
+        request.session['term_id'] = None
         return response
 #        return count1Excel(year_id,number,list,sumsumsum,allList)
             
