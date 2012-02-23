@@ -161,6 +161,21 @@ class Block(models.Model):
     number = models.SmallIntegerField("Khối(*)", max_length = 2, choices=KHOI_CHOICE)
     school_id = models.ForeignKey(Organization, verbose_name = "Trường(*)")
 
+    def tkTbMon(self, request):
+        classList = Class.objects.filter(block_id=self.id,year_id=int(request.session.get('year_id')))
+        slList=[0,0,0,0,0]
+        ptList=[0,0,0,0,0]
+        sum = 0
+        for c in classList:
+            sum_c, slList_c, ptList_c = c.tkTbMon(request)
+            sum += sum_c
+            for i in range(len(slList_c)):
+                slList[i] += slList_c[i]
+        for i in range(5):
+            if sum != 0:
+                ptList[i] = round(float(slList[i]) / sum * 100, 2)
+        return int(sum), slList, ptList
+
     def TkDh(self, request):
         so_luong  =[0,0,0,0]
         phan_tram =[0,0,0,0]
@@ -289,6 +304,21 @@ class Teacher(BasicPersonInfo):
     hs_luong = models.FloatField("Hệ số lương", null=True, blank=True, validators=[validate_hs_luong])
     bhxh = models.CharField("Số bảo hiểm xã hội", null=True, blank=True, max_length=10, validators=[validate_num])
 
+    def tkTbMon(self, request):
+        subjectList = Subject.objects.filter(teacher_id=self.id,name=request.session.get('subject_name'),class_id__year_id=int(request.session.get('year_id')))
+        slList=[0,0,0,0,0]
+        ptList=[0,0,0,0,0]
+        sum = 0
+        for c in subjectList:
+            sum_c, slList_c, ptList_c = c.tkTbMon(request)
+            sum += sum_c
+            for i in range(len(slList_c)):
+                slList[i] += slList_c[i]
+        for i in range(5):
+            if sum != 0:
+                ptList[i] = round(float(slList[i]) / sum * 100, 2)
+        return int(sum), slList, ptList
+
     def teaching_class(self):
         classes = Class.objects.filter(teacher_id = self)
         if classes:
@@ -304,6 +334,36 @@ class Teacher(BasicPersonInfo):
 class Year(models.Model):
     time = models.IntegerField("Năm", max_length = 4, validators = [validate_year]) # date field but just use Year
     school_id = models.ForeignKey(Organization, verbose_name = "Trường")
+
+    def tkTbMon(self, request):
+        if int(request.session.get('mode_view')) == 1:
+            blockList = Block.objects.filter(school_id=self.school_id)
+            slList=[0,0,0,0,0]
+            ptList=[0,0,0,0,0]
+            sum = 0
+            for c in blockList:
+                sum_c, slList_c, ptList_c = c.tkTbMon(request)
+                sum += sum_c
+                for i in range(len(slList_c)):
+                    slList[i] += slList_c[i]
+            for i in range(5):
+                if sum != 0:
+                    ptList[i] = round(float(slList[i]) / sum * 100, 2)
+            return int(sum), slList, ptList
+
+        teacherList = Teacher.objects.filter(school_id=self.school_id)
+        slList=[0,0,0,0,0]
+        ptList=[0,0,0,0,0]
+        sum = 0
+        for c in teacherList:
+            sum_c, slList_c, ptList_c = c.tkTbMon(request)
+            sum += sum_c
+            for i in range(len(slList_c)):
+                slList[i] += slList_c[i]
+        for i in range(5):
+            if sum != 0:
+                ptList[i] = round(float(slList[i]) / sum * 100, 2)
+        return int(sum), slList, ptList
 
     def TkDh(self, request):
         so_luong  =[0,0,0,0]
@@ -407,6 +467,42 @@ class Class(models.Model):
     block_id = models.ForeignKey(Block, verbose_name = "Khối(*)")
     teacher_id = models.OneToOneField(Teacher, verbose_name = "Giáo viên chủ nhiệm", null = True, blank = True) #field nay chi dung de phan quyen, vi vay chi gan 1 gia tri nhan dang
 
+
+    def tkTbMon(self, request):
+        slList = [0, 0, 0, 0, 0]
+        ptList = [0, 0, 0, 0, 0]
+        level =[11,7.995,6.495,4.995,3.495,-1]
+
+        selectedSubjectList = Subject.objects.filter(name=request.session.get('subject_name'), class_id=self.id)
+
+        selectedSubject = selectedSubjectList[0]
+
+        number = int(request.session.get('term_number'))
+        try:
+            term_id = int(request.session.get('term_id'))
+        except :
+            ''
+        type = int(request.session.get('type'))
+
+        if type == 1:
+            if number < 3:
+                for i in range(5):
+                    slList[i] = Mark.objects.filter(term_id=term_id, subject_id=selectedSubject.id, tb__lt=level[i],
+                                                    tb__gt=level[i + 1], current=True).count()
+            else:
+                for i in range(5):
+                    slList[i] = TKMon.objects.filter(subject_id=selectedSubject.id, tb_nam__lt=level[i],
+                                                     tb_nam__gt=level[i + 1], current=True).count()
+        elif type == 2:
+            for i in range(5):
+                slList[i] = Mark.objects.filter(term_id=term_id, subject_id=selectedSubject.id, ck__lt=level[i],
+                                                ck__gt=level[i + 1], current=True).count()
+
+        sum = Pupil.objects.filter(classes=self.id, attend__is_member=True).count()
+        for i in range(5):
+            if sum != 0:
+                ptList[i] = round(float(slList[i]) / sum * 100, 2)
+        return int(sum), slList, ptList
 
     def get_term(self, request):
         if int(request.session.get('term_number')) == 1:
@@ -747,7 +843,37 @@ class Subject(models.Model):
     current_lesson = models.IntegerField("Tiet hoc hien tai", default=0)
     class_id = models.ForeignKey(Class, verbose_name = "Lớp(*)")    
     teacher_id = models.ForeignKey(Teacher, verbose_name = "Giáo viên", null= True ) # field nay de cung cap permission cho giao vien de nhap diem
-    
+
+    def tkTbMon(self, request):
+        slList=[0,0,0,0,0]
+        ptList=[0,0,0,0,0]
+        level =[11,7.995,6.495,4.995,3.495,-1]
+        number = int(request.session.get('term_number'))
+        type = int(request.session.get('type'))
+        try:
+            term_id = int(request.session.get('term_id'))
+        except :
+            ''
+        if type == 1:
+            if number < 3:
+                for i in range(5):
+                    slList[i] = Mark.objects.filter(term_id=term_id, subject_id=self.id, tb__lt=level[i],
+                                                    tb__gt=level[i + 1], current=True).count()
+            else:
+                for i in range(5):
+                    slList[i] = TKMon.objects.filter(subject_id=self.id, tb_nam__lt=level[i], tb_nam__gt=level[i + 1],
+                                                     current=True).count()
+        elif type == 2:
+            for i in range(5):
+                slList[i] = Mark.objects.filter(term_id=term_id, subject_id=self.id, ck__lt=level[i], ck__gt=level[i + 1],
+                                                current=True).count()
+
+        sum = Pupil.objects.filter(classes=self.class_id.id, attend__is_member=True).count()
+        for i in range(5):
+            if sum != 0:
+                ptList[i] = round(float(slList[i]) / sum * 100, 2)
+        return int(sum), slList, ptList
+
     class Meta:
         verbose_name = "Môn"
         verbose_name_plural = "Môn"

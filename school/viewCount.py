@@ -901,7 +901,28 @@ def count2(request,type=None,modeView=None,year_id=None,number=None,index=-1,isE
                allPtList[i]=float(allSlList[i])/sumsumsum *100
         allList=zip(allSlList,allPtList)
         if isExcel=='1':
-            return count2Excel(year_id,number,subjectName,type,modeView,list,allList,sumsumsum)
+            request.session['year_id'] = year_id
+            request.session['subject_name'] = subjectName
+            request.session['term_number'] = number
+            request.session['type'] = type
+            request.session['mode_view'] = modeView
+            try:
+                request.session['term_id'] = term_id
+            except :
+                ''
+            if modeView == 1:
+                message, response = generate('tong ket diem trung binh theo lop.xls', request)
+            else:
+                message, response = generate('tong ket diem trung binh theo giao vien.xls', request)
+            print message
+            request.session['year_id'] = None
+            request.session['subject_name'] = None
+            request.session['term_number'] = None
+            request.session['type'] = None
+            request.session['term_id'] = None
+            request.session['mode_view'] = None
+            return response
+#            return count2Excel(year_id,number,subjectName,type,modeView,list,allList,sumsumsum)
              
     tt2=time.time()
     print tt2-tt1
