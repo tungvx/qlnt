@@ -911,9 +911,9 @@ def count2(request,type=None,modeView=None,year_id=None,number=None,index=-1,isE
             except :
                 ''
             if modeView == 1:
-                message, response = generate('tong ket diem trung binh theo lop.xls', request)
+                message, response = generate('tong ket diem theo lop.xls', request)
             else:
-                message, response = generate('tong ket diem trung binh theo giao vien.xls', request)
+                message, response = generate('tong ket diem theo giao vien.xls', request)
             print message
             request.session['year_id'] = None
             request.session['subject_name'] = None

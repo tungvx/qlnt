@@ -844,6 +844,12 @@ class Subject(models.Model):
     class_id = models.ForeignKey(Class, verbose_name = "Lớp(*)")    
     teacher_id = models.ForeignKey(Teacher, verbose_name = "Giáo viên", null= True ) # field nay de cung cap permission cho giao vien de nhap diem
 
+    def get_type(self, request):
+        if int(request.session.get('type')) == 1:
+            return "TRUNG BÌNH"
+        else:
+            return "THI CUỐI KÌ"
+
     def tkTbMon(self, request):
         slList=[0,0,0,0,0]
         ptList=[0,0,0,0,0]
