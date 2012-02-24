@@ -985,7 +985,18 @@ def printDanhHieu(request,termNumber=None,type=None,isExcel=None):
                         danhHieus=TBNam.objects.filter(student_id__classes=c.id,danh_hieu_nam__in=['G','TT']).order_by("danh_hieu_nam","student_id__index")
                 list.append((c.name,danhHieus))    
     if isExcel:
-        return printHanhKiemExcel(list,termNumber,type,currentTerm)            
+        request.session['term_number'] = termNumber
+        request.session['type'] = type
+        request.session['school_id'] = currentTerm.year_id.school_id.id
+        request.session['year_id'] = currentTerm.year_id.id
+        message, response = generate('thong ke danh hieu.xls', request)
+        print message
+        request.session['term_number'] = None
+        request.session['type'] = None
+        request.session['school_id'] = None
+        request.session['year_id'] = None
+        return response
+#        return printHanhKiemExcel(list,termNumber,type,currentTerm)
     tt2=time.time()
     print tt2-tt1
     t = loader.get_template(os.path.join('school/report','print_danh_hieu.html'))
@@ -1030,7 +1041,15 @@ def printNoPass(request,type=None,isExcel=None):
             list.append((c.name,pupils))
                 
     if isExcel:
-        return printNoPassExcel(list,type,currentYear)            
+        request.session['school_id'] = currentYear.school_id.id
+        request.session['year_id'] = currentYear.id
+        request.session['type'] = type
+        message, response = generate('thong ke khong len lop thi lai ren luyen them.xls', request)
+        request.session['school_id'] = None
+        request.session['year_id'] = None
+        request.session['type'] = None
+        return response
+#        return printNoPassExcel(list,type,currentYear)
     tt2=time.time()
     print tt2-tt1
     t = loader.get_template(os.path.join('school/report','print_no_pass.html'))

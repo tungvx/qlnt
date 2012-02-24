@@ -1074,7 +1074,32 @@ class TBHocKy(models.Model):
     tb_hk = models.FloatField("Trung bình học kì", validators = [validate_mark], null = True, blank = True)
     hl_hk = models.CharField("Học lực", max_length = 3, choices = HL_CHOICES, null = True, blank = True)
     danh_hieu_hk = models.CharField("Danh hiệu", max_length = 2, choices = DH_CHOICES, null = True, blank = True)
-    
+
+    def get_dh(self):
+        if    self.danh_hieu_nam=='G' : return 'HSG'
+        elif  self.danh_hieu_nam=='TT': return 'HSTT'
+        else: return ''
+
+    def get_year(self):
+        return self.term_id.year_id
+
+    def get_dh(self, request):
+        type = int(request.session.get('type'))
+        if   (type==1):
+            return u'GIỎI'
+        elif (type==2):
+            return u'TIÊN TIẾN'
+        elif (type==3):
+            return u'GIỎI VÀ TIÊN TIẾN'
+
+    def get_term(self, request):
+        if int(request.session.get('term_number')) == 1:
+            return 'HỌC KỲ I'
+        elif int(request.session.get('term_number')) == 2:
+            return 'HỌC KỲ II'
+        else:
+            return 'CẢ NĂM'
+
     class Meta:
         verbose_name = "Trung bình học kì"
         verbose_name_plural = "Trung bình học kì"
@@ -1111,6 +1136,60 @@ class TBNam(models.Model):
     hl_thi_lai=models.CharField("Học lực thi lại", null = True, blank=True, max_length = 3, choices = HL_CHOICES)
     sent = models.BooleanField("Sent", default=False)
     #len_lop_sau_he=models.NullBooleanField(null=True,blank = True,choices =LENLOP_CHOICES)
+
+    def thuoc_dien(self):
+        if  self.len_lop:
+            if self.thi_lai:
+                return 'lên lớp(sau khi kt lại)'
+            elif self.ren_luyen_lai:
+                return 'lên lớp(sau rèn luyện thêm trong hè)'
+            else:
+                return 'lên lớp'
+        elif  self.len_lop == False:
+            if self.thi_lai:
+                return 'Ở lại lớp(sau khi kt lại)'
+            elif tbNam.ren_luyen_lai:
+                return 'Ở lại lớp(sau rèn luyện thêm trong hè)'
+            else:
+                return 'Ở lại lớp'
+        elif self.thi_lai:
+            return 'thi lại'
+        elif self.ren_luyen_lai:
+            return 'rèn luyện thêm trong hè'
+
+    def get_type(self, request):
+        type = int(request.session.get('type'))
+        if   (type==1):
+            return u'KHÔNG LÊN LỚP  '
+        elif (type==2):
+            return u'THI LẠI'
+        elif (type==3):
+            return u'RÈN LUYỆN THÊM TRONG HÈ'
+
+    def get_dh(self):
+        if    self.danh_hieu_nam=='G' : return 'HSG'
+        elif  self.danh_hieu_nam=='TT': return 'HSTT'
+        else: return ''
+
+    def get_year(self):
+        return self.year_id
+
+    def get_dh(self, request):
+        type = int(request.session.get('type'))
+        if   (type==1):
+            return u'\GIỎI'
+        elif (type==2):
+            return u'TIÊN TIẾN'
+        elif (type==3):
+            return u'GIỎI VÀ TIÊN TIẾN'
+
+    def get_term(self, request):
+        if int(request.session.get('term_number')) == 1:
+            return 'HỌC KỲ I'
+        elif int(request.session.get('term_number')) == 2:
+            return 'HỌC KỲ II'
+        else:
+            return 'CẢ NĂM'
 
     class Meta:
         verbose_name = "Trung bình năm"
