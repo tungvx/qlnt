@@ -469,40 +469,47 @@ class Class(models.Model):
 
 
     def tkTbMon(self, request):
-        slList = [0, 0, 0, 0, 0]
-        ptList = [0, 0, 0, 0, 0]
-        level =[11,7.995,6.495,4.995,3.495,-1]
+        key = str(self.id) + '_tkTbMon'
+        if request.session.get(key):
+            return request.session.get(key)
+        else:
+            slList = [0, 0, 0, 0, 0]
+            ptList = [0, 0, 0, 0, 0]
+            level =[11,7.995,6.495,4.995,3.495,-1]
 
-        selectedSubjectList = Subject.objects.filter(name=request.session.get('subject_name'), class_id=self.id)
+            selectedSubjectList = Subject.objects.filter(name=request.session.get('subject_name'), class_id=self.id)
 
-        selectedSubject = selectedSubjectList[0]
+            selectedSubject = selectedSubjectList[0]
 
-        number = int(request.session.get('term_number'))
-        try:
-            term_id = int(request.session.get('term_id'))
-        except :
-            ''
-        type = int(request.session.get('type'))
+            number = int(request.session.get('term_number'))
+            try:
+                term_id = int(request.session.get('term_id'))
+            except :
+                ''
+            type = int(request.session.get('type'))
 
-        if type == 1:
-            if number < 3:
+            if type == 1:
+                if number < 3:
+                    for i in range(5):
+                        slList[i] = Mark.objects.filter(term_id=term_id, subject_id=selectedSubject.id, tb__lt=level[i],
+                                                        tb__gt=level[i + 1], current=True).count()
+                else:
+                    for i in range(5):
+                        slList[i] = TKMon.objects.filter(subject_id=selectedSubject.id, tb_nam__lt=level[i],
+                                                         tb_nam__gt=level[i + 1], current=True).count()
+            elif type == 2:
                 for i in range(5):
-                    slList[i] = Mark.objects.filter(term_id=term_id, subject_id=selectedSubject.id, tb__lt=level[i],
-                                                    tb__gt=level[i + 1], current=True).count()
-            else:
-                for i in range(5):
-                    slList[i] = TKMon.objects.filter(subject_id=selectedSubject.id, tb_nam__lt=level[i],
-                                                     tb_nam__gt=level[i + 1], current=True).count()
-        elif type == 2:
+                    slList[i] = Mark.objects.filter(term_id=term_id, subject_id=selectedSubject.id, ck__lt=level[i],
+                                                    ck__gt=level[i + 1], current=True).count()
+
+            sum = Pupil.objects.filter(classes=self.id, attend__is_member=True).count()
             for i in range(5):
-                slList[i] = Mark.objects.filter(term_id=term_id, subject_id=selectedSubject.id, ck__lt=level[i],
-                                                ck__gt=level[i + 1], current=True).count()
-
-        sum = Pupil.objects.filter(classes=self.id, attend__is_member=True).count()
-        for i in range(5):
-            if sum != 0:
-                ptList[i] = round(float(slList[i]) / sum * 100, 2)
-        return int(sum), slList, ptList
+                if sum != 0:
+                    ptList[i] = round(float(slList[i]) / sum * 100, 2)
+            value = int(sum), slList, ptList
+            request.session[key] = value
+            request.session['additional_keys'].append(key)
+            return value
 
     def get_term(self, request):
         if int(request.session.get('term_number')) == 1:
@@ -872,34 +879,42 @@ class Subject(models.Model):
             return "THI CUỐI KÌ"
 
     def tkTbMon(self, request):
-        slList=[0,0,0,0,0]
-        ptList=[0,0,0,0,0]
-        level =[11,7.995,6.495,4.995,3.495,-1]
-        number = int(request.session.get('term_number'))
-        type = int(request.session.get('type'))
-        try:
-            term_id = int(request.session.get('term_id'))
-        except :
-            ''
-        if type == 1:
-            if number < 3:
+        key = str(self.id) + '_tkTbMon'
+        if request.session.get(key):
+            return request.session.get(key)
+        else:
+            slList=[0,0,0,0,0]
+            ptList=[0,0,0,0,0]
+            level =[11,7.995,6.495,4.995,3.495,-1]
+            number = int(request.session.get('term_number'))
+            type = int(request.session.get('type'))
+            try:
+                term_id = int(request.session.get('term_id'))
+            except :
+                ''
+            if type == 1:
+                if number < 3:
+                    for i in range(5):
+                        slList[i] = Mark.objects.filter(term_id=term_id, subject_id=self.id, tb__lt=level[i],
+                                                        tb__gt=level[i + 1], current=True).count()
+                else:
+                    for i in range(5):
+                        slList[i] = TKMon.objects.filter(subject_id=self.id, tb_nam__lt=level[i], tb_nam__gt=level[i + 1],
+                                                         current=True).count()
+            elif type == 2:
                 for i in range(5):
-                    slList[i] = Mark.objects.filter(term_id=term_id, subject_id=self.id, tb__lt=level[i],
-                                                    tb__gt=level[i + 1], current=True).count()
-            else:
-                for i in range(5):
-                    slList[i] = TKMon.objects.filter(subject_id=self.id, tb_nam__lt=level[i], tb_nam__gt=level[i + 1],
-                                                     current=True).count()
-        elif type == 2:
-            for i in range(5):
-                slList[i] = Mark.objects.filter(term_id=term_id, subject_id=self.id, ck__lt=level[i], ck__gt=level[i + 1],
-                                                current=True).count()
+                    slList[i] = Mark.objects.filter(term_id=term_id, subject_id=self.id, ck__lt=level[i], ck__gt=level[i + 1],
+                                                    current=True).count()
 
-        sum = Pupil.objects.filter(classes=self.class_id.id, attend__is_member=True).count()
-        for i in range(5):
-            if sum != 0:
-                ptList[i] = round(float(slList[i]) / sum * 100, 2)
-        return int(sum), slList, ptList
+            sum = Pupil.objects.filter(classes=self.class_id.id, attend__is_member=True).count()
+            for i in range(5):
+                if sum != 0:
+                    ptList[i] = round(float(slList[i]) / sum * 100, 2)
+
+            value  = int(sum), slList, ptList
+            request.session[key] = value
+            request.session['additional_keys'].append(key)
+            return value
 
     class Meta:
         verbose_name = "Môn"

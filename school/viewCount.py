@@ -907,13 +907,20 @@ def count2(request,type=None,modeView=None,year_id=None,number=None,index=-1,isE
                allPtList[i]=float(allSlList[i])/sumsumsum *100
         allList=zip(allSlList,allPtList)
         if isExcel=='1':
+            clear_session(request)
             request.session['year_id'] = year_id
+            request.session['additional_keys'].append('year_id')
             request.session['subject_name'] = subjectName
+            request.session['additional_keys'].append('subject_name')
             request.session['term_number'] = number
+            request.session['additional_keys'].append('term_number')
             request.session['type'] = type
+            request.session['additional_keys'].append('type')
             request.session['mode_view'] = modeView
+            request.session['additional_keys'].append('mode_view')
             try:
                 request.session['term_id'] = term_id
+                request.session['additional_keys'].append('term_id')
             except :
                 ''
             if modeView == 1:
@@ -921,12 +928,7 @@ def count2(request,type=None,modeView=None,year_id=None,number=None,index=-1,isE
             else:
                 message, response = generate('tong ket diem theo giao vien.xls', request)
             print message
-            request.session['year_id'] = None
-            request.session['subject_name'] = None
-            request.session['term_number'] = None
-            request.session['type'] = None
-            request.session['term_id'] = None
-            request.session['mode_view'] = None
+            clear_session(request)
             return response
 #            return count2Excel(year_id,number,subjectName,type,modeView,list,allList,sumsumsum)
              
