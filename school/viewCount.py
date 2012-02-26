@@ -716,18 +716,24 @@ def count1(request,year_id=None,number=None,type=None,):
     tt2=time.time()
     print tt2-tt1
     if type=='1':
+        clear_session(request)
         request.session['year_id'] = selectedYear.id
+        request.session['additional_keys'].append('year_id')
         request.session['school_id'] = selectedYear.school_id.id
+        request.session['additional_keys'].append('school_id')
         try:
             request.session['term_id'] = term_id
+            request.session['additional_keys'].append('term_id')
         except :
             ''
         request.session['term_number'] = number
+        request.session['additional_keys'].append('term_number')
+        tt1=time.time()
         message, response = generate('tong ket hoc luc hanh kiem.xls', request)
+        tt2=time.time()
+        print tt2 - tt1
         print message
-        request.session['year_id'] = None
-        request.session['school_id'] = None
-        request.session['term_id'] = None
+        clear_session(request)
         return response
 #        return count1Excel(year_id,number,list,sumsumsum,allList)
             

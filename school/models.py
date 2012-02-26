@@ -513,22 +513,43 @@ class Class(models.Model):
             return 'CẢ NĂM'
 
     def TkDh(self, request):
-        if int(request.session.get('term_number')) < 3:
-            return self.TkDhKy(request)
+        key = str(self.id) + '_tkDh'
+        if request.session.get(key):
+            return request.session.get(key)
         else:
-            return self.TkDhNam()
+            if int(request.session.get('term_number')) < 3:
+                value =  self.TkDhKy(request)
+            else:
+                value = self.TkDhNam()
+            request.session[key] = value
+            request.session['additional_keys'].append(key)
+            return value
 
     def TkHk(self, request):
-        if int(request.session.get('term_number')) < 3:
-            return self.TkHkKy(request)
+        key = str(self.id) + '_tkHk'
+        if request.session.get(key):
+            return request.session.get(key)
         else:
-            return self.TkHkNam()
+            if int(request.session.get('term_number')) < 3:
+                value =  self.TkHkKy(request)
+            else:
+                value = self.TkHkNam()
+            request.session[key] = value
+            request.session['additional_keys'].append(key)
+            return value
 
     def TkHl(self, request):
-        if int(request.session.get('term_number')) < 3:
-            return self.TkHlKy(request)
+        key = str(self.id) + '_tkHl'
+        if request.session.get(key):
+            return request.session.get(key)
         else:
-            return self.TkHlNam()
+            if int(request.session.get('term_number')) < 3:
+                value =  self.TkHlKy(request)
+            else:
+                value = self.TkHlNam()
+            request.session[key] = value
+            request.session['additional_keys'].append(key)
+            return value
 
     def TkDhNam(self):
         slList=[0,0,0,0]
@@ -562,7 +583,7 @@ class Class(models.Model):
         sum=0.0
         string=['T','K','TB','Y',None]
         for i in range(string.__len__()):
-            slList[i]=TBNam.objects.filter(student_id__classes=self,year=string[i]).count()
+            slList[i]=TBNam.objects.filter(student_id__classes=self.id,year=string[i]).count()
             sum+=slList[i]
         if sum!=0:
             for i in range(string.__len__()):

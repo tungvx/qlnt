@@ -906,3 +906,9 @@ def get_student(request):
     pupil = request.user.pupil
     return pupil
 
+def clear_session(request):
+    if request.session.get('additional_keys'):
+        for key in request.session.get('additional_keys'):
+            request.session[key] = None
+
+    request.session['additional_keys'] = []
