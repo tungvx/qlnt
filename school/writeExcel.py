@@ -880,7 +880,14 @@ def printMarkBook(request,class_id=-2):
     class_id  = int(class_id)
     classList =Class.objects.filter(year_id=currentTerm.year_id) 
     if class_id!=-2 :
-        return markBookClass(class_id)
+        clear_session(request)
+        request.session['class_id'] = class_id
+        request.session['additional_keys'].append('class_id')
+        message, response = generate('so ghi diem.xls', request)
+        print message
+        clear_session(request)
+        return response
+#        return markBookClass(class_id)
             
     t = loader.get_template(os.path.join('school/report','print_mark_book.html'))
     c = RequestContext(request, {"message":message,

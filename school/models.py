@@ -162,7 +162,7 @@ class Block(models.Model):
     school_id = models.ForeignKey(Organization, verbose_name = "Trường(*)")
 
     def tkTbMon(self, request):
-        classList = Class.objects.filter(block_id=self.id,year_id=int(request.session.get('year_id')))
+        classList = Class.objects.filter(block_id__id = self.id, year_id__id = int(request.session.get('year_id')))
         slList=[0,0,0,0,0]
         ptList=[0,0,0,0,0]
         sum = 0
@@ -181,13 +181,14 @@ class Block(models.Model):
         phan_tram =[0,0,0,0]
         sum=0.0
 
-        classList = Class.objects.filter(block_id=self.id ,year_id=int(request.session.get('year_id')))
+        classList = request.session.get('class_list')
 
         for c in classList:
-            so_luong_c, phan_tram_c, sum_c = c.TkDh(request)
-            for i in range(len(so_luong_c)):
-                so_luong[i] += so_luong_c[i]
-            sum += sum_c
+            if c.block_id.id == self.id:
+                so_luong_c, phan_tram_c, sum_c = c.TkDh(request)
+                for i in range(len(so_luong_c)):
+                    so_luong[i] += so_luong_c[i]
+                sum += sum_c
 
         if sum!=0:
             for i in range(len(so_luong)):
@@ -200,13 +201,14 @@ class Block(models.Model):
         phan_tram =[0,0,0,0,0]
         sum=0.0
 
-        classList = Class.objects.filter(block_id=self.id ,year_id=int(request.session.get('year_id')))
+        classList = request.session.get('class_list')
 
         for c in classList:
-            so_luong_c, phan_tram_c, sum_c = c.TkHk(request)
-            for i in range(len(so_luong_c)):
-                so_luong[i] += so_luong_c[i]
-            sum += sum_c
+            if c.block_id.id == self.id:
+                so_luong_c, phan_tram_c, sum_c = c.TkHk(request)
+                for i in range(len(so_luong_c)):
+                    so_luong[i] += so_luong_c[i]
+                sum += sum_c
 
         if sum!=0:
             for i in range(len(so_luong)):
@@ -219,13 +221,14 @@ class Block(models.Model):
         phan_tram =[0,0,0,0,0,0]
         sum=0.0
 
-        classList = Class.objects.filter(block_id=self.id ,year_id=int(request.session.get('year_id')))
+        classList = request.session.get('class_list')
 
         for c in classList:
-            so_luong_c, phan_tram_c, sum_c = c.TkHl(request)
-            for i in range(len(so_luong_c)):
-                so_luong[i] += so_luong_c[i]
-            sum += sum_c
+            if c.block_id.id == self.id:
+                so_luong_c, phan_tram_c, sum_c = c.TkHl(request)
+                for i in range(len(so_luong_c)):
+                    so_luong[i] += so_luong_c[i]
+                sum += sum_c
 
         if sum!=0:
             for i in range(len(so_luong)):
@@ -469,7 +472,7 @@ class Class(models.Model):
 
 
     def tkTbMon(self, request):
-        key = str(self.id) + '_tkTbMon'
+        key = str(self.__class__.__name__) + '_' + str(self.id) + '_tkTbMon'
         if request.session.get(key):
             return request.session.get(key)
         else:
@@ -520,7 +523,7 @@ class Class(models.Model):
             return 'CẢ NĂM'
 
     def TkDh(self, request):
-        key = str(self.id) + '_tkDh'
+        key = str(self.__class__.__name__) + '_' + str(self.id) + '_tkDh'
         if request.session.get(key):
             return request.session.get(key)
         else:
@@ -533,7 +536,7 @@ class Class(models.Model):
             return value
 
     def TkHk(self, request):
-        key = str(self.id) + '_tkHk'
+        key = str(self.__class__.__name__) + '_' + str(self.id) + '_tkHk'
         if request.session.get(key):
             return request.session.get(key)
         else:
@@ -546,7 +549,7 @@ class Class(models.Model):
             return value
 
     def TkHl(self, request):
-        key = str(self.id) + '_tkHl'
+        key = str(self.__class__.__name__) + '_' + str(self.id) + '_tkHl'
         if request.session.get(key):
             return request.session.get(key)
         else:
@@ -879,7 +882,7 @@ class Subject(models.Model):
             return "THI CUỐI KÌ"
 
     def tkTbMon(self, request):
-        key = str(self.id) + '_tkTbMon'
+        key = str(self.__class__.__name__) + '_' + str(self.id) + '_tkTbMon'
         if request.session.get(key):
             return request.session.get(key)
         else:
