@@ -1594,8 +1594,7 @@ def printMarkForClass(request,termNumber=None,class_id=-2):
         request.session['termNumber'] = termNumber
         request.session['class_id'] = class_id
         message, response = generate('phieu bao diem hoc ky.xls', request)
-        request.session['ternNumber'] = None;
-        request.session['class_id'] = None;
+        clear_session(request)
         return response
     
     t = loader.get_template(os.path.join('school/report','print_mark_for_class.html'))

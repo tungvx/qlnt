@@ -161,8 +161,22 @@ class Block(models.Model):
     number = models.SmallIntegerField("Khối(*)", max_length = 2, choices=KHOI_CHOICE)
     school_id = models.ForeignKey(Organization, verbose_name = "Trường(*)")
 
+    def get_term(self, request):
+        if int(request.session.get('term_number')) == 1:
+            return 'HỌC KỲ I'
+        elif int(request.session.get('term_number')) == 2:
+            return 'HỌC KỲ II'
+        else:
+            return 'CẢ NĂM'
+
+    def get_year(self, request):
+        return Year.objects.get(id = int(request.session.get('year_id')))
+
+    def get_class_list(self, request):
+        return Class.objects.filter(block_id__id = self.id, year_id__id = int(request.session.get('year_id')))
+
     def tkTbMon(self, request):
-        classList = Class.objects.filter(block_id__id = self.id, year_id__id = int(request.session.get('year_id')))
+        classList = self.get_class_list(request)
         slList=[0,0,0,0,0]
         ptList=[0,0,0,0,0]
         sum = 0
@@ -181,14 +195,13 @@ class Block(models.Model):
         phan_tram =[0,0,0,0]
         sum=0.0
 
-        classList = request.session.get('class_list')
+        classList = self.get_class_list(request)
 
         for c in classList:
-            if c.block_id.id == self.id:
-                so_luong_c, phan_tram_c, sum_c = c.TkDh(request)
-                for i in range(len(so_luong_c)):
-                    so_luong[i] += so_luong_c[i]
-                sum += sum_c
+            so_luong_c, phan_tram_c, sum_c = c.TkDh(request)
+            for i in range(len(so_luong_c)):
+                so_luong[i] += so_luong_c[i]
+            sum += sum_c
 
         if sum!=0:
             for i in range(len(so_luong)):
@@ -196,19 +209,17 @@ class Block(models.Model):
 
         return so_luong, phan_tram, int(sum)
 
-    def TkHk(self, request):
+    def TkHk(self, request, sex = False, dan_toc = False):
         so_luong  =[0,0,0,0,0]
         phan_tram =[0,0,0,0,0]
         sum=0.0
-
-        classList = request.session.get('class_list')
+        classList = self.get_class_list(request)
 
         for c in classList:
-            if c.block_id.id == self.id:
-                so_luong_c, phan_tram_c, sum_c = c.TkHk(request)
-                for i in range(len(so_luong_c)):
-                    so_luong[i] += so_luong_c[i]
-                sum += sum_c
+            so_luong_c, phan_tram_c, sum_c = c.TkHk(request, sex , dan_toc)
+            for i in range(len(so_luong_c)):
+                so_luong[i] += so_luong_c[i]
+            sum += sum_c
 
         if sum!=0:
             for i in range(len(so_luong)):
@@ -216,19 +227,18 @@ class Block(models.Model):
 
         return so_luong, phan_tram, int(sum)
 
-    def TkHl(self, request):
+    def TkHl(self, request, sex = False, dan_toc = False):
         so_luong  =[0,0,0,0,0,0]
         phan_tram =[0,0,0,0,0,0]
         sum=0.0
 
-        classList = request.session.get('class_list')
+        classList = self.get_class_list(request)
 
         for c in classList:
-            if c.block_id.id == self.id:
-                so_luong_c, phan_tram_c, sum_c = c.TkHl(request)
-                for i in range(len(so_luong_c)):
-                    so_luong[i] += so_luong_c[i]
-                sum += sum_c
+            so_luong_c, phan_tram_c, sum_c = c.TkHl(request, sex , dan_toc)
+            for i in range(len(so_luong_c)):
+                so_luong[i] += so_luong_c[i]
+            sum += sum_c
 
         if sum!=0:
             for i in range(len(so_luong)):
@@ -387,15 +397,18 @@ class Year(models.Model):
 
         return so_luong, phan_tram, int(sum)
 
-    def TkHk(self, request):
+    def TkHk(self, request, sex = False, dan_toc = False, block = False):
         so_luong  =[0,0,0,0,0]
         phan_tram =[0,0,0,0,0]
         sum=0.0
 
         blockList = Block.objects.filter(school_id=self.school_id)
 
+        if block:
+            blockList = blockList.filter(number = block)
+
         for c in blockList:
-            so_luong_c, phan_tram_c, sum_c = c.TkHk(request)
+            so_luong_c, phan_tram_c, sum_c = c.TkHk(request, sex, dan_toc)
             for i in range(len(so_luong_c)):
                 so_luong[i] += so_luong_c[i]
             sum += sum_c
@@ -406,15 +419,18 @@ class Year(models.Model):
 
         return so_luong, phan_tram, int(sum)
 
-    def TkHl(self, request):
+    def TkHl(self, request, sex = False, dan_toc = False, block = False):
         so_luong  =[0,0,0,0,0,0]
         phan_tram =[0,0,0,0,0,0]
         sum=0.0
 
         blockList = Block.objects.filter(school_id=self.school_id)
 
+        if block:
+            blockList = blockList.filter(number = block)
+
         for c in blockList:
-            so_luong_c, phan_tram_c, sum_c = c.TkHl(request)
+            so_luong_c, phan_tram_c, sum_c = c.TkHl(request, sex, dan_toc)
             for i in range(len(so_luong_c)):
                 so_luong[i] += so_luong_c[i]
             sum += sum_c
@@ -431,6 +447,9 @@ class Year(models.Model):
     
     def __unicode__(self):
         return str(self.time) + "-" + str(self.time+1)
+
+    def tostr(self):
+        return str(self.time) + "-" + str(self.time+1)        
         
 class StartYear(models.Model):
     time = models.IntegerField("Năm", max_length = 4, validators = [validate_year]) # date field but just use Year
@@ -535,39 +554,47 @@ class Class(models.Model):
             request.session['additional_keys'].append(key)
             return value
 
-    def TkHk(self, request):
-        key = str(self.__class__.__name__) + '_' + str(self.id) + '_tkHk'
+    def TkHk(self, request, sex = False, dan_toc = False):
+        key = str(self.__class__.__name__) + '_' + str(self.id) + '_tkHk_' + str(sex) + '_' + str(dan_toc)
         if request.session.get(key):
             return request.session.get(key)
         else:
             if int(request.session.get('term_number')) < 3:
                 value =  self.TkHkKy(request)
             else:
-                value = self.TkHkNam()
+                value = self.TkHkNam(sex, dan_toc)
             request.session[key] = value
             request.session['additional_keys'].append(key)
             return value
 
-    def TkHl(self, request):
-        key = str(self.__class__.__name__) + '_' + str(self.id) + '_tkHl'
+    def TkHl(self, request, sex = False, dan_toc = False):
+        key = str(self.__class__.__name__) + '_' + str(self.id) + '_tkHl' + str(sex) + '_' + str(dan_toc)
         if request.session.get(key):
             return request.session.get(key)
         else:
             if int(request.session.get('term_number')) < 3:
                 value =  self.TkHlKy(request)
             else:
-                value = self.TkHlNam()
+                value = self.TkHlNam(sex, dan_toc)
             request.session[key] = value
             request.session['additional_keys'].append(key)
             return value
 
-    def TkDhNam(self):
+    def TkDhNam(self, sex = False, dan_toc = False):
         slList=[0,0,0,0]
         ptList=[0,0,0,0]
 
-        slList[0]=TBNam.objects.filter(student_id__classes=self.id,danh_hieu_nam='G').count()
-        slList[1]=TBNam.objects.filter(student_id__classes=self.id,danh_hieu_nam='TT').count()
-        slList[3]=TBNam.objects.filter(student_id__classes=self.id,danh_hieu_nam=None).count()
+        tk_dh_nam = TBNam.objects.filter(student_id__classes=self.id)
+
+        if sex:
+            tk_dh_nam = tk_dh_nam.filter(student_id__sex = u'Nữ')
+
+        if dan_toc:
+            tk_dh_nam = tk_dh_nam.exclude(student_id__dan_toc = u'Kinh')            
+
+        slList[0]= tk_dh_nam.filter(danh_hieu_nam='G').count()
+        slList[1]= tk_dh_nam.filter(danh_hieu_nam='TT').count()
+        slList[3]= tk_dh_nam.filter(danh_hieu_nam=None).count()
         #slList[2]=
         #slList[2]=TBNam.objects.filter(year_id=year_id,student_id__classes=class_id,len_lop=True).count()
         #slList[3]=TBNam.objects.filter(year_id=year_id,student_id__classes=class_id,len_lop=False).count()
@@ -587,13 +614,20 @@ class Class(models.Model):
 
         return slList,ptList,int(sum)
 
-    def TkHkNam(self):
+    def TkHkNam(self, sex = False, dan_toc = False):
         slList  =[0,0,0,0,0]
         ptslList=[0,0,0,0,0]
         sum=0.0
+
+        tb_nam = TBNam.objects.filter(student_id__classes=self.id)
+        if sex:
+            tb_nam = tb_nam.filter(student_id__sex=u'Nữ')
+        if dan_toc:
+            tb_nam = tb_nam.exclude(student_id__dan_toc = u'Kinh')            
+
         string=['T','K','TB','Y',None]
         for i in range(string.__len__()):
-            slList[i]=TBNam.objects.filter(student_id__classes=self.id,year=string[i]).count()
+            slList[i]=tb_nam.filter(year=string[i]).count()
             sum+=slList[i]
         if sum!=0:
             for i in range(string.__len__()):
@@ -601,17 +635,25 @@ class Class(models.Model):
 
         return slList,ptslList,int(sum)
 
-    def TkHlNam(self):
+    def TkHlNam(self, sex = False, dan_toc = False):
         slList  =[0,0,0,0,0,0]
         ptslList=[0,0,0,0,0,0]
         sum=0.0
+
+        tb_nam = TBNam.objects.filter(student_id__classes=self.id)
+        if sex:
+            tb_nam = tb_nam.filter(student_id__sex=u'Nữ')
+        if dan_toc:
+            tb_nam = tb_nam.exclude(student_id__dan_toc = u'Kinh')
+
         string=['G','K','TB','Y','Kem',None]
         for i in range(string.__len__()):
-            slList[i]=TBNam.objects.filter(student_id__classes=self.id,hl_nam=string[i]).count()
+            slList[i]= tb_nam.filter(hl_nam=string[i]).count()
             sum+=slList[i]
         if sum!=0:
             for i in range(string.__len__()):
                 ptslList[i]=slList[i]/sum *100
+
 
         return slList,ptslList,int(sum)
 
